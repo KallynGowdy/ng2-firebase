@@ -2,10 +2,25 @@
 // Generated on Sun Dec 27 2015 17:39:57 GMT-0500 (Eastern Standard Time)
 
 module.exports = function (config) {
+    var customLaunchers = {
+        'SL_Chrome': {
+            base: 'SauceLabs',
+            browserName: 'chrome'
+        }
+        //'SL_InternetExplorer': {
+        //    base: 'SauceLabs',
+        //    browserName: 'internet explorer',
+        //    version: '10'
+        //},
+        //'SL_FireFox': {
+        //    base: 'SauceLabs',
+        //    browserName: 'firefox',
+        //}
+    };
     config.set({
 
         // base path that will be used to resolve all patterns (eg. files, exclude)
-        basePath: './',
+        basePath: '',
 
 
         // frameworks to use
@@ -18,6 +33,7 @@ module.exports = function (config) {
             // Sources and specs.
             // Loaded through the System loader, in `test-main.js`.
             {pattern: 'src/**', included: false},
+            {pattern: 'node_modules/angular2/**', included: false, watched: false, served: true},
             {pattern: 'node_modules/rxjs/**', included: false, watched: false, served: true},
             {pattern: 'node_modules/sinon/**', included: false, watched: false, served: true},
             {pattern: 'node_modules/systemjs/dist/**', included: false, watched: false, served: true},
@@ -71,6 +87,14 @@ module.exports = function (config) {
 
         // Concurrency level
         // how many browser should be started simultaneous
-        concurrency: Infinity
+        concurrency: Infinity,
+
+        sauceLabs: {
+            testName: 'angular2-firebase',
+            customLaunchers: customLaunchers,
+            browsers: Object.keys(customLaunchers),
+            reporters: ['dots', 'saucelabs'],
+            singleRun: true
+        }
     })
 };
