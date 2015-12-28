@@ -14,13 +14,19 @@ The project is not on NPM yet as it is not finished. You can install it using gi
 npm install --save git://github.com/KallynGowdy/angular2-firebase.git
 ```
 
-To use in your project, just reference the `angular2-firebase/core` module:
+To use in your project, reference the `angular2-firebase/core` module:
 
 ```TypeScript
 import {FirebaseService} from 'angular2-firebase/core';
 ```
 
-You may have to add the `node_modules` path to your `System.config({})`:
+also make sure you include the Firebase JavaScript SDK:
+
+```
+<script src="node_modules/firebase/lib/firebase-web.js"></script>
+```
+
+Finally, you may have to add the `node_modules` path to your `System.config({})`:
 
 ```TypeScript
 System.config({
