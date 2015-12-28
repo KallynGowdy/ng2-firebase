@@ -139,11 +139,11 @@ export var FirebaseServiceSpec = {
                     {name: 'childAdded', event: 'child_added', val: true},
                     {name: 'childChanged', event: 'child_changed', val: true},
                     {name: 'childRemoved', event: 'child_removed', val: true},
-                    {name: 'valueRaw', event: 'value'},
-                    {name: 'dataRaw', event: 'value'},
-                    {name: 'childAddedRaw', event: 'child_added'},
-                    {name: 'childChangedRaw', event: 'child_changed'},
-                    {name: 'childRemovedRaw', event: 'child_removed'}
+                    {name: 'valueRaw', event: 'value', val: false},
+                    {name: 'dataRaw', event: 'value', val: false},
+                    {name: 'childAddedRaw', event: 'child_added', val: false},
+                    {name: 'childChangedRaw', event: 'child_changed', val: false},
+                    {name: 'childRemovedRaw', event: 'child_removed', val: false}
                 ].forEach((m) => {
                     describe(`.${m.name}`, function () {
                         testGetterReturnsObservable(m.name);
