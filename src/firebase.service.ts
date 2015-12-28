@@ -1,9 +1,7 @@
 import {Injectable} from 'angular2/core';
-import * as FirebaseType from 'firebase';
 import {FirebaseConfig} from "./firebase.config";
 import {Observable} from 'rxjs/Rx';
 import {FirebaseUtils} from "./firebase-utils";
-declare var Firebase:FirebaseStatic;
 
 /**
  * Defines a service that wraps the Firebase Javascript API in a nice, Observable-enabled manner.
@@ -20,17 +18,51 @@ export class FirebaseService {
 
     private _firebase:Firebase;
 
-    private wrapFirebaseEvent(eventName: string):Observable<any>{
+    private wrapFirebaseEvent(eventName:string):Observable<any> {
         return FirebaseUtils.wrapFirebaseEvent(this.firebase, eventName);
     }
 
     /**
+     * Gets the raw event stream for the 'value' event from the underlying Firebase Object.
+     * @returns {Observable<any>}
+     */
+    get valueRaw():Observable<any> {
+        return this.wrapFirebaseEvent('value');
+    }
+
+    /**
+     * Gets an observable that resolves with the value in this Firebase location and whenever the data is updated.
+     * Internally, this maps to the 'value' event emitted by Firebase.
+     * @returns {Observable<any>}
+     */
+    get value():Observable<any> {
+        return this.valueRaw.map((data) => data.val());
+    }
+
+    /**
+     * Alias for .valueRaw.
+     * @returns {Observable<any>}
+     */
+    get dataRaw():Observable<any> {
+        return this.valueRaw;
+    }
+
+    /**
      * Gets an observable that resolves with the data in this Firebase location and whenever the data is updated.
+     * Semantically the same as calling .value.
      * Internally, this maps to the 'value' event emitted by Firebase.
      * @returns {Observable<any>}
      */
     get data():Observable<any> {
-        return this.wrapFirebaseEvent('value').map((data) => data.val());
+        return this.value;
+    }
+
+    /**
+     * Gets the raw event stream for the 'child_added' event from the underlying Firebase Object.
+     * @returns {Observable<any>}
+     */
+    get childAddedRaw(): Observable<any>{
+        return this.wrapFirebaseEvent('child_added');
     }
 
     /**
@@ -39,7 +71,15 @@ export class FirebaseService {
      * @returns {Observable<any>}
      */
     get childAdded():Observable<any> {
-        return this.wrapFirebaseEvent('child_added').map((data) => data.val());
+        return this.childAddedRaw.map((data) => data.val());
+    }
+
+    /**
+     * Gets the raw event stream for the 'child_changed' event from the underlying Firebase Object.
+     * @returns {Observable<any>}
+     */
+    get childChangedRaw(): Observable<any>{
+        return this.wrapFirebaseEvent('child_changed');
     }
 
     /**
@@ -48,7 +88,15 @@ export class FirebaseService {
      * @returns {Observable<any>}
      */
     get childChanged():Observable<any> {
-        return this.wrapFirebaseEvent('child_changed').map(data => data.val());
+        return this.childChangedRaw.map(data => data.val());
+    }
+
+    /**
+     * Gets the raw event stream for the 'child_removed' event from the underlying Firebase Object.
+     * @returns {Observable<any>}
+     */
+    get childRemovedRaw(): Observable<any>{
+        return this.wrapFirebaseEvent('child_removed');
     }
 
     /**
@@ -57,7 +105,7 @@ export class FirebaseService {
      * @returns {Observable<any>}
      */
     get childRemoved():Observable<any> {
-        return this.wrapFirebaseEvent('child_removed').map(data => data.val());
+        return this.childRemovedRaw.map(data => data.val());
     }
 
     /**
@@ -70,9 +118,9 @@ export class FirebaseService {
         return Observable.create((observer) => {
             this.firebase.set(data, (err) => {
                 if (err !== null) {
-                    observer.onError(err);
+                    observer.error(err);
                 } else {
-                    observer.onCompleted();
+                    observer.complete();
                 }
             });
         });
@@ -82,7 +130,7 @@ export class FirebaseService {
      * Creates a new FirebaseService using the given Firebase JavaScript API Object.
      * @param firebase The Object that represents the instantiated Firebase JavaScript API Object.
      */
-    constructor(firebase:Firebase) {
+    constructor(firebase:any) {
         this._firebase = firebase;
     }
 

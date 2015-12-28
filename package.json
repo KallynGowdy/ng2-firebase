@@ -10,7 +10,7 @@
     "karma": "karma",
     "pretest": "tsc",
     "test": "npm run karma -- start --single-run --browsers PhantomJS",
-    "test:w": "concurrent \"npm run live\" \"npm run build:test\"",
+    "test:w": "concurrent \"npm run live\" \"npm run build:test:w\"",
     "prepublish": "npm run build:publish"
   },
   "main": "dist/core.js",

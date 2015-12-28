@@ -44,12 +44,12 @@ export class FirebaseUtils {
     public static wrapFirebaseEvent(firebase:Firebase, eventName:string):Observable<any> {
         return Observable.create((observer) => {
             var callback = (data) => {
-                observer.onNext(data);
+                observer.next(data);
             };
             firebase.on(eventName,
                 callback,
                 (err) => {
-                    observer.onError(err);
+                    observer.error(err);
                 });
 
             return () => {

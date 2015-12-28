@@ -77,6 +77,25 @@ export var FirebaseUtilsSpec = {
 
                         expect(offSpy.called).toBeTruthy("Did not expect .off('event') to be called");
                     });
+                    it('should resolve with returned object when callback is called', function () {
+                        var obj = {
+                            val(){
+                                return 42;
+                            }
+                        };
+                        var firebase = <any>{
+                            on (event, callback) {
+                                callback(obj);
+                            }
+                        };
+
+                        var spy = Sinon.spy();
+
+                        FirebaseUtils.wrapFirebaseEvent(firebase, 'event').subscribe(spy);
+
+                        expect(spy.called).toBe(true);
+                        expect(spy.firstCall.args[0]).toEqual(obj);
+                    });
                 });
                 describe('wrapFirebaseAsyncCall()', function () {
                     it('should not manipulate the given arguments', function () {
@@ -156,14 +175,16 @@ export var FirebaseUtilsSpec = {
                         expect(errorSpy.firstCall.args[0]).toEqual('error');
                     });
 
-                    it('should be completed when the callback is completed successfully', function(){
+                    it('should be completed when the callback is completed successfully', function () {
                         var completeSpy = Sinon.spy();
                         var args = [];
                         var observable = FirebaseUtils.wrapFirebaseAsyncCall(null, (callback) => {
                             callback(null);
                         }, args);
 
-                        observable.subscribe(() => {}, () => {}, completeSpy);
+                        observable.subscribe(() => {
+                        }, () => {
+                        }, completeSpy);
 
                         expect(completeSpy.called).toBe(true, 'Expected complete function to be called');
                         expect(completeSpy.firstCall.args.length).toBe(0, 'Expected complete function to not be called with arguments.')

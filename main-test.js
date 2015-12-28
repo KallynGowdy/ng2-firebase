@@ -15,6 +15,9 @@ System.config({
             exports: 'default'
         }
     },
+    map: {
+        'angular2': 'node_modules/angular2'
+    },
     paths: {
         'rxjs/add/observable/*': 'node_modules/rxjs/add/observable/*.js',
         'rxjs/add/operator/*': 'node_modules/rxjs/add/operator/*.js',
