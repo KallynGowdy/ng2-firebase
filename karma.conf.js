@@ -59,13 +59,7 @@ module.exports = function (config) {
             customLaunchers: customLaunchers,
             browsers: Object.keys(customLaunchers),
             reporters: ['dots', 'saucelabs'],
-            singleRun: true,
-            username: 'KallynGowdy',
-            accessKey: '56b7c708-318c-4d46-9611-5363755d5863',
-            startConnect: false,
-            connectOptions: {
-                tunnelIdentifier: 'ebceb1217801488abd797b715c247a78'
-            }
+            singleRun: true
         }
     });
 };

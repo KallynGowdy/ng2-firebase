@@ -41,7 +41,7 @@ export class FirebaseUtils {
      * @param eventName The name of the event that should be listened to.
      * @returns {Observable<any>}
      */
-    public static wrapFirebaseEvent(firebase:Firebase, eventName:string):Observable<any> {
+    public static wrapFirebaseEvent(firebase:Firebase, eventName:string):Observable<FirebaseDataSnapshot> {
         return Observable.create((observer) => {
             var callback = (data) => {
                 observer.next(data);

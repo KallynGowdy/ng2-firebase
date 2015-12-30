@@ -8,7 +8,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('angular2/core');
-var Rx_1 = require('rxjs/Rx');
 var firebase_utils_1 = require("./firebase-utils");
 /**
  * Defines a service that wraps the Firebase Javascript API in a nice, Observable-enabled manner.
@@ -32,17 +31,75 @@ var FirebaseService = (function () {
         enumerable: true,
         configurable: true
     });
-    FirebaseService.prototype.wrapFirebaseEvent = function (eventName) {
-        return firebase_utils_1.FirebaseUtils.wrapFirebaseEvent(this.firebase, eventName);
+    /**
+     * Wraps the given Firebase event type as an observable.
+     * @param eventType {string} One of the following strings: "value", "child_added", "child_changed", "child_removed", or "child_moved."
+     */
+    FirebaseService.prototype.wrapFirebaseEvent = function (eventType) {
+        return firebase_utils_1.FirebaseUtils.wrapFirebaseEvent(this.firebase, eventType);
     };
-    Object.defineProperty(FirebaseService.prototype, "data", {
+    /**
+     * Retrieves an observable that wraps the given event from the Firebase API.
+     * @param eventType {string} One of the following strings: "value", "child_added", "child_changed", "child_removed", or "child_moved."
+     * @returns {Observable<FirebaseDataSnapshot>} An object that represents the asynchronous stream of events.
+     */
+    FirebaseService.prototype.on = function (eventType) {
+        return this.wrapFirebaseEvent(eventType);
+    };
+    Object.defineProperty(FirebaseService.prototype, "valueRaw", {
         /**
-         * Gets an observable that resolves with the data in this Firebase location and whenever the data is updated.
+         * Gets the raw event stream for the 'value' event from the underlying Firebase Object.
+         * @returns {Observable<any>}
+         */
+        get: function () {
+            return this.wrapFirebaseEvent('value');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FirebaseService.prototype, "value", {
+        /**
+         * Gets an observable that resolves with the value in this Firebase location and whenever the data is updated.
          * Internally, this maps to the 'value' event emitted by Firebase.
          * @returns {Observable<any>}
          */
         get: function () {
-            return this.wrapFirebaseEvent('value').map(function (data) { return data.val(); });
+            return this.valueRaw.map(function (data) { return data.val(); });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FirebaseService.prototype, "dataRaw", {
+        /**
+         * Alias for .valueRaw.
+         * @returns {Observable<any>}
+         */
+        get: function () {
+            return this.valueRaw;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FirebaseService.prototype, "data", {
+        /**
+         * Gets an observable that resolves with the data in this Firebase location and whenever the data is updated.
+         * Semantically the same as calling .value.
+         * Internally, this maps to the 'value' event emitted by Firebase.
+         * @returns {Observable<any>}
+         */
+        get: function () {
+            return this.value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FirebaseService.prototype, "childAddedRaw", {
+        /**
+         * Gets the raw event stream for the 'child_added' event from the underlying Firebase Object.
+         * @returns {Observable<any>}
+         */
+        get: function () {
+            return this.wrapFirebaseEvent('child_added');
         },
         enumerable: true,
         configurable: true
@@ -54,7 +111,18 @@ var FirebaseService = (function () {
          * @returns {Observable<any>}
          */
         get: function () {
-            return this.wrapFirebaseEvent('child_added').map(function (data) { return data.val(); });
+            return this.childAddedRaw.map(function (data) { return data.val(); });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FirebaseService.prototype, "childChangedRaw", {
+        /**
+         * Gets the raw event stream for the 'child_changed' event from the underlying Firebase Object.
+         * @returns {Observable<any>}
+         */
+        get: function () {
+            return this.wrapFirebaseEvent('child_changed');
         },
         enumerable: true,
         configurable: true
@@ -66,7 +134,18 @@ var FirebaseService = (function () {
          * @returns {Observable<any>}
          */
         get: function () {
-            return this.wrapFirebaseEvent('child_changed').map(function (data) { return data.val(); });
+            return this.childChangedRaw.map(function (data) { return data.val(); });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FirebaseService.prototype, "childRemovedRaw", {
+        /**
+         * Gets the raw event stream for the 'child_removed' event from the underlying Firebase Object.
+         * @returns {Observable<any>}
+         */
+        get: function () {
+            return this.wrapFirebaseEvent('child_removed');
         },
         enumerable: true,
         configurable: true
@@ -78,7 +157,7 @@ var FirebaseService = (function () {
          * @returns {Observable<any>}
          */
         get: function () {
-            return this.wrapFirebaseEvent('child_removed').map(function (data) { return data.val(); });
+            return this.childRemovedRaw.map(function (data) { return data.val(); });
         },
         enumerable: true,
         configurable: true
@@ -87,17 +166,17 @@ var FirebaseService = (function () {
      * Sets the data exact data that this Firebase location should contain and
      * returns an observable that represents the operation.
      * @param data The data that should be set to this location.
-     * @returns {Observable<any>}
+     * @returns {Promise<boolean>} Returns a promise that resolves `true` if the data was set. Otherwise the promise rejects if there was an error.
      */
     FirebaseService.prototype.setData = function (data) {
         var _this = this;
-        return Rx_1.Observable.create(function (observer) {
+        return new Promise(function (resolve, reject) {
             _this.firebase.set(data, function (err) {
                 if (err !== null) {
-                    observer.onError(err);
+                    reject(err);
                 }
                 else {
-                    observer.onCompleted();
+                    resolve(true);
                 }
             });
         });
@@ -112,7 +191,7 @@ var FirebaseService = (function () {
     };
     FirebaseService = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [Firebase])
+        __metadata('design:paramtypes', [Object])
     ], FirebaseService);
     return FirebaseService;
 })();

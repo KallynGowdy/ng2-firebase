@@ -2,6 +2,7 @@ import {Injectable} from 'angular2/core';
 import {FirebaseConfig} from "./firebase.config";
 import {Observable} from 'rxjs/Rx';
 import {FirebaseUtils} from "./firebase-utils";
+import {Subscription} from "rxjs/Subscription";
 
 /**
  * Defines a service that wraps the Firebase Javascript API in a nice, Observable-enabled manner.
@@ -18,15 +19,28 @@ export class FirebaseService {
 
     private _firebase:Firebase;
 
-    private wrapFirebaseEvent(eventName:string):Observable<any> {
-        return FirebaseUtils.wrapFirebaseEvent(this.firebase, eventName);
+    /**
+     * Wraps the given Firebase event type as an observable.
+     * @param eventType {string} One of the following strings: "value", "child_added", "child_changed", "child_removed", or "child_moved."
+     */
+    private wrapFirebaseEvent(eventType:string):Observable<FirebaseDataSnapshot> {
+        return FirebaseUtils.wrapFirebaseEvent(this.firebase, eventType);
+    }
+
+    /**
+     * Retrieves an observable that wraps the given event from the Firebase API.
+     * @param eventType {string} One of the following strings: "value", "child_added", "child_changed", "child_removed", or "child_moved."
+     * @returns {Observable<FirebaseDataSnapshot>} An object that represents the asynchronous stream of events.
+     */
+    public on(eventType:string):Observable<FirebaseDataSnapshot> {
+        return this.wrapFirebaseEvent(eventType);
     }
 
     /**
      * Gets the raw event stream for the 'value' event from the underlying Firebase Object.
      * @returns {Observable<any>}
      */
-    get valueRaw():Observable<any> {
+    get valueRaw():Observable<FirebaseDataSnapshot> {
         return this.wrapFirebaseEvent('value');
     }
 
@@ -43,7 +57,7 @@ export class FirebaseService {
      * Alias for .valueRaw.
      * @returns {Observable<any>}
      */
-    get dataRaw():Observable<any> {
+    get dataRaw():Observable<FirebaseDataSnapshot> {
         return this.valueRaw;
     }
 
@@ -61,7 +75,7 @@ export class FirebaseService {
      * Gets the raw event stream for the 'child_added' event from the underlying Firebase Object.
      * @returns {Observable<any>}
      */
-    get childAddedRaw(): Observable<any>{
+    get childAddedRaw():Observable<FirebaseDataSnapshot> {
         return this.wrapFirebaseEvent('child_added');
     }
 
@@ -78,7 +92,7 @@ export class FirebaseService {
      * Gets the raw event stream for the 'child_changed' event from the underlying Firebase Object.
      * @returns {Observable<any>}
      */
-    get childChangedRaw(): Observable<any>{
+    get childChangedRaw():Observable<FirebaseDataSnapshot> {
         return this.wrapFirebaseEvent('child_changed');
     }
 
@@ -95,7 +109,7 @@ export class FirebaseService {
      * Gets the raw event stream for the 'child_removed' event from the underlying Firebase Object.
      * @returns {Observable<any>}
      */
-    get childRemovedRaw(): Observable<any>{
+    get childRemovedRaw():Observable<FirebaseDataSnapshot> {
         return this.wrapFirebaseEvent('child_removed');
     }
 
@@ -112,15 +126,15 @@ export class FirebaseService {
      * Sets the data exact data that this Firebase location should contain and
      * returns an observable that represents the operation.
      * @param data The data that should be set to this location.
-     * @returns {Observable<any>}
+     * @returns {Promise<boolean>} Returns a promise that resolves `true` if the data was set. Otherwise the promise rejects if there was an error.
      */
-    setData(data:any):Observable<any> {
-        return Observable.create((observer) => {
+    setData(data:any):Promise<boolean> {
+        return new Promise((resolve, reject) => {
             this.firebase.set(data, (err) => {
                 if (err !== null) {
-                    observer.error(err);
+                    reject(err);
                 } else {
-                    observer.complete();
+                    resolve(true);
                 }
             });
         });

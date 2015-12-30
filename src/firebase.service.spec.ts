@@ -1,6 +1,7 @@
 import {FirebaseService} from './firebase.service';
 import * as Sinon from 'sinon';
 import {Observable} from "rxjs/Rx";
+import {Subscription} from "rxjs/Subscription";
 
 export var FirebaseServiceSpec = {
     register(){
@@ -34,7 +35,7 @@ export var FirebaseServiceSpec = {
                     });
                 });
 
-                describe('child(path)', function () {
+                describe('.child(path)', function () {
                     it('should return new FirebaseService with child service', function () {
                         var child = {};
                         var firebase = {
@@ -159,37 +160,86 @@ export var FirebaseServiceSpec = {
                 });
 
                 describe('.setData(data)', function () {
-                    it('should return an observable', function () {
+                    it('should return a Promise', function () {
                         var observable = service.setData({});
 
-                        expect(observable instanceof Observable).toBe(true);
+                        expect(observable instanceof Promise).toBe(true);
                     });
-                    it('should call .set() on internal Firebase API Instance when subscribed', function () {
+                    it('should call .set() on internal Firebase API Instance', function () {
                         var obj = {data: 'Yay!'};
-                        service.setData(obj).subscribe(() => {
-                        });
+                        service.setData(obj);
 
                         expect(setSpy.called).toBe(true);
                         expect(setSpy.firstCall.args[0]).toBe(obj);
                     });
-                    it('should resolve complete when .set() calls given callback', function () {
+                    it('should resolve true when .set() calls given callback', function (done) {
                         firebase.set = (data, callback) => {
                             callback(null);
                         };
                         var completeSpy = Sinon.spy();
-                        service.setData({}).subscribe(null, null, completeSpy);
-
-                        expect(completeSpy.called).toBe(true);
+                        service.setData({})
+                            .then(function (good) {
+                                expect(good).toBe(true);
+                                done();
+                            }).catch(done);
                     });
-                    it('should resolve with error when .set() calls given callback with value', function () {
+                    it('should resolve with error when .set() calls given callback with value', function (done) {
                         firebase.set = (data, callback) => {
                             callback('error');
                         };
-                        var errorSpy = Sinon.spy();
-                        service.setData({}).subscribe(null, errorSpy);
 
-                        expect(errorSpy.called).toBe(true);
-                        expect(errorSpy.firstCall.args[0]).toBe('error');
+                        service.setData({})
+                            .catch(function (error) {
+                                expect(error).toBe('error');
+                                done();
+                            })
+                            .then(function () {
+                                done('Catch was not called');
+                            })
+                            .catch(done);
+                    });
+                });
+
+                describe('.on(event)', function () {
+                    it('should call .on(event, callback) on firebase instance when subscribed to', function () {
+                        service.on('event').subscribe(() => {
+                        });
+
+                        expect(onSpy.firstCall.args[0]).toEqual('event');
+                    });
+
+                    it('should return an observable', function () {
+                        var observable = service.on('event');
+                        expect(observable instanceof Observable).toBe(true);
+                    });
+
+                    it('should call resolve when Firebase calls callback', function () {
+                        var obj = {
+                            data: 'hello'
+                        };
+                        var spy = Sinon.spy();
+
+                        firebase.on = function (event, callback) {
+                            callback(obj);
+                        };
+
+                        service.on('event').subscribe(spy);
+
+                        expect(spy.firstCall.args[0]).toBe(obj);
+                    });
+
+                    it('should resolve error when Firebase calls Error', function () {
+                        var err = {
+                            message: 'something'
+                        };
+                        var spy = Sinon.spy();
+                        firebase.on = function (event, callback, error) {
+                            error(err);
+                        };
+
+                        service.on('event').subscribe(null, spy);
+
+                        expect(spy.firstCall.args[0]).toBe(err);
                     });
                 });
             }

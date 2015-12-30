@@ -6,7 +6,7 @@ import {error} from "util";
 export var FirebaseUtilsSpec = {
     register() {
         describe('FirebaseUtils', function () {
-                describe('wrapFirebaseEvent()', function () {
+                describe('.wrapFirebaseEvent()', function () {
                     it('should return an observable', function () {
                         var firebase = <any>{
                             on: function () {
@@ -28,7 +28,7 @@ export var FirebaseUtilsSpec = {
 
                         expect(spy.called).toBeFalsy("Did not expect .on('event') to be called.");
                     });
-                    it('should call .on(eventName) on the Firebase object', function () {
+                    it('should call .on(eventName, callback: Function, errorCallback: Function) on the Firebase object after observable is subscribed to', function () {
                         var spy = Sinon.spy();
                         var firebase = <any>{
                             on: spy
@@ -42,6 +42,11 @@ export var FirebaseUtilsSpec = {
                         expect(spy.called).toBeTruthy("Expected .on('event') to be called.");
                         expect(spy.calledOnce).toBeTruthy("Expected .on('event') to be called once.");
                         expect(spy.firstCall.args[0]).toEqual('event', "Expected call with 'event' to .on(eventName)");
+                        expect(spy.firstCall.args[1]).not.toBeNull();
+                        expect(typeof spy.firstCall.args[1] === 'function').toBe(true, 'Expected second argument to be function.');
+                        expect(spy.firstCall.args[2]).not.toBeNull();
+                        expect(typeof spy.firstCall.args[2] === 'function').toBe(true, 'Expected third argument to be function.');
+
                     });
                     it('should not call .off(eventName) if subscription is not disposed', function () {
                         var offSpy = Sinon.spy();
@@ -97,7 +102,7 @@ export var FirebaseUtilsSpec = {
                         expect(spy.firstCall.args[0]).toEqual(obj);
                     });
                 });
-                describe('wrapFirebaseAsyncCall()', function () {
+                describe('.wrapFirebaseAsyncCall()', function () {
                     it('should not manipulate the given arguments', function () {
                         var args = [
                             'hi!',

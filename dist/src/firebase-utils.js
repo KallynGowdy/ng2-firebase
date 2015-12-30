@@ -42,10 +42,10 @@ var FirebaseUtils = (function () {
     FirebaseUtils.wrapFirebaseEvent = function (firebase, eventName) {
         return Rx_1.Observable.create(function (observer) {
             var callback = function (data) {
-                observer.onNext(data);
+                observer.next(data);
             };
             firebase.on(eventName, callback, function (err) {
-                observer.onError(err);
+                observer.error(err);
             });
             return function () {
                 firebase.off(eventName, callback);
