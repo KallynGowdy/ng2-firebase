@@ -1,11 +1,61 @@
+/// <
 import {Injectable} from 'angular2/core';
 import {FirebaseConfig} from "./firebase.config";
 import {Observable} from 'rxjs/Rx';
 import {FirebaseUtils} from "./firebase-utils";
-import {Subscription} from "rxjs/Subscription";
+import {Subscription} from 'rxjs/Subscription';
 
 /**
  * Defines a service that wraps the Firebase Javascript API in a nice, Observable-enabled manner.
+ *
+ * **Example**:
+ * ```TypeScript
+ * import {FirebaseService} from 'angular2-firebase/core';
+ *
+ * // Tell TypeScript that the Firebase SDK has created a global for us
+ * declare var Firebase;
+ *
+ * var firebase = new FirebaseService(Firebase);
+ *
+ * // Use Service
+ * ```
+ *
+ * **Angular 2 Example:**
+ *
+ * ```TypeScript
+ * // some.component.ts
+ * import { Component, OnInit, provide } from 'angular2/core';
+ *
+ * // FirebaseServiceFactory is not Implemented yet...
+ * import { FirebaseService, FirebaseServiceFactory } from 'angular2-firebase/core';
+ * import { Observable } from 'rxjs/Rx';
+ *
+ * @@Component({
+ *    selector: 'some-component',
+ *    template: `My Data: {{data}}`,
+ *    providers: [
+ *      provide(FirebaseService, { useFactory: FirebaseServiceFactory }
+ *    ]
+ * })
+ * export class SomeComponent implements OnInit {
+ *   private firebase: FirebaseService;
+ *
+ *   data: Observable<any>;
+ *
+ *   constructor(firebase: FirebaseService) {
+ *      this.firebase = firebase;
+ *   }
+ *
+ *   observeData() {
+ *      this.data = this.firebase.data;
+ *   }
+ *
+ *   ngOnInit() {
+ *      this.observeData();
+ *   }
+ *
+ * }
+ * ```
  */
 @Injectable()
 export class FirebaseService {

@@ -33,6 +33,7 @@ module.exports = function (config) {
             // Sources and specs.
             // Loaded through the System loader, in `test-main.js`.
             {pattern: 'src/**', included: false},
+            {pattern: 'test/**', included: false},
             {pattern: 'node_modules/angular2/**', included: false, watched: false, served: true},
             {pattern: 'node_modules/rxjs/**', included: false, watched: false, served: true},
             {pattern: 'node_modules/sinon/**', included: false, watched: false, served: true},

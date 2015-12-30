@@ -1,7 +1,7 @@
-import {FirebaseService} from './firebase.service';
+import {FirebaseService} from './../src/firebase.service';
 import * as Sinon from 'sinon';
-import {Observable} from "rxjs/Rx";
-import {Subscription} from "rxjs/Subscription";
+import {Observable} from "../node_modules/rxjs/Rx";
+import {Subscription} from "../node_modules/rxjs/Subscription";
 
 export var FirebaseServiceSpec = {
     register(){

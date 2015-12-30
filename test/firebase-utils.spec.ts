@@ -1,5 +1,5 @@
-import {Observable} from 'rxjs/Rx';
-import {FirebaseUtils} from "./firebase-utils";
+import {Observable} from '../node_modules/rxjs/Rx';
+import {FirebaseUtils} from "./../src/firebase-utils";
 import * as Sinon from 'sinon';
 import {error} from "util";
 

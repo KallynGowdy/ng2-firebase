@@ -87,6 +87,7 @@ node_modules
 
 ## Angular 2 TypeScript
 
-src/*.js
-src/*.js.map
+*.js
+*.js.map
 !dist
+docs

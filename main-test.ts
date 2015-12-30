@@ -30,7 +30,7 @@ System.config({
     }
 });
 
-var importPromise = System.import('src/all.spec');
+var importPromise = System.import('test/all.spec');
 if (hasKarma) {
     importPromise
         .then(function () {
