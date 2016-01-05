@@ -71,7 +71,7 @@
 						<p>Defines a service that wraps the Firebase Javascript API in a nice, Observable-enabled manner.</p>
 					</div>
 					<p><strong>Example</strong>:</p>
-					<pre><code class="lang-TypeScript"><span class="hljs-keyword">import</span> {FirebaseService} from <span class="hljs-string">'angular2-firebase/core'</span>;
+					<pre><code class="lang-TypeScript"><span class="hljs-keyword">import</span> {FirebaseService} from <span class="hljs-string">'firebase-angular2/core'</span>;
 
 <span class="hljs-comment">// Tell TypeScript that the Firebase SDK has created a global for us</span>
 <span class="hljs-keyword">declare</span> <span class="hljs-keyword">var</span> Firebase;
@@ -81,39 +81,37 @@
 <span class="hljs-comment">// Use Service</span>
 </code></pre>
 					<p><strong>Angular 2 Example:</strong></p>
-					<pre><code class="lang-TypeScript"><span class="hljs-comment">// some.component.ts</span>
-<span class="hljs-keyword">import</span> { Component, OnInit, provide } from <span class="hljs-string">'angular2/core'</span>;
-
-<span class="hljs-comment">// FirebaseServiceFactory is not Implemented yet...</span>
-<span class="hljs-keyword">import</span> { FirebaseService, FirebaseServiceFactory } from <span class="hljs-string">'angular2-firebase/core'</span>;
-<span class="hljs-keyword">import</span> { Observable } from <span class="hljs-string">'rxjs/Rx'</span>;
-
-@@Component({
-   selector: <span class="hljs-string">'some-component'</span>,
-   template: `My Data: {{data}}`,
-   providers: [
-     provide(FirebaseService, { useFactory: FirebaseServiceFactory }
-   ]
-})
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> SomeComponent <span class="hljs-keyword">implements</span> OnInit {
-  <span class="hljs-keyword">private</span> firebase: FirebaseService;
-
-  data: Observable&lt;<span class="hljs-built_in">any</span>&gt;;
-
-  <span class="hljs-constructor"><span class="hljs-keyword">constructor</span>(firebase: FirebaseService) </span>{
-     <span class="hljs-keyword">this</span>.firebase = firebase;
-  }
-
-  observeData() {
-     <span class="hljs-keyword">this</span>.data = <span class="hljs-keyword">this</span>.firebase.data;
-  }
-
-  ngOnInit() {
-     <span class="hljs-keyword">this</span>.observeData();
-  }
-
-}
-</code></pre>
+					<p>```TypeScript
+						// some.component.ts
+					import { Component, OnInit, provide } from &#39;angular2/core&#39;;</p>
+					<p>// FirebaseServiceFactory is not Implemented yet...
+						import { FirebaseService, FirebaseServiceFactory } from &#39;firebase-angular2/core&#39;;
+					import { Observable } from &#39;rxjs/Rx&#39;;</p>
+					<dl class="tsd-comment-tags">
+						<dt>component</dt>
+						<dd><p>({
+								selector: &#39;some-component&#39;,
+								template: <code>My Data: {{data}}</code>,
+								providers: [
+								provide(FirebaseService, { useFactory: FirebaseServiceFactory }
+								]
+								})
+								export class SomeComponent implements OnInit {
+							private firebase: FirebaseService;</p>
+							<p>  data: Observable<any>;</p>
+							<p>  constructor(firebase: FirebaseService) {
+								this.firebase = firebase;
+							}</p>
+							<p>  observeData() {
+								this.data = this.firebase.data;
+							}</p>
+							<p>  ngOnInit() {
+								this.observeData();
+							}</p>
+							<p>}
+							```</p>
+						</dd>
+					</dl>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -680,6 +678,15 @@
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
 						<a href="../globals.html#firebase" class="tsd-kind-icon">Firebase</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="../globals.html#firebaseprovider" class="tsd-kind-icon">Firebase<wbr>Provider</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="../globals.html#firebaseserviceprovider" class="tsd-kind-icon">Firebase<wbr>Service<wbr>Provider</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="../globals.html#firebaseservicefactory" class="tsd-kind-icon">Firebase<wbr>Service<wbr>Factory</a>
 					</li>
 				</ul>
 			</nav>
