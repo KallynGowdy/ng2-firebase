@@ -1,4 +1,4 @@
-# angular2-firebase
+# firebase-angular2
 A rich wrapper Angular 2 library for Firebase.
 
 | `master`  | `all` |
@@ -14,10 +14,10 @@ The project is not on NPM yet as it is not finished. You can install it using gi
 npm install --save git://github.com/KallynGowdy/angular2-firebase.git
 ```
 
-To use in your project, reference the `angular2-firebase/core` module:
+To use in your project, reference the `firebase-angular2/core` module:
 
 ```TypeScript
-import {FirebaseService} from 'angular2-firebase/core';
+import {FirebaseService} from 'firebase-angular2/core';
 ```
 
 also make sure you include the Firebase JavaScript SDK:
@@ -32,7 +32,7 @@ Finally, you may have to add the `node_modules` path to your `System.config({})`
 System.config({
   // ...
   map: {
-    'angular2-firebase': 'node_modules/angular2-firebase'
+    'firebase-angular2': 'node_modules/angular2-firebase'
   }
 });
 ```

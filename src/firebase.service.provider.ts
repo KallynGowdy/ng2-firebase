@@ -7,7 +7,7 @@ import {FirebaseServiceFactory} from './firebase.service.factory';
  * Semantically, using this variable is equivalent to the following statements:
  *
  * ```TypeScript
- * import {FirebaseService, FirebaseServiceFactory} from 'angular2-firebase/core';
+ * import {FirebaseService, FirebaseServiceFactory} from 'firebase-angular2/core';
  * var provider = provide(FirebaseService, {useFactory: FirebaseServiceFactory})
  * ```
  *

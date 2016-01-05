@@ -10,7 +10,7 @@ import {Subscription} from 'rxjs/Subscription';
  *
  * **Example**:
  * ```TypeScript
- * import {FirebaseService} from 'angular2-firebase/core';
+ * import {FirebaseService} from 'firebase-angular2/core';
  *
  * // Tell TypeScript that the Firebase SDK has created a global for us
  * declare var Firebase;
@@ -27,7 +27,7 @@ import {Subscription} from 'rxjs/Subscription';
  * import { Component, OnInit, provide } from 'angular2/core';
  *
  * // FirebaseServiceFactory is not Implemented yet...
- * import { FirebaseService, FirebaseServiceFactory } from 'angular2-firebase/core';
+ * import { FirebaseService, FirebaseServiceFactory } from 'firebase-angular2/core';
  * import { Observable } from 'rxjs/Rx';
  *
  * @Component({
