@@ -1,5 +1,5 @@
 import {Observable} from '../../node_modules/rxjs/Rx';
-import {FirebaseUtils} from "./../../src/firebase-utils";
+import {FirebaseUtils} from "angular2-firebase/core";
 import * as Sinon from 'sinon';
 import {error} from "util";
 

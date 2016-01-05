@@ -1,7 +1,6 @@
 import {Component, Provider, Injector, ComponentMetadata, View, ViewMetadata, Injectable, provide} from 'angular2/core';
 import {bootstrap} from 'angular2/platform/browser';
-import {FirebaseService} from '../../src/firebase.service';
-import {FirebaseServiceProvider} from '../../src/firebase.service.provider';
+import {FirebaseProvider, FirebaseService, FirebaseServiceProvider} from "angular2-firebase/core";
 
 import {
     AsyncTestCompleter,
@@ -60,6 +59,16 @@ export function main() {
             return bootstrap(TestComponent, [FirebaseServiceProvider, provide('Firebase', {useValue: firebase})]).then(component => {
                 expect(component.instance).not.toBe(null);
                 expect(component.instance.firebase).toBe(firebase);
+                component.dispose();
+            });
+        });
+
+        it('should be able to use both FirebaseServiceProvider and FirebaseProvider to build FirebaseService', function () {
+            Firebase = <FirebaseStatic>{};
+
+            return bootstrap(TestComponent, [FirebaseServiceProvider, FirebaseProvider]).then(component => {
+                expect(component.instance).not.toBe(null);
+                expect(component.instance.firebase).toBe(Firebase);
                 component.dispose();
             });
         });

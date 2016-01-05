@@ -1,5 +1,5 @@
 import * as Sinon from 'sinon';
-import {FirebaseService} from './../../src/firebase.service';
+import {FirebaseService} from 'angular2-firebase/core';
 import {Observable} from "../../node_modules/rxjs/Rx";
 import {Subscription} from "../../node_modules/rxjs/Subscription";
 

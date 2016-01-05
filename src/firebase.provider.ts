@@ -1,7 +1,7 @@
 import {provide} from 'angular2/core';
 declare var Firebase:Firebase;
 
-if (Firebase === undefined || Firebase === null) {
+if (typeof Firebase === 'undefined') {
     console.warn('"Firebase" is either not defined or is null. Please make sure that you are including the Firebase SDK script before loading this or related angular2-firebase scripts.');
 }
 
@@ -22,6 +22,9 @@ if (Firebase === undefined || Firebase === null) {
  */
 export var FirebaseProvider = provide('Firebase', {
     useFactory: () => {
+        if (Firebase === undefined || Firebase === null) {
+            console.error('"Firebase" is either not defined or is null. Please make sure that you are including the Firebase SDK script before loading this or related angular2-firebase scripts.');
+        }
         return Firebase;
     }
 });
