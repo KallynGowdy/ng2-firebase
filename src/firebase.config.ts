@@ -10,7 +10,7 @@ declare var Firebase:FirebaseStatic;
 export class FirebaseConfig {
     /**
      * The URL that the service should use to connect to firebase.
-     * Typically in the format "https://<YOUR-FIREBASE-APP>.firebaseio.com"
+     * Typically in the format `https://<YOUR-FIREBASE-APP>.firebaseio.com`
      */
     public url:string;
 
