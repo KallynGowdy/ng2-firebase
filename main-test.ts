@@ -4,11 +4,9 @@
 /// <amd-dependency path="./test/unit/firebase-utils.spec" />
 /// <reference path="./typings/sinon/sinon.d.ts"/>
 
-declare var System:any;
-declare var __karma__:any;
+declare var System;
+declare var __karma__;
 declare var Promise:PromiseConstructor;
-declare var file2moduleName:any;
-declare var Error:any;
 
 var win = <any>window;
 

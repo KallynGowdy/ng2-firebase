@@ -1,6 +1,7 @@
+/// <reference path="../../core.ts"/>
 import {Component, Provider, Injector, ComponentMetadata, View, ViewMetadata, Injectable, provide} from 'angular2/core';
 import {bootstrap} from 'angular2/platform/browser';
-import {FirebaseProvider, FirebaseService, FirebaseServiceProvider} from "angular2-firebase/core";
+import {FirebaseProvider, FirebaseService, FirebaseServiceProvider} from "../../core";
 
 import {
     AsyncTestCompleter,

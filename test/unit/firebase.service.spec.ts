@@ -1,7 +1,23 @@
 import * as Sinon from 'sinon';
-import {FirebaseService} from 'angular2-firebase/core';
+import {FirebaseService} from '../../core';
 import {Observable} from "../../node_modules/rxjs/Rx";
 import {Subscription} from "../../node_modules/rxjs/Subscription";
+import {
+    AsyncTestCompleter,
+    beforeEach,
+    ddescribe,
+    xdescribe,
+    describe,
+    dispatchEvent,
+    expect,
+    iit,
+    inject,
+    beforeEachProviders,
+    it,
+    xit,
+    TestComponentBuilder,
+    ComponentFixture
+} from 'angular2/testing_internal';
 
 export function main() {
     describe('FirebaseService', function () {
