@@ -12,7 +12,7 @@
     "karma": "karma",
     "pretest": "tsc",
     "test": "npm run karma -- start --single-run --browsers SauceLabs",
-    "test:w": "concurrent \"npm run live\" \"npm run build:test:w\"",
+    "test:w": "concurrent \"npm run karma -- start --browsers Chrome\" \"npm run build:test:w\"",
     "prepublish": "npm run build:publish"
   },
   "main": "dist/core.js",

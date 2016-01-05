@@ -7,10 +7,60 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+/// <
 var core_1 = require('angular2/core');
 var firebase_utils_1 = require("./firebase-utils");
 /**
  * Defines a service that wraps the Firebase Javascript API in a nice, Observable-enabled manner.
+ *
+ * **Example**:
+ * ```TypeScript
+ * import {FirebaseService} from 'angular2-firebase/core';
+ *
+ * // Tell TypeScript that the Firebase SDK has created a global for us
+ * declare var Firebase;
+ *
+ * var firebase = new FirebaseService(Firebase);
+ *
+ * // Use Service
+ * ```
+ *
+ * **Angular 2 Example:**
+ *
+ * ```TypeScript
+ * // some.component.ts
+ * import { Component, OnInit, provide } from 'angular2/core';
+ *
+ * // FirebaseServiceFactory is not Implemented yet...
+ * import { FirebaseService, FirebaseServiceFactory } from 'angular2-firebase/core';
+ * import { Observable } from 'rxjs/Rx';
+ *
+ * @@Component({
+ *    selector: 'some-component',
+ *    template: `My Data: {{data}}`,
+ *    providers: [
+ *      provide(FirebaseService, { useFactory: FirebaseServiceFactory }
+ *    ]
+ * })
+ * export class SomeComponent implements OnInit {
+ *   private firebase: FirebaseService;
+ *
+ *   data: Observable<any>;
+ *
+ *   constructor(firebase: FirebaseService) {
+ *      this.firebase = firebase;
+ *   }
+ *
+ *   observeData() {
+ *      this.data = this.firebase.data;
+ *   }
+ *
+ *   ngOnInit() {
+ *      this.observeData();
+ *   }
+ *
+ * }
+ * ```
  */
 var FirebaseService = (function () {
     /**

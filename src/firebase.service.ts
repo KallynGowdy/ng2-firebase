@@ -30,7 +30,7 @@ import {Subscription} from 'rxjs/Subscription';
  * import { FirebaseService, FirebaseServiceFactory } from 'angular2-firebase/core';
  * import { Observable } from 'rxjs/Rx';
  *
- * @@Component({
+ * @Component({
  *    selector: 'some-component',
  *    template: `My Data: {{data}}`,
  *    providers: [

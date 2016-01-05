@@ -1,15 +1,26 @@
-/// <reference path="node_modules/angular2/typings/es6-shim/es6-shim.d.ts"/>
+/// <reference path="./node_modules/angular2/typings/es6-shim/es6-shim.d.ts"/>
+/// <amd-dependency path="./test/integration/firebase.service.spec" />
+/// <amd-dependency path="./test/unit/firebase.service.spec" />
+/// <amd-dependency path="./test/unit/firebase-utils.spec" />
+/// <reference path="./typings/sinon/sinon.d.ts"/>
+
 declare var System:any;
 declare var __karma__:any;
 declare var Promise:PromiseConstructor;
 declare var file2moduleName:any;
-var hasKarma = typeof __karma__ !== 'undefined';
-var baseURL = '';
-if (hasKarma) {
-    __karma__.loaded = function () {
-    };
-    baseURL = '/base/';
-}
+declare var Error:any;
+
+var win = <any>window;
+
+// Tun on full stack traces in errors to help debugging
+(<any>Error).stackTraceLimit = Infinity;
+
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 100;
+
+__karma__.loaded = function () {
+};
+
+var baseURL = '/base/';
 System.config({
     baseURL: baseURL,
     defaultJSExtensions: true,
@@ -30,13 +41,30 @@ System.config({
     }
 });
 
-var importPromise = System.import('test/all.spec');
-if (hasKarma) {
-    importPromise
-        .then(function () {
-            __karma__.start();
-        })
-        .catch(function (error) {
-            __karma__.error(error.stack || error);
-        });
+function onlySpecFiles(path) {
+    return /^\/base\/test.+spec\.js$/.test(path);
 }
+
+// Import all the specs, execute their `main()` method and kick off Karma (Jasmine).
+System.import('angular2/src/platform/browser/browser_adapter').then(function (browser_adapter) {
+    (<any>browser_adapter).BrowserDomAdapter.makeCurrent();
+}).then(function () {
+        return Promise.all(
+            Object.keys(win.__karma__.files) // All files served by Karma.
+                .filter(onlySpecFiles)
+                //.map(win.file2moduleName)        // Normalize paths to module names.
+                .map(function (path) {
+                    return System.import(path).then(function (module) {
+                        if (module.hasOwnProperty('main')) {
+                            module.main();
+                        } else {
+                            throw new Error('Module ' + path + ' does not implement main() method.');
+                        }
+                    });
+                }));
+    })
+    .then(function () {
+        __karma__.start();
+    }, function (error) {
+        __karma__.error(error.stack || error);
+    });

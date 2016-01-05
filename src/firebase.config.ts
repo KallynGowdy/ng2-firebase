@@ -1,5 +1,6 @@
 import {Injectable} from 'angular2/core';
 import {FirebaseService} from "./firebase.service";
+import {FirebaseServiceFactory} from './firebase.service.factory';
 declare var Firebase:FirebaseStatic;
 
 /**
@@ -13,6 +14,10 @@ export class FirebaseConfig {
      */
     public url:string;
 
+    /**
+     * Creates a new FirebaseConfig object using the given Firebase URL.
+     * @param url The URL that should be used to connect to Firebase.
+     */
     constructor(url:string) {
         this.url = url;
     }
@@ -29,6 +34,6 @@ export class FirebaseConfig {
      * Creates a new Firebase Service using the this configuration.
      */
     public createService():FirebaseService {
-        return new FirebaseService(this.createFirebase());
+        return FirebaseServiceFactory(this.createFirebase());
     }
 }
