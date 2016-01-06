@@ -1,0 +1,6 @@
+test/
+typings/
+karma.conf.ts
+main-test.ts
+unit-tests.html
+wercker.yml
