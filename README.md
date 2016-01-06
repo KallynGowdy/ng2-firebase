@@ -26,13 +26,32 @@ also make sure you include the Firebase JavaScript SDK:
 <script src="node_modules/firebase/lib/firebase-web.js"></script>
 ```
 
-Finally, you may have to add the `node_modules` path to your `System.config({})`:
+Add the path to your `System.config({})`:
 
 ```TypeScript
 System.config({
   // ...
   map: {
-    'firebase-angular2': 'node_modules/angular2-firebase'
+    'firebase-angular2': 'node_modules/firebase-angular2'
   }
 });
 ```
+
+Finally, register whatever providers you need:
+
+```
+// boot.ts
+import {provide} from 'angular2/core';
+import {FirebaseService} from 'firebase-angular2/core';
+
+// Tell TypeScript that Firebase is a global object.
+declare var Firebase;
+
+bootstrap(MyAppComponent, [
+    provide(FirebaseService, {useFactory: () => new new FirebaseService(new Firebase('https://YOUR-FIREBASE-URL.firebaseio.com/')))})
+]);
+```
+
+## Demo
+
+See [firebase-angular2-demo](https://github.com/KallynGowdy/firebase-angular2-demo) for the Tour of Heroes example application using `firebase-angular2`.
