@@ -1,9 +1,8 @@
 /// <
 import {Injectable} from 'angular2/core';
+import {Observable, Subscription} from 'rxjs/Rx';
 import {FirebaseConfig} from "./firebase.config";
-import {Observable} from 'rxjs/Rx';
 import {FirebaseUtils} from "./firebase-utils";
-import {Subscription} from 'rxjs/Subscription';
 
 /**
  * Defines a service that wraps the Firebase Javascript API in a nice, Observable-enabled manner.
