@@ -1,6 +1,6 @@
 {
   "name": "firebase-angular2",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "An Angular 2 Wrapper for Firebase",
   "scripts": {
     "build:test": "tsc",
@@ -16,6 +16,11 @@
     "test": "npm run karma -- start --single-run --browsers SauceLabs",
     "test:w": "concurrent \"npm run karma -- start --browsers Chrome\" \"npm run build:test:w\"",
     "prepublish": "npm run build:publish"
+  },
+  "repository" :
+  {
+    "type" : "git",
+    "url" : "https://github.com/KallynGowdy/angular2-firebase"
   },
   "author": "Kallyn Gowdy",
   "license": "Apache-2.0",
