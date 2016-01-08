@@ -1,7 +1,7 @@
 {
   "name": "firebase-angular2",
   "version": "0.6.1",
-  "description": "An Angular 2 Wrapper for Firebase",
+  "description": "An Angular 2 Wrapper for the Firebase JavaScript SDK",
   "scripts": {
     "build:test": "tsc",
     "build:test:w": "tsc -w",
@@ -21,11 +21,14 @@
     "type" : "git",
     "url" : "https://github.com/KallynGowdy/angular2-firebase"
   },
+  "bugs": {
+    "url": "https://github.com/KallynGowdy/angular2-firebase/issues"
+  },
   "keywords": [
     "angular2",
     "firebase"
   ],
-  "author": "Kallyn Gowdy",
+  "author": "Kallyn Gowdy <kallyngowdy@gmail.com>",
   "license": "Apache-2.0",
   "directories": [
     "src"
