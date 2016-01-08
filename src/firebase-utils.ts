@@ -43,8 +43,8 @@ export class FirebaseUtils {
      */
     public static wrapFirebaseEvent(firebase:Firebase, eventName:string):Observable<FirebaseDataSnapshot> {
         return Observable.create((observer) => {
-            var callback = (data) => {
-                observer.next(data);
+            var callback = function () {
+                observer.next(Array.prototype.slice.call(arguments));
             };
             firebase.on(eventName,
                 callback,

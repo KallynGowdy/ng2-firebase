@@ -18,6 +18,7 @@ import {
     TestComponentBuilder,
     ComponentFixture
 } from 'angular2/testing_internal';
+import {FirebaseArray} from "../../src/firebase-array";
 
 export function main() {
     describe('FirebaseService', function () {
@@ -149,17 +150,37 @@ export function main() {
                 });
             }
 
+            function testObservableResolvesExtraArguments(getterName:string){
+                it('should resolve with extra arguments given to callback', function () {
+                    var args = ['arg1', 'arg2', 'arg3', {
+                        name: 'arg4'
+                    }, 3, 5];
+                    firebase.on = function (event, callback, cancelCallback) {
+                        callback(...args);
+                    };
+
+                    var spy = Sinon.spy();
+
+                    service[getterName].subscribe(spy);
+
+                    expect(spy.called).toBe(true, 'Expected callback to be called.');
+                    expect(spy.firstCall.args).toEqual(args);
+                });
+            }
+
             [
                 {name: 'value', event: 'value', val: true},
                 {name: 'data', event: 'value', val: true},
                 {name: 'childAdded', event: 'child_added', val: true},
                 {name: 'childChanged', event: 'child_changed', val: true},
                 {name: 'childRemoved', event: 'child_removed', val: true},
+                {name: 'childMoved', event: 'child_moved', val: true},
                 {name: 'valueRaw', event: 'value', val: false},
                 {name: 'dataRaw', event: 'value', val: false},
                 {name: 'childAddedRaw', event: 'child_added', val: false},
                 {name: 'childChangedRaw', event: 'child_changed', val: false},
-                {name: 'childRemovedRaw', event: 'child_removed', val: false}
+                {name: 'childRemovedRaw', event: 'child_removed', val: false},
+                {name: 'childMovedRaw', event: 'child_moved', val: false}
             ].forEach((m) => {
                 describe(`.${m.name}`, function () {
                     testGetterReturnsObservable(m.name);
@@ -167,6 +188,7 @@ export function main() {
                         testObservableResolvesWithVal(m.name);
                     }
                     else {
+                        testObservableResolvesExtraArguments(m.name);
                         testObservableResolvesWithFullObj(m.name);
                     }
                     testObservableResolvesCancelCallbackAsError(m.name);
@@ -255,6 +277,17 @@ export function main() {
                     service.on('event').subscribe(null, spy);
 
                     expect(spy.firstCall.args[0]).toBe(err);
+                });
+            });
+
+            describe('.asArray', function () {
+                it('should return a new FirebaseArrayService that wraps the FirebaseService', function () {
+                    var firebase = {};
+                    var firebaseService = new FirebaseService(firebase);
+
+                    var firebaseArray = firebaseService.asArray();
+
+                    expect(firebaseArray instanceof FirebaseArray).toBe(true);
                 });
             });
         }

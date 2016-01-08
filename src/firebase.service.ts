@@ -3,6 +3,7 @@ import {Injectable} from 'angular2/core';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {FirebaseConfig} from "./firebase.config";
 import {FirebaseUtils} from "./firebase-utils";
+import {FirebaseArray} from "./firebase-array";
 
 /**
  * Defines a service that wraps the Firebase Javascript API in a nice, Observable-enabled manner.
@@ -101,7 +102,7 @@ export class FirebaseService {
      * @returns {Observable<any>}
      */
     get value():Observable<any> {
-        return this.valueRaw.map((data) => data.val());
+        return this.valueRaw.map((data) => data[0].val());
     }
 
     /**
@@ -136,7 +137,7 @@ export class FirebaseService {
      * @returns {Observable<any>}
      */
     get childAdded():Observable<any> {
-        return this.childAddedRaw.map((data) => data.val());
+        return this.childAddedRaw.map((data) => data[0].val());
     }
 
     /**
@@ -153,7 +154,7 @@ export class FirebaseService {
      * @returns {Observable<any>}
      */
     get childChanged():Observable<any> {
-        return this.childChangedRaw.map(data => data.val());
+        return this.childChangedRaw.map(data => data[0].val());
     }
 
     /**
@@ -170,7 +171,24 @@ export class FirebaseService {
      * @returns {Observable<any>}
      */
     get childRemoved():Observable<any> {
-        return this.childRemovedRaw.map(data => data.val());
+        return this.childRemovedRaw.map(data => data[0].val());
+    }
+
+    /**
+     * Gets an observable that resolves whenever a child is moved in this Firebase location.
+     * Internally, this maps to the 'child_moved' event emitted by Firebase.
+     * @returns {Observable<any>}
+     */
+    get childMoved():Observable<any> {
+        return this.childMovedRaw.map(data => data[0].val());
+    }
+
+    /**
+     * Gets the raw event stream for the 'child_moved' event from the underlying Firebase Object.
+     * @returns {Observable<any>}
+     */
+    get childMovedRaw():Observable<FirebaseDataSnapshot> {
+        return this.wrapFirebaseEvent('child_moved');
     }
 
     /**
@@ -189,6 +207,15 @@ export class FirebaseService {
                 }
             });
         });
+    }
+
+    /**
+     * Wraps this FirebaseService in a new FirebaseArray object.
+     * The FirebaseArray service provides functionality for dealing with synchronized order lists of objects.
+     * @returns {FirebaseArray}
+     */
+    asArray():FirebaseArray {
+        return new FirebaseArray(this);
     }
 
     /**
