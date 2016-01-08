@@ -1,5 +1,5 @@
 # firebase-angular2
-A rich wrapper Angular 2 library for Firebase.
+A rich Angular 2 wrapper library for the Firebase JavaScript SDK.
 
 | `master`  | `all` |
 | ------------- | ------------- |
@@ -20,7 +20,7 @@ There are two valid ways to use the library in your project:
  - TypeScript
  - JavaScript (ES5)
 
-### TypeScript [Demo Application](https://github.com/KallynGowdy/firebase-angular2-demo/tree/master/ts)
+### TypeScript - [Demo Application](https://github.com/KallynGowdy/firebase-angular2-demo/tree/master/ts)
 
 To use in your project, reference the `firebase-angular2/core` module:
 
@@ -63,7 +63,7 @@ bootstrap(MyAppComponent, [
 ]);
 ```
 
-### JavaScript [Demo Application](https://github.com/KallynGowdy/firebase-angular2-demo/tree/master/js)
+### JavaScript - [Demo Application](https://github.com/KallynGowdy/firebase-angular2-demo/tree/master/js)
 
 Make sure that both the Firebase SDK and the Firebase Angular 2 Bundle are included:
 

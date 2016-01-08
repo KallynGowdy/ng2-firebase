@@ -17,11 +17,14 @@
     "test:w": "concurrent \"npm run karma -- start --browsers Chrome\" \"npm run build:test:w\"",
     "prepublish": "npm run build:publish"
   },
-  "repository" :
-  {
+  "repository" : {
     "type" : "git",
     "url" : "https://github.com/KallynGowdy/angular2-firebase"
   },
+  "keywords": [
+    "angular2",
+    "firebase"
+  ],
   "author": "Kallyn Gowdy",
   "license": "Apache-2.0",
   "directories": [
