@@ -81,37 +81,41 @@
 <span class="hljs-comment">// Use Service</span>
 </code></pre>
 					<p><strong>Angular 2 Example:</strong></p>
-					<p>```TypeScript
-						// some.component.ts
-					import { Component, OnInit, provide } from &#39;angular2/core&#39;;</p>
-					<p>// FirebaseServiceFactory is not Implemented yet...
-						import { FirebaseService, FirebaseServiceFactory } from &#39;firebase-angular2/core&#39;;
-					import { Observable } from &#39;rxjs/Rx&#39;;</p>
-					<dl class="tsd-comment-tags">
-						<dt>component</dt>
-						<dd><p>({
-								selector: &#39;some-component&#39;,
-								template: <code>My Data: {{data}}</code>,
-								providers: [
-								provide(FirebaseService, { useFactory: FirebaseServiceFactory }
-								]
-								})
-								export class SomeComponent implements OnInit {
-							private firebase: FirebaseService;</p>
-							<p>  data: Observable<any>;</p>
-							<p>  constructor(firebase: FirebaseService) {
-								this.firebase = firebase;
-							}</p>
-							<p>  observeData() {
-								this.data = this.firebase.data;
-							}</p>
-							<p>  ngOnInit() {
-								this.observeData();
-							}</p>
-							<p>}
-							```</p>
-						</dd>
-					</dl>
+					<pre><code><span class="hljs-comment">// some.component.ts</span>
+<span class="hljs-keyword">import</span> { Component, OnInit, provide } from <span class="hljs-string">'angular2/core'</span>;
+<span class="hljs-keyword">import</span> { FirebaseService, FirebaseServiceFactory } from <span class="hljs-string">'firebase-angular2/core'</span>;
+<span class="hljs-keyword">import</span> { Observable } from <span class="hljs-string">'rxjs/Rx'</span>;
+
+@@Component({
+   <span class="hljs-comment">// FirebaseServiceFactory is not Implemented yet...</span>
+   selector: <span class="hljs-string">'some-component'</span>,
+
+   <span class="hljs-comment">// Make sure to include the async pipe so that the most recent value</span>
+   <span class="hljs-comment">// is resolved from the data observable.</span>
+   template: `My Data: {{data | async}}`,
+
+   <span class="hljs-comment">// Declare the providers that should be used for the service.</span>
+   providers: [
+     provide(FirebaseService, { useFactory: FirebaseServiceFactory }
+   ]
+})
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> SomeComponent <span class="hljs-keyword">implements</span> OnInit {
+  <span class="hljs-keyword">private</span> firebase: FirebaseService;
+  data: Observable&lt;<span class="hljs-built_in">any</span>&gt;;
+
+  <span class="hljs-constructor"><span class="hljs-keyword">constructor</span>(firebase: FirebaseService) </span>{
+     <span class="hljs-keyword">this</span>.firebase = firebase;
+  }
+
+  observeData() {
+     <span class="hljs-keyword">this</span>.data = <span class="hljs-keyword">this</span>.firebase.data;
+  }
+
+  ngOnInit() {
+     <span class="hljs-keyword">this</span>.observeData();
+  }
+}
+</code></pre>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -178,7 +182,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L190">firebase.service.ts:190</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L192">firebase.service.ts:192</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -210,7 +214,7 @@
 					<div class="tsd-signature tsd-kind-icon">_firebase<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Firebase</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L69">firebase.service.ts:69</a></li>
+							<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L71">firebase.service.ts:71</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -227,7 +231,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L136">firebase.service.ts:136</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L138">firebase.service.ts:138</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -250,7 +254,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L127">firebase.service.ts:127</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L129">firebase.service.ts:129</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -272,7 +276,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L153">firebase.service.ts:153</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L155">firebase.service.ts:155</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -295,7 +299,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L144">firebase.service.ts:144</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L146">firebase.service.ts:146</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -317,7 +321,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L170">firebase.service.ts:170</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L172">firebase.service.ts:172</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -340,7 +344,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L161">firebase.service.ts:161</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L163">firebase.service.ts:163</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -362,7 +366,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L119">firebase.service.ts:119</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L121">firebase.service.ts:121</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -386,7 +390,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L109">firebase.service.ts:109</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L111">firebase.service.ts:111</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -408,7 +412,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L65">firebase.service.ts:65</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L67">firebase.service.ts:67</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -430,7 +434,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L101">firebase.service.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L103">firebase.service.ts:103</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -453,7 +457,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L92">firebase.service.ts:92</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L94">firebase.service.ts:94</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -478,7 +482,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L205">firebase.service.ts:205</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L207">firebase.service.ts:207</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -509,7 +513,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L84">firebase.service.ts:84</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L86">firebase.service.ts:86</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -541,7 +545,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L180">firebase.service.ts:180</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L182">firebase.service.ts:182</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -574,7 +578,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L75">firebase.service.ts:75</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/angular2-firebase/blob/master/src/firebase.service.ts#L77">firebase.service.ts:77</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
