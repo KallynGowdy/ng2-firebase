@@ -8,6 +8,7 @@ import {FirebaseUtils} from "./firebase-utils";
  * Defines a service that wraps the Firebase Javascript API in a nice, Observable-enabled manner.
  *
  * **Example**:
+ *
  * ```TypeScript
  * import {FirebaseService} from 'firebase-angular2/core';
  *
@@ -20,25 +21,27 @@ import {FirebaseUtils} from "./firebase-utils";
  * ```
  *
  * **Angular 2 Example:**
- *
- * ```TypeScript
+ * ```
  * // some.component.ts
  * import { Component, OnInit, provide } from 'angular2/core';
- *
- * // FirebaseServiceFactory is not Implemented yet...
  * import { FirebaseService, FirebaseServiceFactory } from 'firebase-angular2/core';
  * import { Observable } from 'rxjs/Rx';
  *
- * @Component({
+ * @@Component({
+ *    // FirebaseServiceFactory is not Implemented yet...
  *    selector: 'some-component',
- *    template: `My Data: {{data}}`,
+ *
+ *    // Make sure to include the async pipe so that the most recent value
+ *    // is resolved from the data observable.
+ *    template: `My Data: {{data | async}}`,
+ *
+ *    // Declare the providers that should be used for the service.
  *    providers: [
  *      provide(FirebaseService, { useFactory: FirebaseServiceFactory }
  *    ]
  * })
  * export class SomeComponent implements OnInit {
  *   private firebase: FirebaseService;
- *
  *   data: Observable<any>;
  *
  *   constructor(firebase: FirebaseService) {
@@ -52,7 +55,6 @@ import {FirebaseUtils} from "./firebase-utils";
  *   ngOnInit() {
  *      this.observeData();
  *   }
- *
  * }
  * ```
  */

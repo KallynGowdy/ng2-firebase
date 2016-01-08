@@ -6,7 +6,7 @@
     "build:test": "tsc",
     "build:test:w": "tsc -w",
     "build:publish": "tsc && npm run build:package",
-    "build:docs": "typedoc --out ./docs --includeDeclarations --name \"Angular 2 Firebase\" --readme ./README.md --target ES5 --mode file --externalPattern \"./node_modules/**/*\" --excludeExternals --module commonjs --moduleResolution node --emitDecoratorMetadata --experimentalDecorators \"./src\"",
+    "build:docs": "typedoc --out ./docs --name \"Angular 2 Firebase\" --readme ./README.md --target ES5 --mode file --externalPattern \"./node_modules/**/*\" --excludeExternals --module commonjs --moduleResolution node --emitDecoratorMetadata --experimentalDecorators \"./src\"",
     "build:package": "npm run webpack",
     "webpack": "webpack --display-modules",
     "typedoc": "typedoc",
