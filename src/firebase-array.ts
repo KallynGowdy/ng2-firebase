@@ -74,7 +74,7 @@ export class FirebaseArray extends Subject<any[]> {
      * @returns {function(any[]): undefined}
      * @private
      */
-    private _wrap(func:(val:any, key:string) => void) {
+    private _wrap(func:Function) {
         return (args:any[]) => {
             var child:FirebaseDataSnapshot = args[0];
             func(child.val(), child.key(), ...args);
