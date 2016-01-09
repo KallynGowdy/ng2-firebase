@@ -69,12 +69,20 @@ export class FirebaseArray extends Subject<any[]> {
     }
 
     /**
-     *
-     * @param index
+     * Gets the of the member with the given key.
+     * @param key
      * @returns {number|number}
      */
-    indexOf(index:(string|number)) {
-        return this._getPositionFor(index.toString());
+    indexOf(key:(string|number)) {
+        return this._getPositionFor(key.toString());
+    }
+
+    /**
+     * Gets the underlying service for this array.
+     * @returns {FirebaseService}
+     */
+    get service():FirebaseService {
+        return this._service;
     }
 
     /**
@@ -83,6 +91,10 @@ export class FirebaseArray extends Subject<any[]> {
      */
     get length():number {
         return this._list.length;
+    }
+
+    get array():any[] {
+        return this._list.slice();
     }
 
     /**
@@ -163,7 +175,7 @@ export class FirebaseArray extends Subject<any[]> {
     }
 
     private _emit() {
-        this.next(this._list.slice());
+        this.next(this.array);
     }
 
     /**
