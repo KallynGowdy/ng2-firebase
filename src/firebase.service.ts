@@ -75,7 +75,7 @@ export class FirebaseService {
      * Wraps the given Firebase event type as an observable.
      * @param eventType {string} One of the following strings: "value", "child_added", "child_changed", "child_removed", or "child_moved."
      */
-    private wrapFirebaseEvent(eventType:string):Observable<FirebaseDataSnapshot> {
+    private wrapFirebaseEvent(eventType:string):Observable<any[]> {
         return FirebaseUtils.wrapFirebaseEvent(this.firebase, eventType);
     }
 
@@ -84,7 +84,7 @@ export class FirebaseService {
      * @param eventType {string} One of the following strings: "value", "child_added", "child_changed", "child_removed", or "child_moved."
      * @returns {Observable<FirebaseDataSnapshot>} An object that represents the asynchronous stream of events.
      */
-    public on(eventType:string):Observable<FirebaseDataSnapshot> {
+    public on(eventType:string):Observable<any[]> {
         return this.wrapFirebaseEvent(eventType);
     }
 
@@ -92,7 +92,7 @@ export class FirebaseService {
      * Gets the raw event stream for the 'value' event from the underlying Firebase Object.
      * @returns {Observable<any>}
      */
-    get valueRaw():Observable<FirebaseDataSnapshot> {
+    get valueRaw():Observable<any[]> {
         return this.wrapFirebaseEvent('value');
     }
 
@@ -109,7 +109,7 @@ export class FirebaseService {
      * Alias for .valueRaw.
      * @returns {Observable<any>}
      */
-    get dataRaw():Observable<FirebaseDataSnapshot> {
+    get dataRaw():Observable<any[]> {
         return this.valueRaw;
     }
 
@@ -127,7 +127,7 @@ export class FirebaseService {
      * Gets the raw event stream for the 'child_added' event from the underlying Firebase Object.
      * @returns {Observable<any>}
      */
-    get childAddedRaw():Observable<FirebaseDataSnapshot> {
+    get childAddedRaw():Observable<any[]> {
         return this.wrapFirebaseEvent('child_added');
     }
 
@@ -144,7 +144,7 @@ export class FirebaseService {
      * Gets the raw event stream for the 'child_changed' event from the underlying Firebase Object.
      * @returns {Observable<any>}
      */
-    get childChangedRaw():Observable<FirebaseDataSnapshot> {
+    get childChangedRaw():Observable<any[]> {
         return this.wrapFirebaseEvent('child_changed');
     }
 
@@ -161,7 +161,7 @@ export class FirebaseService {
      * Gets the raw event stream for the 'child_removed' event from the underlying Firebase Object.
      * @returns {Observable<any>}
      */
-    get childRemovedRaw():Observable<FirebaseDataSnapshot> {
+    get childRemovedRaw():Observable<any[]> {
         return this.wrapFirebaseEvent('child_removed');
     }
 
@@ -187,7 +187,7 @@ export class FirebaseService {
      * Gets the raw event stream for the 'child_moved' event from the underlying Firebase Object.
      * @returns {Observable<any>}
      */
-    get childMovedRaw():Observable<FirebaseDataSnapshot> {
+    get childMovedRaw():Observable<any[]> {
         return this.wrapFirebaseEvent('child_moved');
     }
 

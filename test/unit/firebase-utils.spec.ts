@@ -114,7 +114,7 @@ export function main() {
                     FirebaseUtils.wrapFirebaseEvent(firebase, 'event').subscribe(spy);
 
                     expect(spy.called).toBe(true);
-                    expect(spy.firstCall.args[0]).toEqual(obj);
+                    expect(spy.firstCall.args[0]).toEqual([obj]);
                 });
             });
             describe('.wrapFirebaseAsyncCall()', function () {

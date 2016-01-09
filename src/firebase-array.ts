@@ -8,8 +8,14 @@ import {Subject} from "rxjs/Subject";
  */
 @Injectable()
 export class FirebaseArray extends Subject<any[]> {
-    private service:FirebaseService;
-    private list:any[];
+    private _service:FirebaseService;
+    private _list:any[];
+
+    /**
+     * @type {boolean}
+     * @private
+     */
+    private _initialized:boolean = false;
 
     /**
      * Creates a new FirebaseArray using the given FirebaseService.
@@ -17,34 +23,53 @@ export class FirebaseArray extends Subject<any[]> {
      */
     constructor(firebaseService:FirebaseService) {
         super();
-        this.service = firebaseService;
-        this.list = [];
+        this._service = firebaseService;
+        this._list = [];
         this._init();
     }
 
     /**
      * @private
      */
-    _init() {
-        this._subscribeToEvent(this.service.childAddedRaw, this._childAdded);
-        this._subscribeToEvent(this.service.childRemovedRaw, this._childRemoved);
-        this._subscribeToEvent(this.service.childChangedRaw, this._childChanged);
-        this._subscribeToEvent(this.service.childMovedRaw, this._childMoved);
-    }
-
-    _subscribeToEvent(observable:Observable<FirebaseDataSnapshot>, reciever:(val:any, key:string) => void) {
-        observable.subscribe(this._wrap(reciever), this.error, this.complete);
-    }
-
-    _wrap(func:(val:any, key:string) => void) {
-        return (child:FirebaseDataSnapshot) => {
-            func(child.val(), child.key(), ...arguments);
+    private _init() {
+        if (!this._initialized) {
+            this._subscribeToEvent(this._service.childAddedRaw, this._childAdded.bind(this));
+            this._subscribeToEvent(this._service.childRemovedRaw, this._childRemoved.bind(this));
+            this._subscribeToEvent(this._service.childChangedRaw, this._childChanged.bind(this));
+            this._subscribeToEvent(this._service.childMovedRaw, this._childMoved.bind(this));
+            this._initialized = true;
         }
     }
 
-    _getPositionFor(key) {
-        for (var i = 0; i < this.list.length; i++) {
-            var v = this.list[i];
+    /**
+     * @param observable
+     * @param reciever
+     * @private
+     */
+    private _subscribeToEvent(observable:Observable<any[]>, reciever:Function) {
+        observable.subscribe(this._wrap(reciever), this.error, this.complete);
+    }
+
+    /**
+     * @param func
+     * @returns {function(any[]): undefined}
+     * @private
+     */
+    private _wrap(func:(val:any, key:string) => void) {
+        return (args:any[]) => {
+            var child:FirebaseDataSnapshot = args[0];
+            func(child.val(), child.key(), ...args);
+        }
+    }
+
+    /**
+     * @param key
+     * @returns {number}
+     * @private
+     */
+    private _getPositionFor(key) {
+        for (var i = 0; i < this._list.length; i++) {
+            var v = this._list[i];
             if (v.$id === key) {
                 return i;
             }
@@ -52,14 +77,19 @@ export class FirebaseArray extends Subject<any[]> {
         return -1;
     }
 
-    _getPositionAfter(prevChildKey) {
+    /**
+     * @param prevChildKey
+     * @returns {any}
+     * @private
+     */
+    private _getPositionAfter(prevChildKey) {
         if (prevChildKey === null) {
             return 0;
         }
         else {
             var i = this._getPositionFor(prevChildKey);
             if (i === -1) {
-                return this.list.length;
+                return this._list.length;
             }
             else {
                 return i + 1;
@@ -67,14 +97,19 @@ export class FirebaseArray extends Subject<any[]> {
         }
     }
 
+    private _emit() {
+        this.next(this._list.slice());
+    }
+
     /**
      * @param child
      * @private
      */
-    _childAdded(val:any, key:string, snap:FirebaseDataSnapshot, prevChild:any) {
+    private _childAdded(val:any, key:string, snap:FirebaseDataSnapshot, prevChild:any):void {
         val.$id = key;
         var pos = this._getPositionAfter(prevChild);
-        this.list.splice(pos, 0, val);
+        this._list.splice(pos, 0, val);
+        this._emit();
     }
 
     /**
@@ -82,23 +117,38 @@ export class FirebaseArray extends Subject<any[]> {
      * @param child
      * @private
      */
-    _childRemoved(val:any, key:string) {
-
+    private _childRemoved(val:any, key:string) {
+        var pos = this._getPositionFor(key);
+        if (pos > -1) {
+            this._list.splice(pos, 1);
+            this._emit();
+        }
     }
 
     /**
      * @param child
      * @private
      */
-    _childMoved(val:any, key:string) {
-
+    private _childMoved(val:any, key:string, snap:FirebaseDataSnapshot, prevChildKey:any) {
+        var pos = this._getPositionFor(key);
+        if (pos > -1) {
+            var data = this._list.splice(pos, 1)[0];
+            var newPos = this._getPositionAfter(prevChildKey);
+            this._list.splice(newPos, 0, data);
+            this._emit();
+        }
     }
 
     /**
      * @param child
      * @private
      */
-    _childChanged(val:any, key:string) {
-
+    private _childChanged(val:any, key:string) {
+        var pos = this._getPositionFor(key);
+        if (pos > -1) {
+            this._list[pos] = val;
+            this._list[pos].$id = key;
+            this._emit();
+        }
     }
 }
