@@ -198,15 +198,38 @@ export class FirebaseService {
      * @returns {Promise<boolean>} Returns a promise that resolves `true` if the data was set. Otherwise the promise rejects if there was an error.
      */
     setData(data:any):Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            this.firebase.set(data, (err) => {
-                if (err !== null) {
-                    reject(err);
-                } else {
-                    resolve(true);
-                }
-            });
-        });
+        return FirebaseUtils.wrapFirebaseAsyncCall(this.firebase, this.firebase.set, [data]).then(() => true);
+    }
+
+    /**
+     * @alias setData(data)
+     */
+    set(data:any):Promise<boolean> {
+        return this.setData(data);
+    }
+
+    /**
+     * Adds the given data to this Firebase location.
+     * @param data The data that should be added.
+     * @returns {Promise<boolean>}
+     */
+    push(data:any):Promise<boolean> {
+        return FirebaseUtils.wrapFirebaseAsyncCall(this.firebase, this.firebase.push, [data]).then(() => true);
+    }
+
+    /**
+     * Removes the child with the given key from this location.
+     * If a key is not provided, then this location will be removed from it's parent location.
+     * @param key The key of the child that should be removed from this location.
+     * @returns {Promise<boolean>}
+     */
+    remove(key?:string):Promise<boolean> {
+        var firebase = this.firebase;
+        if (key) {
+            firebase = firebase.child(key);
+        }
+
+        return FirebaseUtils.wrapFirebaseAsyncCall(firebase, this.firebase.remove, []).then(() => true);
     }
 
     /**

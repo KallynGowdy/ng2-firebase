@@ -129,29 +129,26 @@ export function main() {
 
                     expect(args).toEqual(originalArgs);
                 });
-                it('should return an observable', function () {
+                it('should return a promise', function () {
                     var args = [
                         'hello',
                         'world'
                     ];
 
-                    var observable = FirebaseUtils.wrapFirebaseAsyncCall(null, () => {
+                    var promise = FirebaseUtils.wrapFirebaseAsyncCall(null, () => {
                     }, args);
 
-                    expect(observable instanceof Observable).toBeTruthy();
+                    expect(promise instanceof Promise).toBeTruthy();
                 });
 
-                it('should call the given function with a callback and the provided args when subscribed to', function () {
+                it('should call the given function with a callback and the provided args', function () {
                     var spy = Sinon.spy();
                     var args = [
                         'hello',
                         'world'
                     ];
 
-                    var observable = FirebaseUtils.wrapFirebaseAsyncCall(null, spy, args);
-
-                    observable.subscribe(() => {
-                    });
+                    var promise = FirebaseUtils.wrapFirebaseAsyncCall(null, spy, args);
 
                     expect(spy.called).toBeTruthy('Expected given function to be called');
 
@@ -163,20 +160,22 @@ export function main() {
 
                 it('should resolve with the arguments returned from the callback', function () {
                     var spy = Sinon.spy();
-                    var observable = FirebaseUtils.wrapFirebaseAsyncCall(null, (callback) => {
+                    var promise = FirebaseUtils.wrapFirebaseAsyncCall(null, (callback) => {
                         callback(null, 'hello', 1);
                     }, []);
 
-                    observable.subscribe(spy);
+                    promise.then(spy);
 
-                    expect(spy.called).toBe(true, 'Expected subscribed function to be called');
-                    expect(spy.firstCall.args[0]).not.toBeNull();
-                    var args = spy.firstCall.args[0];
-                    expect(args).toEqual([
-                        null,
-                        'hello',
-                        1
-                    ]);
+                    setTimeout(() => {
+                        expect(spy.called).toBe(true, 'Expected then() function to be called');
+                        expect(spy.firstCall.args[0]).not.toBeNull();
+                        var args = spy.firstCall.args[0];
+                        expect(args).toEqual([
+                            null,
+                            'hello',
+                            1
+                        ]);
+                    }, 1);
                 });
 
                 it('should error when first arg returned from the callback is not null', function () {
@@ -184,30 +183,17 @@ export function main() {
                     var errorSpy = Sinon.spy();
                     var args = [];
 
-                    var observable = FirebaseUtils.wrapFirebaseAsyncCall(null, (callback) => {
+                    var promise = FirebaseUtils.wrapFirebaseAsyncCall(null, (callback) => {
                         callback('error', 'hello', 1);
                     }, args);
 
-                    observable.subscribe(okSpy, errorSpy);
+                    promise.then(okSpy).catch(errorSpy);
 
-                    expect(okSpy.called).toBe(false, 'Expected OnNext subscribe function to not be called');
-                    expect(errorSpy.called).toBe(true, 'Expected OnError subscribe function to be called');
-                    expect(errorSpy.firstCall.args[0]).toEqual('error');
-                });
-
-                it('should be completed when the callback is completed successfully', function () {
-                    var completeSpy = Sinon.spy();
-                    var args = [];
-                    var observable = FirebaseUtils.wrapFirebaseAsyncCall(null, (callback) => {
-                        callback(null);
-                    }, args);
-
-                    observable.subscribe(() => {
-                    }, () => {
-                    }, completeSpy);
-
-                    expect(completeSpy.called).toBe(true, 'Expected complete function to be called');
-                    expect(completeSpy.firstCall.args.length).toBe(0, 'Expected complete function to not be called with arguments.')
+                    setTimeout(() => {
+                        expect(okSpy.called).toBe(false, 'Expected then() function to not be called');
+                        expect(errorSpy.called).toBe(true, 'Expected catch() function to be called');
+                        expect(errorSpy.firstCall.args[0]).toEqual('error');
+                    }, 1);
                 });
 
                 it('should preserve the given context', function () {
@@ -219,8 +205,8 @@ export function main() {
                     var args = [];
                     var obj = new test();
 
-                    var observable = FirebaseUtils.wrapFirebaseAsyncCall(obj, obj.async, args);
-                    observable.subscribe(() => {
+                    var promise = FirebaseUtils.wrapFirebaseAsyncCall(obj, obj.async, args);
+                    promise.then(() => {
                     });
 
                     expect(spy.firstCall.calledOn(obj)).toBe(true, 'Expected test.async() to be called, not async()');

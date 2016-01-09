@@ -5,29 +5,28 @@ declare var Firebase:FirebaseStatic;
  * A class that defines utility functions that help Wrap the Firebase JavaScript API.
  */
 export class FirebaseUtils {
+
     /**
-     * Wraps the given Firebase call in an Observable.
-     * When the async call returns, the Observable resolves with the callback
-     * arguments.
-     * @param obj The object that the given function should be called on.
+     * Wraps the given Firebase call in a Promise.
+     * When the async call returns, the Promise resolves with the callback
+     * arguments in an array.
+     * @param obj The object that the given function should be called on. This is typically your Firebase ref instance.
      * @param fn The function that should be wrapped.
      * @param args The Arguments that should be given to Firebase.
-     * @returns {Observable<any>}
+     * @returns {Promise<any[]>}
      */
-    public static wrapFirebaseAsyncCall(obj:any, fn:Function, args:any[]):Observable<any> {
+    public static wrapFirebaseAsyncCall(obj:any, fn:Function, args:any[] = []):Promise<any[]> {
         args = args.slice();
-        return Observable.create(observer => {
+        return new Promise((resolve, reject) => {
             args.push(callback);
             function callback(err) {
                 if (err !== null) {
-                    observer.error(err);
+                    reject(err);
                 }
                 else {
-                    observer.next(Array.prototype.slice.call(arguments));
-                    observer.complete();
+                    resolve(Array.prototype.slice.call(arguments));
                 }
             }
-
             fn.apply(obj, args);
         });
     }

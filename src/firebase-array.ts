@@ -28,6 +28,25 @@ export class FirebaseArray extends Subject<any[]> {
         this._init();
     }
 
+    add(data:any) {
+        return this._service.push(data);
+    }
+
+    remove(index:(string|number)) {
+        return this._service.remove(index.toString());
+    }
+
+    set(index:(string|number), data:any) {
+        if (data.hasOwnProperty('$id')) {
+            delete data.$id
+        }
+        return this._service.child(index.toString()).set(data);
+    }
+
+    indexOf(index:(string|number)) {
+        return this._getPositionFor(index.toString());
+    }
+
     /**
      * @private
      */
@@ -67,7 +86,7 @@ export class FirebaseArray extends Subject<any[]> {
      * @returns {number}
      * @private
      */
-    private _getPositionFor(key) {
+    private _getPositionFor(key:string) {
         for (var i = 0; i < this._list.length; i++) {
             var v = this._list[i];
             if (v.$id === key) {
@@ -82,7 +101,7 @@ export class FirebaseArray extends Subject<any[]> {
      * @returns {any}
      * @private
      */
-    private _getPositionAfter(prevChildKey) {
+    private _getPositionAfter(prevChildKey:string) {
         if (prevChildKey === null) {
             return 0;
         }
