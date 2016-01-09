@@ -313,9 +313,9 @@ export function main() {
                 var data = {
                     newData: 'test'
                 };
-                var returned = arr.set(0, data);
+                var r = arr.set(0, data);
 
-                expect(returned).toBe(returned);
+                expect(r).toBe(returned);
             });
         });
 
