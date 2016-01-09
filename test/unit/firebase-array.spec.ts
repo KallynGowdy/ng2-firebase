@@ -32,11 +32,19 @@ function createSnapshot(key:string, val:any):any {
     };
 }
 
-function mockService(marbles, values):FirebaseService {
-    var childAdded = this.scheduler.createColdObservable(marbles.a, values);
-    var childRemoved = this.scheduler.createColdObservable(marbles.b, values);
-    var childChanged = this.scheduler.createColdObservable(marbles.c, values);
-    var childMoved = this.scheduler.createColdObservable(marbles.d, values);
+function mockService(marbles?, values?):FirebaseService {
+    var safeMarbles = marbles || {
+            a: '----',
+            b: '----',
+            c: '----',
+            d: '----',
+            e: '----'
+        };
+    var safeValues = values || {};
+    var childAdded = this.scheduler.createColdObservable(safeMarbles.a, safeValues);
+    var childRemoved = this.scheduler.createColdObservable(safeMarbles.b, safeValues);
+    var childChanged = this.scheduler.createColdObservable(safeMarbles.c, safeValues);
+    var childMoved = this.scheduler.createColdObservable(safeMarbles.d, safeValues);
     return <any>{
         childAddedRaw: childAdded,
         childRemovedRaw: childRemoved,
@@ -168,6 +176,207 @@ export function main() {
                 this.scheduler.expectObservable(arr).toBe(expected, values);
                 this.scheduler.flush();
             });
-        })
+        });
+
+        var testCallFunctionOnService = function (testName, arrayName, serviceName, data, expected?) {
+            it(testName, function () {
+                var spy = Sinon.spy();
+                var service = mockService();
+                service[serviceName] = spy;
+                var arr = new FirebaseArray(service);
+
+                arr[arrayName](data);
+
+                expect(spy.called).toBe(true, `Expected ${serviceName}() spy to be called`);
+                expect(spy.firstCall.args[0]).toBe(expected || data);
+            });
+        };
+
+        var testReturnsWhatServiceReturns = function (testName, arrayName, serviceName, data, returned) {
+            it(testName, function () {
+                var stub = Sinon.stub();
+                stub.returns(returned);
+                var service = mockService();
+                service.push = stub;
+                var arr = new FirebaseArray(service);
+
+                var r = arr.add(data);
+
+                expect(r).toBe(returned, `Expected ${arrayName}() to return stubbed value`);
+            });
+        };
+
+        describe('.add(data)', function () {
+            testCallFunctionOnService(
+                'should call push() on the underlying service',
+                'add',
+                'push',
+                [
+                    {
+                        val: 1,
+                        hello: 'hello'
+                    }
+                ]);
+
+            testReturnsWhatServiceReturns(
+                'should return what push() returns',
+                'add',
+                'push',
+                {
+                    val: 1,
+                    hello: 'hello'
+                },
+                {
+                    value: true
+                }
+            );
+
+            it('should reject nulls', function () {
+                var service = mockService();
+                var arr = new FirebaseArray(service);
+
+                expect(() => {
+                    arr.add(null);
+                }).toThrow(new Error(
+                    'Cannot add nulls to synchronized array as they cannot be reliably tracked. ' +
+                    'If you want a "null"-like value, use a special trigger value, such as a custom Unit or Void object.'));
+            });
+        });
+
+        describe('.remove(index)', function () {
+            testCallFunctionOnService(
+                'it should call .remove() on the underlying service',
+                'remove',
+                'remove',
+                0,
+                '0');
+
+            testReturnsWhatServiceReturns(
+                'should return what .remove() returns',
+                'remove',
+                'remove',
+                0,
+                {
+                    val: 'test'
+                }
+            );
+
+            it('should reject nulls', function () {
+                var service = mockService();
+                var arr = new FirebaseArray(service);
+
+                expect(() => {
+                    arr.remove(null);
+                }).toThrow(new Error(
+                    'The provided index is invalid. Please make sure that it is in the range of 0 - array.length'
+                ));
+            });
+        });
+
+        describe('.set(index, data)', function () {
+            it('should call child().set() on the underlying service', function () {
+                var setSpy = Sinon.spy();
+                var childStub = Sinon.stub();
+                childStub.returns({
+                    set: setSpy
+                });
+
+                var service = mockService();
+                service.child = childStub;
+                var arr = new FirebaseArray(service);
+                var data = {
+                    newData: 'test'
+                };
+                arr.set(0, data);
+
+                expect(childStub.called).toBe(true, `Expected child() stub to be called`);
+                expect(childStub.firstCall.args[0]).toBe('0');
+                expect(setSpy.called).toBe(true, 'Expected set() spy to be called');
+                expect(setSpy.firstCall.args[0]).toBe(data);
+            });
+
+            it('should return whatever child().set() returns', function () {
+                var returned = {
+                    returned: true
+                };
+
+                var setStub = Sinon.stub();
+                var childStub = Sinon.stub();
+                childStub.returns({
+                    set: setStub
+                });
+                setStub.returns(returned);
+
+                var service = mockService();
+                service.child = childStub;
+                var arr = new FirebaseArray(service);
+                var data = {
+                    newData: 'test'
+                };
+                var returned = arr.set(0, data);
+
+                expect(returned).toBe(returned);
+            });
+        });
+
+        describe('.length', function () {
+            it('should return the current length of the array', function () {
+                var values = {
+                    a: [createSnapshot('1', {value: 'a'}), null],
+                    b: [createSnapshot('2', {value: 'b'}), 'a'],
+                    c: [{value: 'a', $id: '1'}],
+                    d: [{value: 'a', $id: '1'}, {value: 'b', $id: '2'}]
+                };
+
+                var marbles = {
+                    a: '-a-b',
+                    b: '----',
+                    c: '----',
+                    d: '----',
+
+                    e: '-c-d'
+                };
+
+                var service = mockService(marbles, values);
+                var expected = marbles.e;
+
+                var arr = new FirebaseArray(service);
+
+                this.scheduler.expectObservable(arr).toBe(expected, values);
+                this.scheduler.flush();
+
+                expect(arr.length).toBe(2);
+            });
+        });
+
+        describe('.lengthObservable', function () {
+            it('should return an observable that updates when the length updates', function () {
+                var values = {
+                    a: [createSnapshot('1', {value: 'a'}), null],
+                    b: [createSnapshot('2', {value: 'b'}), 'a'],
+                    c: [createSnapshot('1', null)],
+                    1: 1,
+                    2: 2,
+                    3: 1
+                };
+
+                var marbles = {
+                    a: '-a-b-',
+                    b: '----c',
+                    c: '-----',
+                    d: '-----',
+
+                    e: '-1-23'
+                };
+
+                var service = mockService(marbles, values);
+                var expected = marbles.e;
+
+                var arr = new FirebaseArray(service);
+
+                this.scheduler.expectObservable(arr.lengthObservable).toBe(expected, values);
+                this.scheduler.flush();
+            });
+        });
     });
 }

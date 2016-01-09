@@ -28,23 +28,69 @@ export class FirebaseArray extends Subject<any[]> {
         this._init();
     }
 
-    add(data:any) {
+    /**
+     * Adds the given data to the end of this array.
+     * Returns a promise that represents the async operation.
+     * @param data The data that should be added to the data structure.
+     * @returns {Promise<boolean>}
+     */
+    add(data:any):Promise<boolean> {
+        if (typeof data === 'undefined' || data === null) {
+            throw new Error(
+                'Cannot add nulls to synchronized array as they cannot be reliably tracked. ' +
+                'If you want a "null"-like value, use a special trigger value, such as a custom Unit or Void object.');
+        }
         return this._service.push(data);
     }
 
-    remove(index:(string|number)) {
+    /**
+     * Removes the child at the given index(a.k.a. key) from this array.
+     * @param index The key of the child that should be removed from the data structure.
+     * @returns {Promise<boolean>}
+     */
+    remove(index:(string|number)):Promise<boolean> {
+        if (index === null) {
+            throw new Error('The provided index is invalid. Please make sure that it is in the range of 0 - array.length');
+        }
         return this._service.remove(index.toString());
     }
 
-    set(index:(string|number), data:any) {
+    /**
+     * Sets the data stored at the given index (a.k.a. key).
+     * @param index The key of the child whose data should be replaced.
+     * @param data The data that the child should be replaced with.
+     * @returns {Promise<boolean>}
+     */
+    set(index:(string|number), data:any):Promise<boolean> {
         if (data.hasOwnProperty('$id')) {
             delete data.$id
         }
         return this._service.child(index.toString()).set(data);
     }
 
+    /**
+     *
+     * @param index
+     * @returns {number|number}
+     */
     indexOf(index:(string|number)) {
         return this._getPositionFor(index.toString());
+    }
+
+    /**
+     * Gets the current length of the array.
+     * @returns {number}
+     */
+    get length():number {
+        return this._list.length;
+    }
+
+    /**
+     * Gets an observable for the length of the array.
+     * @returns {Observable<number>}
+     */
+    get lengthObservable():Observable<number> {
+        return this.map((a) => a.length).distinctUntilChanged();
     }
 
     /**
