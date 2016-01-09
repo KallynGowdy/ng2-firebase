@@ -16,7 +16,9 @@ import {FirebaseArray} from "./firebase-array";
  * // Tell TypeScript that the Firebase SDK has created a global for us
  * declare var Firebase;
  *
- * var firebase = new FirebaseService(Firebase);
+ * var firebase = new FirebaseService(
+ *    new Firebase('https://YOUR-FIREBASE-URL.firebaseio-demo.com')
+ * );
  *
  * // Use Service
  * ```
@@ -34,11 +36,11 @@ import {FirebaseArray} from "./firebase-array";
  *
  *    // Make sure to include the async pipe so that the most recent value
  *    // is resolved from the data observable.
- *    template: `My Data: {{data | async}}`,
+ *    template: 'My Data: {{data | async}}',
  *
  *    // Declare the providers that should be used for the service.
  *    providers: [
- *      provide(FirebaseService, { useFactory: FirebaseServiceFactory }
+ *      provide(FirebaseService, { useFactory: FirebaseServiceFactory })
  *    ]
  * })
  * export class SomeComponent implements OnInit {

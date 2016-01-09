@@ -5,6 +5,63 @@ import {Subject} from "rxjs/Subject";
 
 /**
  * Defines a class that provides capabilities to synchronize ordered lists for a Firebase Object.
+ *
+ * **Example**:
+ *
+ * ```TypeScript
+ * import {FirebaseService} from 'firebase-angular2/core';
+ *
+ * // Get the Array
+ * var arr = new FirebaseService(
+ *    new Firebase('https://YOUR-FIREBASE-URL.firebaseio-demo.com')
+ * ).asArray();
+ *
+ * // Use Array
+ * ```
+ *
+ * **Angular 2 Example**:
+ *
+ * ```TypeScript
+ * // some.component.ts
+ * import { Component, OnInit, provide } from 'angular2/core';
+ * import { FirebaseArray, FirebaseService, FirebaseServiceFactory } from 'firebase-angular2/core';
+ * import { Observable } from 'rxjs/Rx';
+ *
+ * @@Component({
+ *    // FirebaseServiceFactory is not Implemented yet...
+ *    selector: 'some-component',
+ *
+ *    // Make sure to include the async pipe so that the most recent value
+ *    // is resolved from the data observable.
+ *    template:
+ *      'I have {{users.length}} users!' +
+ *      '<div *ngFor="#user of (users | async)">' +
+ *      '   {{user}}' +
+ *      '</div>',
+ *
+ *    // Declare the providers that should be used for the service.
+ *    providers: [
+ *      provide(
+ *          FirebaseArray,
+ *          {
+ *              useValue: new FirebaseService(
+ *                  new Firebase('https://YOUR-FIREBASE-URL.firebaseio-demo.com')
+ *              ).asArray()
+ *          }
+ *      )
+ *    ]
+ * })
+ * export class SomeComponent {
+ *   private users: FirebaseArray;
+ *
+ *   constructor(users: FirebaseArray) {
+ *      // We don't need to retrieve an observable
+ *      // because FirebaseArray is an observable.
+ *      this.users = users;
+ *   }
+ * }
+ * ```
+ *
  */
 @Injectable()
 export class FirebaseArray extends Subject<any[]> {
