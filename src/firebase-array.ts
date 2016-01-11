@@ -67,7 +67,7 @@ if (!Array.prototype.find) {
  *      '   {{user.name}}' +
  *      '</div>' +
  *      '<h2>Users over 18:</h2>' +
- *      '<div *ngFor="#user of ( | async)>' +
+ *      '<div *ngFor="#user of (over18 | async)>' +
  *      ' {{user.name}}' +
  *      '</div>' +,
  *
