@@ -390,14 +390,13 @@ export function main() {
             });
         });
 
-        describe('.indexOf()', function () {
+        describe('.indexOfKey()', function () {
             it('should return an observable that updates when the index of a value changes', function () {
                 var values = {
                     a: [createSnapshot('1', {value: 'a'}), null],
                     b: [createSnapshot('2', {value: 'b'}), 'a'],
                     c: [createSnapshot('2', null), null],
                     1: 0,
-                    2: 0,
                     3: 1
                 };
 
@@ -407,7 +406,7 @@ export function main() {
                     c: '-----',
                     d: '----c',
 
-                    e: '-1-23'
+                    e: '-1--3'
                 };
 
                 var service = mockService(marbles, values);
@@ -415,7 +414,37 @@ export function main() {
 
                 var arr = new FirebaseArray(service);
 
-                this.scheduler.expectObservable(arr.indexOf('1')).toBe(expected, values);
+                this.scheduler.expectObservable(arr.indexOfKey('1')).toBe(expected, values);
+                this.scheduler.flush();
+            });
+        });
+
+        describe('.indexOf()', function () {
+            it('should return an observable that updates when the index of a value changes', function () {
+                var val = {value: 'a'};
+                var values = {
+                    a: [createSnapshot('1', val), null],
+                    b: [createSnapshot('2', {value: 'b'}), 'a'],
+                    c: [createSnapshot('2', null), null],
+                    1: 0,
+                    3: 1
+                };
+
+                var marbles = {
+                    a: '-a-b-',
+                    b: '-----',
+                    c: '-----',
+                    d: '----c',
+
+                    e: '-1--3'
+                };
+
+                var service = mockService(marbles, values);
+                var expected = marbles.e;
+
+                var arr = new FirebaseArray(service);
+
+                this.scheduler.expectObservable(arr.indexOf(val)).toBe(expected, values);
                 this.scheduler.flush();
             });
         });
@@ -511,6 +540,41 @@ export function main() {
 
                     1: undefined,
                     2: 'This is Great!'
+                };
+
+                var marbles = {
+                    a: '-abcd',
+                    b: '-----',
+                    c: '-----',
+                    d: '-----',
+
+                    e: '-1-2-'
+                };
+
+                var service = mockService(marbles, values);
+                var expected = marbles.e;
+
+                var arr = new FirebaseArray(service);
+                var spy = Sinon.spy(val => val.indexOf('is') >= 0);
+                var _this = {};
+                var found = arr.find(spy, _this);
+
+                this.scheduler.expectObservable(found).toBe(expected, values);
+                this.scheduler.flush();
+                expect(spy.alwaysCalledOn(_this));
+            });
+        });
+
+        describe('.findIndex()', function () {
+            it('should return an observable that only updates with the found item', function () {
+                var values = {
+                    a: [createSnapshot('1', 'Hello, World!'), null],
+                    b: [createSnapshot('2', 'Meh.'), '1'],
+                    c: [createSnapshot('3', 'This is Great!'), '2'],
+                    d: [createSnapshot('4', 'Bah Humbug'), '3'],
+
+                    1: -1,
+                    2: 2
                 };
 
                 var marbles = {

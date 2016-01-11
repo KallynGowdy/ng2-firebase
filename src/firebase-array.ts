@@ -7,6 +7,30 @@ class ArrayValue {
     id:string;
 }
 
+// Polyfill Array.find()
+if (!Array.prototype.find) {
+    Array.prototype.find = function (predicate) {
+        if (this === null) {
+            throw new TypeError('Array.prototype.find called on null or undefined');
+        }
+        if (typeof predicate !== 'function') {
+            throw new TypeError('predicate must be a function');
+        }
+        var list:any = Object(this);
+        var length = list.length >>> 0;
+        var thisArg = arguments[1];
+        var value;
+
+        for (var i = 0; i < length; i++) {
+            value = list[i];
+            if (predicate.call(thisArg, value, i, list)) {
+                return value;
+            }
+        }
+        return undefined;
+    };
+}
+
 /**
  * Defines a class that provides capabilities to synchronize ordered lists for a Firebase Object.
  *
@@ -131,12 +155,24 @@ export class FirebaseArray {
     }
 
     /**
-     * Gets the of the member with the given key.
+     * Gets an observable that resolves with the index of the given key is found.
      * @param key
-     * @returns {number|number}
+     * @returns {Observable<number>}
      */
-    indexOf(key:(string|number)):Observable<number> {
-        return this._subject.map(arr => FirebaseArray._getPositionFor(key.toString(), arr));
+    indexOfKey(key:(string|number)):Observable<number> {
+        return this._subject.map(arr => FirebaseArray._getPositionFor(key.toString(), arr)).distinctUntilChanged();
+    }
+
+    /**
+     * Gets an observable that resolves whenever the index of the given value is found.
+     * @param val
+     * @param fromIndex
+     * @returns {Observable<number>}
+     */
+    indexOf(val:any):Observable<number> {
+        return this.observable.map(arr => {
+            return arr.indexOf(val);
+        }).distinctUntilChanged();
     }
 
     /**
@@ -145,7 +181,9 @@ export class FirebaseArray {
      * @param thisArg
      */
     filter(callback:(val:any, index:number, arr:any[]) => boolean, thisArg?:any):Observable<any[]> {
-        return this.observable.map(arr => arr.filter(callback, thisArg));
+        return this.observable.map(arr => {
+            return arr.filter(callback, thisArg);
+        });
     }
 
     /**
@@ -159,12 +197,25 @@ export class FirebaseArray {
 
     /**
      * Returns an observable that resolves whenever a new value is found in the underlying array.
+     * If the value was removed, or was originally not present in the array, `undefined` is returned.
      * @param callback The function that is used to determine if a value is "found".
      * @param thisArg The object that the callback should be called on.
      * @returns {Observable<any>}
      */
     find(callback:(val:any, index:number, arr:any[]) => boolean, thisArg?:any):Observable<any> {
         return this.observable.map(arr => arr.find(callback, thisArg)).distinctUntilChanged();
+    }
+
+    /**
+     * Returns an observable that resolves with the index of the item whenever a new value is found in the underlying array.
+     * If the value was removed, or was originally not present in the array, `-1` is returned.
+     * @param callback The function that is used to determine if a value is "found".
+     * @param thisArg The object that the callback should be called on.
+     * @returns {Observable<any>}
+     */
+    findIndex(callback:(val:any, index:number, arr:any[]) => boolean, thisArg?:any):Observable<number> {
+        // <any> cast is to get typescript compiler to ignore "incorrect" arguments
+        return this.observable.map(arr => arr.findIndex(<any>callback, thisArg)).distinctUntilChanged();
     }
 
     /**
