@@ -63,9 +63,13 @@ if (!Array.prototype.find) {
  *    // is resolved from the data observable.
  *    template:
  *      'I have {{users.length}} users!' +
- *      '<div *ngFor="#user of (users | async)">' +
- *      '   {{user}}' +
- *      '</div>',
+ *      '<div *ngFor="#user of (users.observable | async)">' +
+ *      '   {{user.name}}' +
+ *      '</div>' +
+ *      '<h2>Users over 18:</h2>' +
+ *      '<div *ngFor="#user of ( | async)>' +
+ *      ' {{user.name}}' +
+ *      '</div>' +,
  *
  *    // Declare the providers that should be used for the service.
  *    providers: [
@@ -79,13 +83,20 @@ if (!Array.prototype.find) {
  *      )
  *    ]
  * })
- * export class SomeComponent {
+ * export class SomeComponent implements OnInit {
  *   private users: FirebaseArray;
+ *   private over18: Observable<User>;
  *
  *   constructor(users: FirebaseArray) {
- *      // We don't need to retrieve an observable
- *      // because FirebaseArray is an observable.
  *      this.users = users;
+ *   }
+ *
+ *   findOver18(): Observable<User> {
+ *      this.over18 = this.users.filter(u => u.age > 18);
+ *   }
+ *
+ *   ngOnInit() {
+ *      findOver18();
  *   }
  * }
  * ```
