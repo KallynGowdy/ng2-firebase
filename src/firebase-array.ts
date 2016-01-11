@@ -1,7 +1,6 @@
 import {Injectable} from "angular2/core";
 import {FirebaseService} from './firebase.service';
-import {Observable} from "rxjs/Rx";
-import {Subject} from "rxjs/Subject";
+import {Observable, Subject, Subscription} from "rxjs/Rx";
 
 class ArrayValue {
     value:any;
@@ -69,9 +68,10 @@ class ArrayValue {
  *
  */
 @Injectable()
-export class FirebaseArray extends Subject<any[]> {
+export class FirebaseArray {
     private _service:FirebaseService;
     private _list:ArrayValue[];
+    private _subject:Subject<ArrayValue[]>;
 
     /**
      * @type {boolean}
@@ -84,7 +84,7 @@ export class FirebaseArray extends Subject<any[]> {
      * @param firebaseService
      */
     constructor(firebaseService:FirebaseService) {
-        super();
+        this._subject = new Subject();
         this._service = firebaseService;
         this._list = [];
         this._init();
@@ -135,8 +135,19 @@ export class FirebaseArray extends Subject<any[]> {
      * @param key
      * @returns {number|number}
      */
-    indexOf(key:(string|number)) {
-        return this._getPositionFor(key.toString());
+    indexOf(key:(string|number)):Observable<number> {
+        return this._subject.map(arr => FirebaseArray._getPositionFor(key.toString(), arr));
+    }
+
+    /**
+     * Registers handlers for notification when this array is updated.
+     * @param onNext
+     * @param onError
+     * @param onComplete
+     * @returns {Subscription<any[]>}
+     */
+    subscribe(onNext?:(value:any[]) => void, onError?:(error:any) => void, onComplete?:() => void):Subscription<any[]> {
+        return this._arrayObservable.subscribe(onNext, onError, onComplete);
     }
 
     /**
@@ -148,23 +159,27 @@ export class FirebaseArray extends Subject<any[]> {
     }
 
     /**
-     * Gets the current length of the array.
-     * @returns {number}
-     */
-    get length():number {
-        return this._list.length;
-    }
-
-    get array():any[] {
-        return this._list.map(v => v.value);
-    }
-
-    /**
      * Gets an observable for the length of the array.
      * @returns {Observable<number>}
      */
-    get lengthObservable():Observable<number> {
-        return this.map((a) => a.length).distinctUntilChanged();
+    get length():Observable<number> {
+        return this._arrayObservable.map(a => a.length).distinctUntilChanged();
+    }
+
+    /**
+     * Gets the array that is currently stored in this service.
+     * @returns {*[]}
+     */
+    get array():any[] {
+        return FirebaseArray._mapArrayValues(this._list);
+    }
+
+    private get _arrayObservable():Observable<any[]> {
+        return this._subject.map(FirebaseArray._mapArrayValues);
+    }
+
+    private static _mapArrayValues(arr:ArrayValue[]) {
+        return arr.map(v => v.value);
     }
 
     /**
@@ -186,7 +201,7 @@ export class FirebaseArray extends Subject<any[]> {
      * @private
      */
     private _subscribeToEvent(observable:Observable<any[]>, reciever:Function) {
-        observable.subscribe(this._wrap(reciever), this.error, this.complete);
+        observable.subscribe(this._wrap(reciever), this._subject.error.bind(this._subject), this._subject.complete.bind(this._subject));
     }
 
     /**
@@ -203,12 +218,13 @@ export class FirebaseArray extends Subject<any[]> {
 
     /**
      * @param key
+     * @param list
      * @returns {number}
      * @private
      */
-    private _getPositionFor(key:string) {
-        for (var i = 0; i < this._list.length; i++) {
-            var v = this._list[i];
+    private static _getPositionFor(key:string, list:ArrayValue[]) {
+        for (var i = 0; i < list.length; i++) {
+            var v = list[i];
             if (v.id === key) {
                 return i;
             }
@@ -218,17 +234,18 @@ export class FirebaseArray extends Subject<any[]> {
 
     /**
      * @param prevChildKey
+     * @param list
      * @returns {any}
      * @private
      */
-    private _getPositionAfter(prevChildKey:string) {
+    private static _getPositionAfter(prevChildKey:string, list:ArrayValue[]) {
         if (prevChildKey === null) {
             return 0;
         }
         else {
-            var i = this._getPositionFor(prevChildKey);
+            var i = FirebaseArray._getPositionFor(prevChildKey, list);
             if (i === -1) {
-                return this._list.length;
+                return list.length;
             }
             else {
                 return i + 1;
@@ -237,7 +254,7 @@ export class FirebaseArray extends Subject<any[]> {
     }
 
     private _emit() {
-        this.next(this.array);
+        this._subject.next(this._list);
     }
 
     /**
@@ -249,7 +266,7 @@ export class FirebaseArray extends Subject<any[]> {
             value: val,
             id: key
         };
-        var pos = this._getPositionAfter(prevChild);
+        var pos = FirebaseArray._getPositionAfter(prevChild, this._list);
         this._list.splice(pos, 0, value);
         this._emit();
     }
@@ -260,7 +277,7 @@ export class FirebaseArray extends Subject<any[]> {
      * @private
      */
     private _childRemoved(val:any, key:string) {
-        var pos = this._getPositionFor(key);
+        var pos = FirebaseArray._getPositionFor(key, this._list);
         if (pos > -1) {
             this._list.splice(pos, 1);
             this._emit();
@@ -272,10 +289,10 @@ export class FirebaseArray extends Subject<any[]> {
      * @private
      */
     private _childMoved(val:any, key:string, snap:FirebaseDataSnapshot, prevChildKey:any) {
-        var pos = this._getPositionFor(key);
+        var pos = FirebaseArray._getPositionFor(key, this._list);
         if (pos > -1) {
             var data = this._list.splice(pos, 1)[0];
-            var newPos = this._getPositionAfter(prevChildKey);
+            var newPos = FirebaseArray._getPositionAfter(prevChildKey, this._list);
             this._list.splice(newPos, 0, data);
             this._emit();
         }
@@ -286,7 +303,7 @@ export class FirebaseArray extends Subject<any[]> {
      * @private
      */
     private _childChanged(val:any, key:string) {
-        var pos = this._getPositionFor(key);
+        var pos = FirebaseArray._getPositionFor(key, this._list);
         if (pos > -1) {
             this._list[pos] = {
                 value: val,

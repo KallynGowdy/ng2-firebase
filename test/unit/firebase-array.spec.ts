@@ -361,36 +361,6 @@ export function main() {
         });
 
         describe('.length', function () {
-            it('should return the current length of the array', function () {
-                var values = {
-                    a: [createSnapshot('1', {value: 'a'}), null],
-                    b: [createSnapshot('2', {value: 'b'}), 'a'],
-                    c: [{value: 'a'}],
-                    d: [{value: 'a'}, {value: 'b'}]
-                };
-
-                var marbles = {
-                    a: '-a-b',
-                    b: '----',
-                    c: '----',
-                    d: '----',
-
-                    e: '-c-d'
-                };
-
-                var service = mockService(marbles, values);
-                var expected = marbles.e;
-
-                var arr = new FirebaseArray(service);
-
-                this.scheduler.expectObservable(arr).toBe(expected, values);
-                this.scheduler.flush();
-
-                expect(arr.length).toBe(2);
-            });
-        });
-
-        describe('.lengthObservable', function () {
             it('should return an observable that updates when the length updates', function () {
                 var values = {
                     a: [createSnapshot('1', {value: 'a'}), null],
@@ -415,7 +385,37 @@ export function main() {
 
                 var arr = new FirebaseArray(service);
 
-                this.scheduler.expectObservable(arr.lengthObservable).toBe(expected, values);
+                this.scheduler.expectObservable(arr.length).toBe(expected, values);
+                this.scheduler.flush();
+            });
+        });
+
+        describe('.indexOf', function () {
+            it('should return an observable that updates when the index of a value changes', function () {
+                var values = {
+                    a: [createSnapshot('1', {value: 'a'}), null],
+                    b: [createSnapshot('2', {value: 'b'}), 'a'],
+                    c: [createSnapshot('2', null), null],
+                    1: 0,
+                    2: 0,
+                    3: 1
+                };
+
+                var marbles = {
+                    a: '-a-b-',
+                    b: '-----',
+                    c: '-----',
+                    d: '----c',
+
+                    e: '-1-23'
+                };
+
+                var service = mockService(marbles, values);
+                var expected = marbles.e;
+
+                var arr = new FirebaseArray(service);
+
+                this.scheduler.expectObservable(arr.indexOf('1')).toBe(expected, values);
                 this.scheduler.flush();
             });
         });

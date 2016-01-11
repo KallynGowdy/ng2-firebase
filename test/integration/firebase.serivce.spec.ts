@@ -71,7 +71,7 @@ export function main() {
 
             return bootstrap(TestComponent, [FirebaseServiceProvider, FirebaseProvider]).then(component => {
                 expect(component.instance).not.toBe(null);
-                expect(component.instance.firebase).toBe(Firebase);
+                expect(component.instance.firebase.firebase).toBe(Firebase);
                 component.dispose();
             });
         });
