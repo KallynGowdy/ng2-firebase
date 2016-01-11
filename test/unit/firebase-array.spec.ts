@@ -457,5 +457,83 @@ export function main() {
                 expect(spy.alwaysCalledOn(_this));
             });
         });
+
+        describe('.map()', function () {
+            it('should return an observable that updates with the mapped array', function () {
+
+                var helloWorldLength = 'Hello, World!'.length;
+                var mehLength = 'Meh.'.length;
+                var thisIsGreatLength = 'This is Great!'.length;
+                var bahHumbugLength = 'Bah Humbug'.length;
+
+                var values = {
+                    a: [createSnapshot('1', 'Hello, World!'), null],
+                    b: [createSnapshot('2', 'Meh.'), '1'],
+                    c: [createSnapshot('3', 'This is Great!'), '2'],
+                    d: [createSnapshot('4', 'Bah Humbug'), '3'],
+
+                    1: [helloWorldLength],
+                    2: [helloWorldLength, mehLength],
+                    3: [helloWorldLength, mehLength, thisIsGreatLength],
+                    4: [helloWorldLength, mehLength, thisIsGreatLength, bahHumbugLength]
+                };
+
+                var marbles = {
+                    a: '-abcd',
+                    b: '-----',
+                    c: '-----',
+                    d: '-----',
+
+                    e: '-1234'
+                };
+
+                var service = mockService(marbles, values);
+                var expected = marbles.e;
+
+                var arr = new FirebaseArray(service);
+                var spy = Sinon.spy(val => val.length);
+                var _this = {};
+                var mapped = arr.map(spy, _this);
+
+                this.scheduler.expectObservable(mapped).toBe(expected, values);
+                this.scheduler.flush();
+                expect(spy.alwaysCalledOn(_this));
+            });
+        });
+
+        describe('.find()', function () {
+            it('should return an observable that only updates with the found item', function () {
+                var values = {
+                    a: [createSnapshot('1', 'Hello, World!'), null],
+                    b: [createSnapshot('2', 'Meh.'), '1'],
+                    c: [createSnapshot('3', 'This is Great!'), '2'],
+                    d: [createSnapshot('4', 'Bah Humbug'), '3'],
+
+                    1: undefined,
+                    2: 'This is Great!'
+                };
+
+                var marbles = {
+                    a: '-abcd',
+                    b: '-----',
+                    c: '-----',
+                    d: '-----',
+
+                    e: '-1-2-'
+                };
+
+                var service = mockService(marbles, values);
+                var expected = marbles.e;
+
+                var arr = new FirebaseArray(service);
+                var spy = Sinon.spy(val => val.indexOf('is') >= 0);
+                var _this = {};
+                var found = arr.find(spy, _this);
+
+                this.scheduler.expectObservable(found).toBe(expected, values);
+                this.scheduler.flush();
+                expect(spy.alwaysCalledOn(_this));
+            });
+        });
     });
 }

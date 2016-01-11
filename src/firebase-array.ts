@@ -142,9 +142,29 @@ export class FirebaseArray {
     /**
      * Filters each of the elements in the observed arrays based on whether they match the provided comparison function.
      * @param callback
+     * @param thisArg
      */
-    filter(callback:(val:any, index:number, arr:any[]) => boolean, thisArg?: any):Observable<any[]> {
-        return this._arrayObservable.map(arr => arr.filter(callback, thisArg));
+    filter(callback:(val:any, index:number, arr:any[]) => boolean, thisArg?:any):Observable<any[]> {
+        return this.observable.map(arr => arr.filter(callback, thisArg));
+    }
+
+    /**
+     * Maps each observed array to a new array that is made up of the results of calling the given callback function.
+     * @param callback
+     * @param thisArg
+     */
+    map<T>(callback:(val:any, index:number, arr:any[]) => T, thisArg?:any):Observable<T[]> {
+        return this.observable.map(arr => arr.map(callback, thisArg));
+    }
+
+    /**
+     * Returns an observable that resolves whenever a new value is found in the underlying array.
+     * @param callback The function that is used to determine if a value is "found".
+     * @param thisArg The object that the callback should be called on.
+     * @returns {Observable<any>}
+     */
+    find(callback:(val:any, index:number, arr:any[]) => boolean, thisArg?:any):Observable<any> {
+        return this.observable.map(arr => arr.find(callback, thisArg)).distinctUntilChanged();
     }
 
     /**
@@ -155,7 +175,7 @@ export class FirebaseArray {
      * @returns {Subscription<any[]>}
      */
     subscribe(onNext?:(value:any[]) => void, onError?:(error:any) => void, onComplete?:() => void):Subscription<any[]> {
-        return this._arrayObservable.subscribe(onNext, onError, onComplete);
+        return this.observable.subscribe(onNext, onError, onComplete);
     }
 
     /**
@@ -171,7 +191,7 @@ export class FirebaseArray {
      * @returns {Observable<number>}
      */
     get length():Observable<number> {
-        return this._arrayObservable.map(a => a.length).distinctUntilChanged();
+        return this.observable.map(a => a.length).distinctUntilChanged();
     }
 
     /**
@@ -182,7 +202,11 @@ export class FirebaseArray {
         return FirebaseArray._mapArrayValues(this._list);
     }
 
-    private get _arrayObservable():Observable<any[]> {
+    /**
+     * Gets an observable that notifies whenever the underlying array is updated.
+     * @returns {Observable<any>}
+     */
+    get observable():Observable<any[]> {
         return this._subject.map(FirebaseArray._mapArrayValues);
     }
 
