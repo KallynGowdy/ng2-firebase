@@ -592,7 +592,7 @@ export function main() {
                 var arr = new FirebaseArray(service);
                 var spy = Sinon.spy(val => val.indexOf('is') >= 0);
                 var _this = {};
-                var found = arr.find(spy, _this);
+                var found = arr.findIndex(spy, _this);
 
                 this.scheduler.expectObservable(found).toBe(expected, values);
                 this.scheduler.flush();
