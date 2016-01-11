@@ -55,11 +55,13 @@ export function main() {
         });
 
         it('should be able to use FirebaseServiceProvider to build FirebaseService', function () {
-            var firebase = {};
+            var firebase = {
+                a: 'b'
+            };
 
             return bootstrap(TestComponent, [FirebaseServiceProvider, provide('Firebase', {useValue: firebase})]).then(component => {
                 expect(component.instance).not.toBe(null);
-                expect(component.instance.firebase).toBe(firebase);
+                expect(component.instance.firebase.firebase).toBe(firebase);
                 component.dispose();
             });
         });
@@ -69,7 +71,7 @@ export function main() {
 
             return bootstrap(TestComponent, [FirebaseServiceProvider, FirebaseProvider]).then(component => {
                 expect(component.instance).not.toBe(null);
-                expect(component.instance.firebase).toBe(Firebase);
+                expect(component.instance.firebase.firebase).toBe(Firebase);
                 component.dispose();
             });
         });

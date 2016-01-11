@@ -40,9 +40,9 @@ export class FirebaseAuthService {
      * This will start a session that is connected to the FirebaseService.
      * @param credentials
      */
-    authWithPassword(credentials:{email:string, password: string}):Observable<any> {
+    authWithPassword(credentials:{email:string, password: string}):Promise<any> {
         return FirebaseUtils.wrapFirebaseAsyncCall(this.firebase, this.firebase.authWithPassword, [credentials])
-            .map(args => args[1]);
+            .then(args => args[1]);
     }
 
 

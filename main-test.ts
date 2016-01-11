@@ -11,7 +11,7 @@ declare var Promise:PromiseConstructor;
 var win = <any>window;
 
 // Tun on full stack traces in errors to help debugging
-(<any>Error).stackTraceLimit = Infinity;
+//(<any>Error).stackTraceLimit = Infinity;
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 100;
 
