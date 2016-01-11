@@ -140,6 +140,14 @@ export class FirebaseArray {
     }
 
     /**
+     * Filters each of the elements in the observed arrays based on whether they match the provided comparison function.
+     * @param callback
+     */
+    filter(callback:(val:any, index:number, arr:any[]) => boolean, thisArg?: any):Observable<any[]> {
+        return this._arrayObservable.map(arr => arr.filter(callback, thisArg));
+    }
+
+    /**
      * Registers handlers for notification when this array is updated.
      * @param onNext
      * @param onError

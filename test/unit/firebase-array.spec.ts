@@ -390,7 +390,7 @@ export function main() {
             });
         });
 
-        describe('.indexOf', function () {
+        describe('.indexOf()', function () {
             it('should return an observable that updates when the index of a value changes', function () {
                 var values = {
                     a: [createSnapshot('1', {value: 'a'}), null],
@@ -417,6 +417,44 @@ export function main() {
 
                 this.scheduler.expectObservable(arr.indexOf('1')).toBe(expected, values);
                 this.scheduler.flush();
+            });
+        });
+
+        describe('.filter()', function () {
+            it('should return an observable that updates with the filtered array', function () {
+                var values = {
+                    a: [createSnapshot('1', 'Hello, World!'), null],
+                    b: [createSnapshot('2', 'Meh.'), '1'],
+                    c: [createSnapshot('3', 'This is Great!'), '2'],
+                    d: [createSnapshot('4', 'Bah Humbug'), '3'],
+
+                    // Everything should contain an exclamation point
+                    1: ['Hello, World!'],
+                    2: ['Hello, World!'],
+                    3: ['Hello, World!', 'This is Great!'],
+                    4: ['Hello, World!', 'This is Great!']
+                };
+
+                var marbles = {
+                    a: '-abcd',
+                    b: '-----',
+                    c: '-----',
+                    d: '-----',
+
+                    e: '-1234'
+                };
+
+                var service = mockService(marbles, values);
+                var expected = marbles.e;
+
+                var arr = new FirebaseArray(service);
+                var spy = Sinon.spy(val => val.indexOf('!') >= 0);
+                var _this = {};
+                var filtered = arr.filter(spy, _this);
+
+                this.scheduler.expectObservable(filtered).toBe(expected, values);
+                this.scheduler.flush();
+                expect(spy.alwaysCalledOn(_this));
             });
         });
     });
