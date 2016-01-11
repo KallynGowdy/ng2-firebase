@@ -3,6 +3,11 @@ import {FirebaseService} from './firebase.service';
 import {Observable} from "rxjs/Rx";
 import {Subject} from "rxjs/Subject";
 
+class ArrayValue {
+    value:any;
+    id:string;
+}
+
 /**
  * Defines a class that provides capabilities to synchronize ordered lists for a Firebase Object.
  *
@@ -66,7 +71,7 @@ import {Subject} from "rxjs/Subject";
 @Injectable()
 export class FirebaseArray extends Subject<any[]> {
     private _service:FirebaseService;
-    private _list:any[];
+    private _list:ArrayValue[];
 
     /**
      * @type {boolean}
@@ -151,7 +156,7 @@ export class FirebaseArray extends Subject<any[]> {
     }
 
     get array():any[] {
-        return this._list.slice();
+        return this._list.map(v => v.value);
     }
 
     /**
@@ -204,7 +209,7 @@ export class FirebaseArray extends Subject<any[]> {
     private _getPositionFor(key:string) {
         for (var i = 0; i < this._list.length; i++) {
             var v = this._list[i];
-            if (v.$id === key) {
+            if (v.id === key) {
                 return i;
             }
         }
@@ -240,9 +245,12 @@ export class FirebaseArray extends Subject<any[]> {
      * @private
      */
     private _childAdded(val:any, key:string, snap:FirebaseDataSnapshot, prevChild:any):void {
-        val.$id = key;
+        var value:ArrayValue = {
+            value: val,
+            id: key
+        };
         var pos = this._getPositionAfter(prevChild);
-        this._list.splice(pos, 0, val);
+        this._list.splice(pos, 0, value);
         this._emit();
     }
 
@@ -280,8 +288,10 @@ export class FirebaseArray extends Subject<any[]> {
     private _childChanged(val:any, key:string) {
         var pos = this._getPositionFor(key);
         if (pos > -1) {
-            this._list[pos] = val;
-            this._list[pos].$id = key;
+            this._list[pos] = {
+                value: val,
+                id: key
+            };
             this._emit();
         }
     }

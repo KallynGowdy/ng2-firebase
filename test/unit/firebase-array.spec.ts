@@ -75,8 +75,8 @@ export function main() {
                 var values = {
                     a: [createSnapshot('1', {value: 'a'}), null],
                     b: [createSnapshot('2', {value: 'b'}), 'a'],
-                    c: [{value: 'a', $id: '1'}],
-                    d: [{value: 'a', $id: '1'}, {value: 'b', $id: '2'}]
+                    c: [{value: 'a'}],
+                    d: [{value: 'a'}, {value: 'b'}]
                 };
 
                 var marbles = {
@@ -101,7 +101,7 @@ export function main() {
                 var values = {
                     a: [createSnapshot('1', {value: 'a'}), null],
                     b: [createSnapshot('1', null)],
-                    e: [{value: 'a', $id: '1'}],
+                    e: [{value: 'a'}],
                     f: []
                 };
 
@@ -127,8 +127,8 @@ export function main() {
                 var values = {
                     a: [createSnapshot('1', {value: 'a'}), null],
                     b: [createSnapshot('1', {value: 'b'})],
-                    1: [{value: 'a', $id: '1'}],
-                    2: [{value: 'b', $id: '1'}]
+                    1: [{value: 'a'}],
+                    2: [{value: 'b'}]
                 };
 
                 var marbles = {
@@ -154,9 +154,9 @@ export function main() {
                     a: [createSnapshot('1', {value: 'a'}), null],
                     b: [createSnapshot('2', {value: 'b'}), '1'],
                     c: [createSnapshot('1', {value: 'a'}), '2'],
-                    1: [{value: 'a', $id: '1'}],
-                    2: [{value: 'a', $id: '1'}, {value: 'b', $id: '2'}],
-                    3: [{value: 'b', $id: '2'}, {value: 'a', $id: '1'}]
+                    1: [{value: 'a'}],
+                    2: [{value: 'a'}, {value: 'b'}],
+                    3: [{value: 'b'}, {value: 'a'}]
                 };
 
                 var marbles = {
@@ -166,6 +166,47 @@ export function main() {
                     d: '---c-',
 
                     e: '-123-'
+                };
+
+                var service = mockService(marbles, values);
+                var expected = marbles.e;
+
+                var arr = new FirebaseArray(service);
+
+                this.scheduler.expectObservable(arr).toBe(expected, values);
+                this.scheduler.flush();
+            });
+
+            it('should handle primitive values', function () {
+                var values = {
+                    a: [createSnapshot('1', 'Hello, World'), null],
+
+                    // Change 'Hello, World' to 'Hello'
+                    b: [createSnapshot('1', 'Hello')],
+
+                    // Add ', World' after 'Hello'
+                    c: [createSnapshot('2', ', World'), '1'],
+
+                    // Change ', World' to ', '
+                    d: [createSnapshot('2', ', ')],
+
+                    // Add 'World' after ', '
+                    e: [createSnapshot('3', 'World'), '2'],
+
+                    1: ['Hello, World'],
+                    2: ['Hello'],
+                    3: ['Hello', ', World'],
+                    4: ['Hello', ', '],
+                    5: ['Hello', ', ', 'World']
+                };
+
+                var marbles = {
+                    a: '-a-c-e',
+                    b: '------',
+                    c: '--b-d-',
+                    d: '------',
+
+                    e: '-12345'
                 };
 
                 var service = mockService(marbles, values);
@@ -324,8 +365,8 @@ export function main() {
                 var values = {
                     a: [createSnapshot('1', {value: 'a'}), null],
                     b: [createSnapshot('2', {value: 'b'}), 'a'],
-                    c: [{value: 'a', $id: '1'}],
-                    d: [{value: 'a', $id: '1'}, {value: 'b', $id: '2'}]
+                    c: [{value: 'a'}],
+                    d: [{value: 'a'}, {value: 'b'}]
                 };
 
                 var marbles = {
