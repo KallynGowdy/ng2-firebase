@@ -1,6 +1,6 @@
 {
   "name": "firebase-angular2",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "An Angular 2 Wrapper for the Firebase JavaScript SDK",
   "scripts": {
     "build:test": "tsc",
