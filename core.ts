@@ -6,3 +6,4 @@ export * from './src/firebase.config';
 export * from './src/firebase.service.provider';
 export * from './src/firebase.service.factory';
 export * from './src/firebase.provider';
+export * from './src/firebase-array';
