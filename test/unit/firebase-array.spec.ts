@@ -599,5 +599,81 @@ export function main() {
                 expect(spy.alwaysCalledOn(_this));
             });
         });
+        
+        describe('.copyArray', function() {
+            it('should produce different array instances between updates when copyArray = true', function() {
+                var values = {
+                    a: [createSnapshot('1', {value: 'a'}), null],
+                    b: [createSnapshot('1', {value: 'b'})],
+                    1: [{value: 'a'}],
+                    2: [{value: 'b'}]
+                };
+
+                var marbles = {
+                    a: '-a--',
+                    b: '----',
+                    c: '--b-',
+                    d: '----',
+
+                    e: '-12-'
+                };
+
+                var service = mockService(marbles, values);
+                var expected = marbles.e;
+
+                var arr = new FirebaseArray(service);
+                arr.copyArray = true;
+
+                var arrays = [];
+                arr.subscribe((items) => {
+                   arrays.push(items); 
+                });
+
+                this.scheduler.flush();
+                
+                expect(arrays.length).toBe(2);
+                arrays.forEach((array, index) => {
+                    var otherArrays = arrays.slice(index - 1, index);
+                    otherArrays.forEach(otherArray => {
+                        expect(array).not.toBe(otherArray);
+                    }); 
+                });
+            });
+            it('should produce the same array instance between updates when copyArray = false', function() {
+                var values = {
+                    a: [createSnapshot('1', {value: 'a'}), null],
+                    b: [createSnapshot('1', {value: 'b'})],
+                    1: [{value: 'a'}],
+                    2: [{value: 'b'}]
+                };
+
+                var marbles = {
+                    a: '-a--',
+                    b: '----',
+                    c: '--b-',
+                    d: '----',
+
+                    e: '-12-'
+                };
+
+                var service = mockService(marbles, values);
+                var expected = marbles.e;
+
+                var arr = new FirebaseArray(service);
+                arr.copyArray = false;
+
+                var arrays = [];
+                arr.subscribe((items) => {
+                   arrays.push(items); 
+                });
+
+                this.scheduler.flush();
+                
+                expect(arrays.length).toBe(2);
+                arrays.forEach(array => {
+                   expect(array).toBe(arrays[0]);
+                });
+            });
+        });
     });
 }
