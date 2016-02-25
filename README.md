@@ -59,7 +59,7 @@ import {FirebaseService} from 'firebase-angular2/core';
 declare var Firebase;
 
 bootstrap(MyAppComponent, [
-    provide(FirebaseService, {useFactory: () => new new FirebaseService(new Firebase('https://YOUR-FIREBASE-URL.firebaseio.com/')))})
+    provide(FirebaseService, {useFactory: () => new FirebaseService(new Firebase('https://YOUR-FIREBASE-URL.firebaseio.com/'))})
 ]);
 ```
 
