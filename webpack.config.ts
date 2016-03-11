@@ -2,13 +2,13 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        'firebase-angular2-all.umd': './core',
-        'firebase-angular2-all.umd.min': './core'
+        'ng2-firebase-all.umd': './core',
+        'ng2-firebase-all.umd.min': './core'
     },
     output: {
         filename: '[name].js',
         path: 'bundles',
-        library: 'firebaseAngular2',
+        library: 'ng2Firebase',
         libraryTarget: 'umd'
     },
     externals:

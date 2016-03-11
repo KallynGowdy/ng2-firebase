@@ -1,4 +1,4 @@
-# firebase-angular2
+# ng2-firebase
 A rich Angular 2 wrapper library for the Firebase JavaScript SDK.
 
 | `master`  | `all` |
@@ -10,7 +10,7 @@ A rich Angular 2 wrapper library for the Firebase JavaScript SDK.
 
 
 ```
-npm install --save firebase-angular2
+npm install --save ng2-firebase
 ```
 
 ## Usage
@@ -22,11 +22,11 @@ There are two valid ways to use the library in your project:
 
 ### TypeScript - [Demo Application](https://github.com/KallynGowdy/firebase-angular2-demo/tree/master/ts)
 
-To use in your project, reference the `firebase-angular2/core` module:
+To use in your project, reference the `ng2-firebase/core` module:
 
 ```TypeScript
 // myfile.ts
-import {FirebaseService} from 'firebase-angular2/core';
+import {FirebaseService} from 'ng2-firebase/core';
 ```
 
 also make sure you include the Firebase JavaScript SDK:
@@ -43,7 +43,7 @@ System.config({
   // ...
   defaultJSExtensions: true,
   map: {
-    'firebase-angular2': 'node_modules/firebase-angular2'
+    'ng2-firebase': 'node_modules/ng2-firebase'
   }
 });
 ```
@@ -53,7 +53,7 @@ Finally, register whatever providers you need:
 ```TypeScript
 // boot.ts
 import {provide} from 'angular2/core';
-import {FirebaseService} from 'firebase-angular2/core';
+import {FirebaseService} from 'ng2-firebase/core';
 
 // Tell TypeScript that Firebase is a global object.
 declare var Firebase;
@@ -70,7 +70,7 @@ Make sure that both the Firebase SDK and the Firebase Angular 2 Bundle are inclu
 ```html
 <!-- index.html -->
 <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
-<script src="node_modules/firebase-angular2/bundles/firebase-angular2-all.umd.js"></script>
+<script src="node_modules/ng2-firebase/bundles/ng2-firebase-all.umd.js"></script>
 ```
 
 Register the provider:
@@ -113,7 +113,7 @@ Use in a component:
 })(window.app || (window.app = {}));
 ```
 
-If you are not using a module system, then all of the exported services and classes from the `firebase-angular2` library are in the `firebaseAngular2` global variable.
+If you are not using a module system, then all of the exported services and classes from the `ng2-firebase` library are in the `ng2Firebase` global variable.
 
 ## Demo
 
