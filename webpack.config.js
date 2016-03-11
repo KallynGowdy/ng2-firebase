@@ -2,7 +2,7 @@
 
 var webpack = require('webpack');
 
-export = {
+module.exports = {
     entry: {
         'ng2-firebase-all.umd': './core',
         'ng2-firebase-all.umd.min': './core'
