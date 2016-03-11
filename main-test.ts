@@ -1,4 +1,3 @@
-/// <reference path="./node_modules/angular2/typings/es6-shim/es6-shim.d.ts"/>
 /// <amd-dependency path="./test/integration/firebase.service.spec" />
 /// <amd-dependency path="./test/unit/firebase.service.spec" />
 /// <amd-dependency path="./test/unit/firebase-utils.spec" />

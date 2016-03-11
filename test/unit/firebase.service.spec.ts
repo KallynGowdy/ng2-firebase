@@ -1,23 +1,9 @@
+/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
+
 import * as Sinon from 'sinon';
 import {FirebaseService} from '../../core';
 import {Observable} from '../../node_modules/rxjs/Rx';
 import {Subscription} from '../../node_modules/rxjs/Subscription';
-import {
-    AsyncTestCompleter,
-    beforeEach,
-    ddescribe,
-    xdescribe,
-    describe,
-    dispatchEvent,
-    expect,
-    iit,
-    inject,
-    beforeEachProviders,
-    it,
-    xit,
-    TestComponentBuilder,
-    ComponentFixture
-} from 'angular2/testing_internal';
 import {FirebaseArray} from '../../src/firebase-array';
 
 export function main() {

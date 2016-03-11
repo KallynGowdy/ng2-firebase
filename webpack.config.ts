@@ -1,6 +1,8 @@
+/// <reference path="./typings/node/node.d.ts" />
+
 var webpack = require('webpack');
 
-module.exports = {
+export = {
     entry: {
         'ng2-firebase-all.umd': './core',
         'ng2-firebase-all.umd.min': './core'

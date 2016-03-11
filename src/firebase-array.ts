@@ -268,9 +268,9 @@ export class FirebaseArray {
      * @param onNext
      * @param onError
      * @param onComplete
-     * @returns {Subscription<any[]>}
+     * @returns {Subscription}
      */
-    subscribe(onNext?: (value: any[]) => void, onError?: (error: any) => void, onComplete?: () => void): Subscription<any[]> {
+    subscribe(onNext?: (value: any[]) => void, onError?: (error: any) => void, onComplete?: () => void): Subscription {
         return this.observable.subscribe(onNext, onError, onComplete);
     }
 

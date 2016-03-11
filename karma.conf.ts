@@ -1,7 +1,7 @@
 // Karma configuration
 // Generated on Sun Dec 27 2015 17:39:57 GMT-0500 (Eastern Standard Time)
 
-module.exports = function (config) {
+export = function (config) {
     var customLaunchers = {
         'SL_Chrome': {
             base: 'SauceLabs',

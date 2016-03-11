@@ -1,23 +1,8 @@
+/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
+
 import {Observable} from '../../node_modules/rxjs/Rx';
 import {FirebaseUtils} from "../../core";
 import * as Sinon from 'sinon';
-import {error} from "util";
-import {
-    AsyncTestCompleter,
-    beforeEach,
-    ddescribe,
-    xdescribe,
-    describe,
-    dispatchEvent,
-    expect,
-    iit,
-    inject,
-    beforeEachProviders,
-    it,
-    xit,
-    TestComponentBuilder,
-    ComponentFixture
-} from 'angular2/testing_internal';
 
 export function main() {
     describe('FirebaseUtils', function () {

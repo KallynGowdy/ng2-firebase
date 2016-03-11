@@ -1,50 +1,36 @@
+/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
+
 import * as Sinon from 'sinon';
 import {FirebaseService} from '../../core';
 import {Observable} from '../../node_modules/rxjs/Rx';
 import {Subscription} from '../../node_modules/rxjs/Subscription';
-import {
-    AsyncTestCompleter,
-    beforeEach,
-    ddescribe,
-    xdescribe,
-    describe,
-    dispatchEvent,
-    expect,
-    iit,
-    inject,
-    beforeEachProviders,
-    it,
-    xit,
-    TestComponentBuilder,
-    ComponentFixture
-} from 'angular2/testing_internal';
 import {FirebaseArray} from '../../src/firebase-array';
-import {TestScheduler} from "rxjs/Rx.KitchenSink";
+import {TestScheduler} from 'rxjs/Rx.KitchenSink';
 
-function createSnapshot(key:string, val:any):any {
+function createSnapshot(key: string, val: any): any {
     return {
-        val(){
+        val() {
             return val;
         },
-        key(){
+        key() {
             return key;
         }
     };
 }
 
-function mockService(marbles?, values?):FirebaseService {
+function mockService(scheduler: TestScheduler, marbles?, values?): FirebaseService {
     var safeMarbles = marbles || {
-            a: '----',
-            b: '----',
-            c: '----',
-            d: '----',
-            e: '----'
-        };
+        a: '----',
+        b: '----',
+        c: '----',
+        d: '----',
+        e: '----'
+    };
     var safeValues = values || {};
-    var childAdded = this.scheduler.createColdObservable(safeMarbles.a, safeValues);
-    var childRemoved = this.scheduler.createColdObservable(safeMarbles.b, safeValues);
-    var childChanged = this.scheduler.createColdObservable(safeMarbles.c, safeValues);
-    var childMoved = this.scheduler.createColdObservable(safeMarbles.d, safeValues);
+    var childAdded = scheduler.createColdObservable(safeMarbles.a, safeValues);
+    var childRemoved = scheduler.createColdObservable(safeMarbles.b, safeValues);
+    var childChanged = scheduler.createColdObservable(safeMarbles.c, safeValues);
+    var childMoved = scheduler.createColdObservable(safeMarbles.d, safeValues);
     return <any>{
         childAddedRaw: childAdded,
         childRemovedRaw: childRemoved,
@@ -53,10 +39,10 @@ function mockService(marbles?, values?):FirebaseService {
     };
 }
 export function main() {
-    describe('FirebaseArray', function () {
+    describe('FirebaseArray', function() {
 
-        beforeEach(function () {
-            this.scheduler = new TestScheduler((first, second) => {
+        var setupScheduler = (): TestScheduler => {
+            return new TestScheduler((first, second) => {
                 expect(first.length).toEqual(second.length, `Expected ${first.length} events to be observed.`);
                 for (var i = 0; i < first.length; i++) {
                     var f = first[i];
@@ -67,16 +53,17 @@ export function main() {
                 }
                 //return expect(first).toEqual(second);
             });
-        });
+        };
 
-        describe('.subscribe()', function () {
-            it('should notify observer after "child_added" event', function () {
+        describe('.subscribe()', function() {
+            it('should notify observer after "child_added" event', function() {
+                var scheduler = setupScheduler();
 
                 var values = {
-                    a: [createSnapshot('1', {value: 'a'}), null],
-                    b: [createSnapshot('2', {value: 'b'}), 'a'],
-                    c: [{value: 'a'}],
-                    d: [{value: 'a'}, {value: 'b'}]
+                    a: [createSnapshot('1', { value: 'a' }), null],
+                    b: [createSnapshot('2', { value: 'b' }), 'a'],
+                    c: [{ value: 'a' }],
+                    d: [{ value: 'a' }, { value: 'b' }]
                 };
 
                 var marbles = {
@@ -88,20 +75,21 @@ export function main() {
                     e: '-c-d'
                 };
 
-                var service = mockService(marbles, values);
+                var service = mockService(scheduler, marbles, values);
                 var expected = marbles.e;
 
                 var arr = new FirebaseArray(service);
 
-                this.scheduler.expectObservable(arr).toBe(expected, values);
-                this.scheduler.flush();
+                scheduler.expectObservable(<any>arr).toBe(expected, values);
+                scheduler.flush();
             });
 
-            it('should notify observer after "child_removed" event', function () {
+            it('should notify observer after "child_removed" event', function() {
+                var scheduler = setupScheduler();
                 var values = {
-                    a: [createSnapshot('1', {value: 'a'}), null],
+                    a: [createSnapshot('1', { value: 'a' }), null],
                     b: [createSnapshot('1', null)],
-                    e: [{value: 'a'}],
+                    e: [{ value: 'a' }],
                     f: []
                 };
 
@@ -114,21 +102,22 @@ export function main() {
                     e: '-e-f'
                 };
 
-                var service = mockService(marbles, values);
+                var service = mockService(scheduler, marbles, values);
                 var expected = marbles.e;
 
                 var arr = new FirebaseArray(service);
 
-                this.scheduler.expectObservable(arr).toBe(expected, values);
-                this.scheduler.flush();
+                scheduler.expectObservable(<any>arr).toBe(expected, values);
+                scheduler.flush();
             });
 
-            it('should notify observer after "child_changed" event', function () {
+            it('should notify observer after "child_changed" event', function() {
+                var scheduler = setupScheduler();
                 var values = {
-                    a: [createSnapshot('1', {value: 'a'}), null],
-                    b: [createSnapshot('1', {value: 'b'})],
-                    1: [{value: 'a'}],
-                    2: [{value: 'b'}]
+                    a: [createSnapshot('1', { value: 'a' }), null],
+                    b: [createSnapshot('1', { value: 'b' })],
+                    1: [{ value: 'a' }],
+                    2: [{ value: 'b' }]
                 };
 
                 var marbles = {
@@ -140,23 +129,24 @@ export function main() {
                     e: '-12-'
                 };
 
-                var service = mockService(marbles, values);
+                var service = mockService(scheduler, marbles, values);
                 var expected = marbles.e;
 
                 var arr = new FirebaseArray(service);
 
-                this.scheduler.expectObservable(arr).toBe(expected, values);
-                this.scheduler.flush();
+                scheduler.expectObservable(<any>arr).toBe(expected, values);
+                scheduler.flush();
             });
 
-            it('should notify observer after "child_moved" event', function () {
+            it('should notify observer after "child_moved" event', function() {
+                var scheduler = setupScheduler();
                 var values = {
-                    a: [createSnapshot('1', {value: 'a'}), null],
-                    b: [createSnapshot('2', {value: 'b'}), '1'],
-                    c: [createSnapshot('1', {value: 'a'}), '2'],
-                    1: [{value: 'a'}],
-                    2: [{value: 'a'}, {value: 'b'}],
-                    3: [{value: 'b'}, {value: 'a'}]
+                    a: [createSnapshot('1', { value: 'a' }), null],
+                    b: [createSnapshot('2', { value: 'b' }), '1'],
+                    c: [createSnapshot('1', { value: 'a' }), '2'],
+                    1: [{ value: 'a' }],
+                    2: [{ value: 'a' }, { value: 'b' }],
+                    3: [{ value: 'b' }, { value: 'a' }]
                 };
 
                 var marbles = {
@@ -168,16 +158,17 @@ export function main() {
                     e: '-123-'
                 };
 
-                var service = mockService(marbles, values);
+                var service = mockService(scheduler, marbles, values);
                 var expected = marbles.e;
 
                 var arr = new FirebaseArray(service);
 
-                this.scheduler.expectObservable(arr).toBe(expected, values);
-                this.scheduler.flush();
+                scheduler.expectObservable(<any>arr).toBe(expected, values);
+                scheduler.flush();
             });
 
-            it('should handle primitive values', function () {
+            it('should handle primitive values', function() {
+                var scheduler = setupScheduler();
                 var values = {
                     a: [createSnapshot('1', 'Hello, World'), null],
 
@@ -209,20 +200,20 @@ export function main() {
                     e: '-12345'
                 };
 
-                var service = mockService(marbles, values);
+                var service = mockService(scheduler, marbles, values);
                 var expected = marbles.e;
 
                 var arr = new FirebaseArray(service);
 
-                this.scheduler.expectObservable(arr).toBe(expected, values);
-                this.scheduler.flush();
+                scheduler.expectObservable(<any>arr).toBe(expected, values);
+                scheduler.flush();
             });
         });
 
-        var testCallFunctionOnService = function (testName, arrayName, serviceName, data, expected?) {
-            it(testName, function () {
+        var testCallFunctionOnService = function(testName, arrayName, serviceName, data, expected?) {
+            it(testName, function() {
                 var spy = Sinon.spy();
-                var service = mockService();
+                var service = mockService(setupScheduler());
                 service[serviceName] = spy;
                 var arr = new FirebaseArray(service);
 
@@ -233,11 +224,11 @@ export function main() {
             });
         };
 
-        var testReturnsWhatServiceReturns = function (testName, arrayName, serviceName, data, returned) {
-            it(testName, function () {
+        var testReturnsWhatServiceReturns = function(testName, arrayName, serviceName, data, returned) {
+            it(testName, function() {
                 var stub = Sinon.stub();
                 stub.returns(returned);
-                var service = mockService();
+                var service = mockService(setupScheduler());
                 service.push = stub;
                 var arr = new FirebaseArray(service);
 
@@ -247,7 +238,7 @@ export function main() {
             });
         };
 
-        describe('.add(data)', function () {
+        describe('.add(data)', function() {
             testCallFunctionOnService(
                 'should call push() on the underlying service',
                 'add',
@@ -272,8 +263,8 @@ export function main() {
                 }
             );
 
-            it('should reject nulls', function () {
-                var service = mockService();
+            it('should reject nulls', function() {
+                var service = mockService(setupScheduler());
                 var arr = new FirebaseArray(service);
 
                 expect(() => {
@@ -284,7 +275,7 @@ export function main() {
             });
         });
 
-        describe('.remove(index)', function () {
+        describe('.remove(index)', function() {
             testCallFunctionOnService(
                 'it should call .remove() on the underlying service',
                 'remove',
@@ -302,8 +293,8 @@ export function main() {
                 }
             );
 
-            it('should reject nulls', function () {
-                var service = mockService();
+            it('should reject nulls', function() {
+                var service = mockService(setupScheduler());
                 var arr = new FirebaseArray(service);
 
                 expect(() => {
@@ -314,15 +305,15 @@ export function main() {
             });
         });
 
-        describe('.set(index, data)', function () {
-            it('should call child().set() on the underlying service', function () {
+        describe('.set(index, data)', function() {
+            it('should call child().set() on the underlying service', function() {
                 var setSpy = Sinon.spy();
                 var childStub = Sinon.stub();
                 childStub.returns({
                     set: setSpy
                 });
 
-                var service = mockService();
+                var service = mockService(setupScheduler());
                 service.child = childStub;
                 var arr = new FirebaseArray(service);
                 var data = {
@@ -336,7 +327,7 @@ export function main() {
                 expect(setSpy.firstCall.args[0]).toBe(data);
             });
 
-            it('should return whatever child().set() returns', function () {
+            it('should return whatever child().set() returns', function() {
                 var returned = {
                     returned: true
                 };
@@ -348,7 +339,7 @@ export function main() {
                 });
                 setStub.returns(returned);
 
-                var service = mockService();
+                var service = mockService(setupScheduler());
                 service.child = childStub;
                 var arr = new FirebaseArray(service);
                 var data = {
@@ -360,11 +351,12 @@ export function main() {
             });
         });
 
-        describe('.length', function () {
-            it('should return an observable that updates when the length updates', function () {
+        describe('.length', function() {
+            it('should return an observable that updates when the length updates', function() {
+                var scheduler = setupScheduler();
                 var values = {
-                    a: [createSnapshot('1', {value: 'a'}), null],
-                    b: [createSnapshot('2', {value: 'b'}), 'a'],
+                    a: [createSnapshot('1', { value: 'a' }), null],
+                    b: [createSnapshot('2', { value: 'b' }), 'a'],
                     c: [createSnapshot('1', null)],
                     1: 1,
                     2: 2,
@@ -380,21 +372,22 @@ export function main() {
                     e: '-1-23'
                 };
 
-                var service = mockService(marbles, values);
+                var service = mockService(scheduler, marbles, values);
                 var expected = marbles.e;
 
                 var arr = new FirebaseArray(service);
 
-                this.scheduler.expectObservable(arr.length).toBe(expected, values);
-                this.scheduler.flush();
+                scheduler.expectObservable(arr.length).toBe(expected, values);
+                scheduler.flush();
             });
         });
 
-        describe('.indexOfKey()', function () {
-            it('should return an observable that updates when the index of a value changes', function () {
+        describe('.indexOfKey()', function() {
+            it('should return an observable that updates when the index of a value changes', function() {
+                var scheduler = setupScheduler();
                 var values = {
-                    a: [createSnapshot('1', {value: 'a'}), null],
-                    b: [createSnapshot('2', {value: 'b'}), 'a'],
+                    a: [createSnapshot('1', { value: 'a' }), null],
+                    b: [createSnapshot('2', { value: 'b' }), 'a'],
                     c: [createSnapshot('2', null), null],
                     1: 0,
                     3: 1
@@ -409,22 +402,23 @@ export function main() {
                     e: '-1--3'
                 };
 
-                var service = mockService(marbles, values);
+                var service = mockService(scheduler, marbles, values);
                 var expected = marbles.e;
 
                 var arr = new FirebaseArray(service);
 
-                this.scheduler.expectObservable(arr.indexOfKey('1')).toBe(expected, values);
-                this.scheduler.flush();
+                scheduler.expectObservable(arr.indexOfKey('1')).toBe(expected, values);
+                scheduler.flush();
             });
         });
 
-        describe('.indexOf()', function () {
-            it('should return an observable that updates when the index of a value changes', function () {
-                var val = {value: 'a'};
+        describe('.indexOf()', function() {
+            it('should return an observable that updates when the index of a value changes', function() {
+                var scheduler = setupScheduler();
+                var val = { value: 'a' };
                 var values = {
                     a: [createSnapshot('1', val), null],
-                    b: [createSnapshot('2', {value: 'b'}), 'a'],
+                    b: [createSnapshot('2', { value: 'b' }), 'a'],
                     c: [createSnapshot('2', null), null],
                     1: 0,
                     3: 1
@@ -439,18 +433,19 @@ export function main() {
                     e: '-1--3'
                 };
 
-                var service = mockService(marbles, values);
+                var service = mockService(scheduler, marbles, values);
                 var expected = marbles.e;
 
                 var arr = new FirebaseArray(service);
 
-                this.scheduler.expectObservable(arr.indexOf(val)).toBe(expected, values);
-                this.scheduler.flush();
+                scheduler.expectObservable(arr.indexOf(val)).toBe(expected, values);
+                scheduler.flush();
             });
         });
 
-        describe('.filter()', function () {
-            it('should return an observable that updates with the filtered array', function () {
+        describe('.filter()', function() {
+            it('should return an observable that updates with the filtered array', function() {
+                var scheduler = setupScheduler();
                 var values = {
                     a: [createSnapshot('1', 'Hello, World!'), null],
                     b: [createSnapshot('2', 'Meh.'), '1'],
@@ -473,7 +468,7 @@ export function main() {
                     e: '-1234'
                 };
 
-                var service = mockService(marbles, values);
+                var service = mockService(scheduler, marbles, values);
                 var expected = marbles.e;
 
                 var arr = new FirebaseArray(service);
@@ -481,15 +476,15 @@ export function main() {
                 var _this = {};
                 var filtered = arr.filter(spy, _this);
 
-                this.scheduler.expectObservable(filtered).toBe(expected, values);
-                this.scheduler.flush();
+                scheduler.expectObservable(filtered).toBe(expected, values);
+                scheduler.flush();
                 expect(spy.alwaysCalledOn(_this));
             });
         });
 
-        describe('.map()', function () {
-            it('should return an observable that updates with the mapped array', function () {
-
+        describe('.map()', function() {
+            it('should return an observable that updates with the mapped array', function() {
+                var scheduler = setupScheduler();
                 var helloWorldLength = 'Hello, World!'.length;
                 var mehLength = 'Meh.'.length;
                 var thisIsGreatLength = 'This is Great!'.length;
@@ -516,7 +511,7 @@ export function main() {
                     e: '-1234'
                 };
 
-                var service = mockService(marbles, values);
+                var service = mockService(scheduler, marbles, values);
                 var expected = marbles.e;
 
                 var arr = new FirebaseArray(service);
@@ -524,14 +519,15 @@ export function main() {
                 var _this = {};
                 var mapped = arr.map(spy, _this);
 
-                this.scheduler.expectObservable(mapped).toBe(expected, values);
-                this.scheduler.flush();
+                scheduler.expectObservable(mapped).toBe(expected, values);
+                scheduler.flush();
                 expect(spy.alwaysCalledOn(_this));
             });
         });
 
-        describe('.find()', function () {
-            it('should return an observable that only updates with the found item', function () {
+        describe('.find()', function() {
+            it('should return an observable that only updates with the found item', function() {
+                var scheduler = setupScheduler();
                 var values = {
                     a: [createSnapshot('1', 'Hello, World!'), null],
                     b: [createSnapshot('2', 'Meh.'), '1'],
@@ -551,7 +547,7 @@ export function main() {
                     e: '-1-2-'
                 };
 
-                var service = mockService(marbles, values);
+                var service = mockService(scheduler, marbles, values);
                 var expected = marbles.e;
 
                 var arr = new FirebaseArray(service);
@@ -559,14 +555,15 @@ export function main() {
                 var _this = {};
                 var found = arr.find(spy, _this);
 
-                this.scheduler.expectObservable(found).toBe(expected, values);
-                this.scheduler.flush();
+                scheduler.expectObservable(found).toBe(expected, values);
+                scheduler.flush();
                 expect(spy.alwaysCalledOn(_this));
             });
         });
 
-        describe('.findIndex()', function () {
-            it('should return an observable that only updates with the found item', function () {
+        describe('.findIndex()', function() {
+            it('should return an observable that only updates with the found item', function() {
+                var scheduler = setupScheduler();
                 var values = {
                     a: [createSnapshot('1', 'Hello, World!'), null],
                     b: [createSnapshot('2', 'Meh.'), '1'],
@@ -586,7 +583,7 @@ export function main() {
                     e: '-1-2-'
                 };
 
-                var service = mockService(marbles, values);
+                var service = mockService(scheduler, marbles, values);
                 var expected = marbles.e;
 
                 var arr = new FirebaseArray(service);
@@ -594,19 +591,20 @@ export function main() {
                 var _this = {};
                 var found = arr.findIndex(spy, _this);
 
-                this.scheduler.expectObservable(found).toBe(expected, values);
-                this.scheduler.flush();
+                scheduler.expectObservable(found).toBe(expected, values);
+                scheduler.flush();
                 expect(spy.alwaysCalledOn(_this));
             });
         });
-        
+
         describe('.copyArray', function() {
             it('should produce different array instances between updates when copyArray = true', function() {
+                var scheduler = setupScheduler();
                 var values = {
-                    a: [createSnapshot('1', {value: 'a'}), null],
-                    b: [createSnapshot('1', {value: 'b'})],
-                    1: [{value: 'a'}],
-                    2: [{value: 'b'}]
+                    a: [createSnapshot('1', { value: 'a' }), null],
+                    b: [createSnapshot('1', { value: 'b' })],
+                    1: [{ value: 'a' }],
+                    2: [{ value: 'b' }]
                 };
 
                 var marbles = {
@@ -618,7 +616,7 @@ export function main() {
                     e: '-12-'
                 };
 
-                var service = mockService(marbles, values);
+                var service = mockService(scheduler, marbles, values);
                 var expected = marbles.e;
 
                 var arr = new FirebaseArray(service);
@@ -626,25 +624,26 @@ export function main() {
 
                 var arrays = [];
                 arr.subscribe((items) => {
-                   arrays.push(items); 
+                    arrays.push(items);
                 });
 
-                this.scheduler.flush();
-                
+                scheduler.flush();
+
                 expect(arrays.length).toBe(2);
                 arrays.forEach((array, index) => {
                     var otherArrays = arrays.slice(index - 1, index);
                     otherArrays.forEach(otherArray => {
                         expect(array).not.toBe(otherArray);
-                    }); 
+                    });
                 });
             });
             it('should produce the same array instance between updates when copyArray = false', function() {
+                var scheduler = setupScheduler();
                 var values = {
-                    a: [createSnapshot('1', {value: 'a'}), null],
-                    b: [createSnapshot('1', {value: 'b'})],
-                    1: [{value: 'a'}],
-                    2: [{value: 'b'}]
+                    a: [createSnapshot('1', { value: 'a' }), null],
+                    b: [createSnapshot('1', { value: 'b' })],
+                    1: [{ value: 'a' }],
+                    2: [{ value: 'b' }]
                 };
 
                 var marbles = {
@@ -656,7 +655,7 @@ export function main() {
                     e: '-12-'
                 };
 
-                var service = mockService(marbles, values);
+                var service = mockService(scheduler, marbles, values);
                 var expected = marbles.e;
 
                 var arr = new FirebaseArray(service);
@@ -664,14 +663,14 @@ export function main() {
 
                 var arrays = [];
                 arr.subscribe((items) => {
-                   arrays.push(items); 
+                    arrays.push(items);
                 });
 
-                this.scheduler.flush();
-                
+                scheduler.flush();
+
                 expect(arrays.length).toBe(2);
                 arrays.forEach(array => {
-                   expect(array).toBe(arrays[0]);
+                    expect(array).toBe(arrays[0]);
                 });
             });
         });
