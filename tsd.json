@@ -22,6 +22,9 @@
     },
     "sinon/sinon.d.ts": {
       "commit": "a6ff9f6e195a334afd89e4b721d05e9520eee4c0"
+    },
+    "es6-shim/es6-shim.d.ts": {
+      "commit": "0144ad5a74053f2292424847259c4c8e1d0fecaa"
     }
   }
 }

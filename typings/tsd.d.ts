@@ -4,3 +4,4 @@
 /// <reference path="q/Q.d.ts" />
 /// <reference path="firebase/firebase.d.ts" />
 /// <reference path="sinon/sinon.d.ts" />
+/// <reference path="es6-shim/es6-shim.d.ts" />
