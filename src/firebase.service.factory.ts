@@ -9,7 +9,7 @@ import {Inject, Injectable} from "angular2/core";
  *
  * ```TypeScript
  * // Make sure you included the Firebase SDK.
- * import {FirebaseServiceFactory} from 'firebase-angular2/core';
+ * import {FirebaseServiceFactory} from 'ng2-firebase/core';
  * var service = FirebaseServiceFactory(Firebase);
  * ```
  *
@@ -17,7 +17,7 @@ import {Inject, Injectable} from "angular2/core";
  *
  * ```TypeScript
  * // Make sure you included the Firebase SDK.
- * import {FirebaseService} from 'firebase-angular2/core';
+ * import {FirebaseService} from 'ng2-firebase/core';
  * var firebaseService = new FirebaseService(Firebase);
  * ```
  *

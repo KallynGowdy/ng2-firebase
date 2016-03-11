@@ -11,7 +11,7 @@ import {FirebaseArray} from "./firebase-array";
  * **Example**:
  *
  * ```TypeScript
- * import {FirebaseService} from 'firebase-angular2/core';
+ * import {FirebaseService} from 'ng2-firebase/core';
  *
  * // Tell TypeScript that the Firebase SDK has created a global for us
  * declare var Firebase;
@@ -27,7 +27,7 @@ import {FirebaseArray} from "./firebase-array";
  * ```
  * // some.component.ts
  * import { Component, OnInit, provide } from 'angular2/core';
- * import { FirebaseService, FirebaseServiceFactory } from 'firebase-angular2/core';
+ * import { FirebaseService, FirebaseServiceFactory } from 'ng2-firebase/core';
  * import { Observable } from 'rxjs/Rx';
  *
  * @@Component({

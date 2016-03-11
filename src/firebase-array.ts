@@ -61,7 +61,7 @@ if (!Array.prototype.findIndex) {
  * **Example**:
  *
  * ```TypeScript
- * import {FirebaseService} from 'firebase-angular2/core';
+ * import {FirebaseService} from 'ng2-firebase/core';
  *
  * // Get the Array
  * var arr = new FirebaseService(
@@ -76,7 +76,7 @@ if (!Array.prototype.findIndex) {
  * ```TypeScript
  * // some.component.ts
  * import { Component, OnInit, provide } from 'angular2/core';
- * import { FirebaseArray, FirebaseService, FirebaseServiceFactory } from 'firebase-angular2/core';
+ * import { FirebaseArray, FirebaseService, FirebaseServiceFactory } from 'ng2-firebase/core';
  * import { Observable } from 'rxjs/Rx';
  *
  * @@Component({

@@ -11,7 +11,7 @@ if (typeof Firebase === 'undefined') {
  * Usage:
  *
  * ```TypeScript
- * import {FirebaseProvider} from 'firebase-angular2/core';
+ * import {FirebaseProvider} from 'ng2-firebase/core';
  *
  * // Later in the application when you are declaring the providers...
  *
