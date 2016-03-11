@@ -90,7 +90,7 @@ node_modules
 *.js
 *.js.map
 *.d.ts
-!typings
+!typings/**/*
 !dist
 docs
 
