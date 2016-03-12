@@ -62,7 +62,7 @@ import {FirebaseArray} from "./firebase-array";
  * ```
  */
 @Injectable()
-export class FirebaseService {
+export class FirebaseService<T> {
     /**
      * Gets the internal Firebase Instance.
      * @returns {Firebase}
@@ -103,7 +103,7 @@ export class FirebaseService {
      * Internally, this maps to the 'value' event emitted by Firebase.
      * @returns {Observable<any>}
      */
-    get value():Observable<any> {
+    get value():Observable<T> {
         return this.valueRaw.map((data) => data[0].val());
     }
 
@@ -121,7 +121,7 @@ export class FirebaseService {
      * Internally, this maps to the 'value' event emitted by Firebase.
      * @returns {Observable<any>}
      */
-    get data():Observable<any> {
+    get data():Observable<T> {
         return this.value;
     }
 
@@ -199,14 +199,14 @@ export class FirebaseService {
      * @param data The data that should be set to this location.
      * @returns {Promise<boolean>} Returns a promise that resolves `true` if the data was set. Otherwise the promise rejects if there was an error.
      */
-    setData(data:any):Promise<boolean> {
+    setData(data:T):Promise<boolean> {
         return FirebaseUtils.wrapFirebaseAsyncCall(this.firebase, this.firebase.set, [data]).then(() => true);
     }
 
     /**
      * @alias setData(data)
      */
-    set(data:any):Promise<boolean> {
+    set(data:T):Promise<boolean> {
         return this.setData(data);
     }
 
@@ -239,8 +239,8 @@ export class FirebaseService {
      * The FirebaseArray service provides functionality for dealing with synchronized order lists of objects.
      * @returns {FirebaseArray}
      */
-    asArray():FirebaseArray {
-        return new FirebaseArray(this);
+    asArray():FirebaseArray<T> {
+        return new FirebaseArray<T>(<any>this);
     }
 
     /**
@@ -256,7 +256,7 @@ export class FirebaseService {
      * @param path The relative path from this Firebase location to the requested location.
      * @returns {FirebaseService}
      */
-    public child(path:string):FirebaseService {
-        return new FirebaseService(this.firebase.child(path));
+    public child<TChild>(path:string):FirebaseService<TChild> {
+        return new FirebaseService<TChild>(this.firebase.child(path));
     }
 }

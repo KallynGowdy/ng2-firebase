@@ -25,6 +25,6 @@ import {Inject, Injectable} from "angular2/core";
  * @returns {FirebaseService}
  * @constructor
  */
-export function FirebaseServiceFactory(Firebase:Firebase):FirebaseService {
-    return new FirebaseService(Firebase);
+export function FirebaseServiceFactory<T>(Firebase:Firebase):FirebaseService<T> {
+    return new FirebaseService<T>(Firebase);
 }
