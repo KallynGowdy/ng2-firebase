@@ -127,7 +127,7 @@ if (!Array.prototype.findIndex) {
  *
  */
 @Injectable()
-export class FirebaseArray {
+export class FirebaseArray<T> {
     
     /**
      * Whether inner array should be copied when notifying observers.
@@ -136,7 +136,7 @@ export class FirebaseArray {
      */
     public copyArray: boolean = true;
 
-    private _service: FirebaseService;
+    private _service: FirebaseService<T[]>;
     private _list: ArrayValue[];
     private _arr: any[];
     private _subject: Subject<ArrayValue[]>;
@@ -151,7 +151,7 @@ export class FirebaseArray {
      * Creates a new FirebaseArray using the given FirebaseService.
      * @param firebaseService
      */
-    constructor(firebaseService: FirebaseService) {
+    constructor(firebaseService: FirebaseService<T[]>) {
         this._subject = new Subject();
         this._service = firebaseService;
         this._list = [];
@@ -165,7 +165,7 @@ export class FirebaseArray {
      * @param data The data that should be added to the data structure.
      * @returns {Promise<boolean>}
      */
-    add(data: any): Promise<boolean> {
+    add(data: T): Promise<boolean> {
         if (typeof data === 'undefined' || data === null) {
             throw new Error(
                 'Cannot add nulls to synchronized array as they cannot be reliably tracked. ' +
@@ -192,9 +192,9 @@ export class FirebaseArray {
      * @param data The data that the child should be replaced with.
      * @returns {Promise<boolean>}
      */
-    set(index: (string | number), data: any): Promise<boolean> {
+    set(index: (string | number), data: T): Promise<boolean> {
         if (data.hasOwnProperty('$id')) {
-            delete data.$id
+            delete (<any>data).$id
         }
         return this._service.child(index.toString()).set(data);
     }
@@ -214,7 +214,7 @@ export class FirebaseArray {
      * @param fromIndex
      * @returns {Observable<number>}
      */
-    indexOf(val: any): Observable<number> {
+    indexOf(val: T): Observable<number> {
         return this.observable.map(arr => {
             return arr.indexOf(val);
         }).distinctUntilChanged();
@@ -225,7 +225,7 @@ export class FirebaseArray {
      * @param callback
      * @param thisArg
      */
-    filter(callback: (val: any, index: number, arr: any[]) => boolean, thisArg?: any): Observable<any[]> {
+    filter(callback: (val: T, index: number, arr: T[]) => boolean, thisArg?: any): Observable<any[]> {
         return this.observable.map(arr => {
             return arr.filter(callback, thisArg);
         });
@@ -236,7 +236,7 @@ export class FirebaseArray {
      * @param callback
      * @param thisArg
      */
-    map<T>(callback: (val: any, index: number, arr: any[]) => T, thisArg?: any): Observable<T[]> {
+    map<U>(callback: (val: T, index: number, arr: T[]) => U, thisArg?: any): Observable<U[]> {
         return this.observable.map(arr => arr.map(callback, thisArg));
     }
 
@@ -247,7 +247,7 @@ export class FirebaseArray {
      * @param thisArg The object that the callback should be called on.
      * @returns {Observable<any>}
      */
-    find(callback: (val: any, index: number, arr: any[]) => boolean, thisArg?: any): Observable<any> {
+    find(callback: (val: T, index: number, arr: T[]) => boolean, thisArg?: any): Observable<any> {
         return this.observable.map(arr => arr.find(callback, thisArg)).distinctUntilChanged();
     }
 
@@ -258,7 +258,7 @@ export class FirebaseArray {
      * @param thisArg The object that the callback should be called on.
      * @returns {Observable<any>}
      */
-    findIndex(callback: (val: any, index: number, arr: any[]) => boolean, thisArg?: any): Observable<number> {
+    findIndex(callback: (val: T, index: number, arr: T[]) => boolean, thisArg?: any): Observable<number> {
         // <any> cast is to get typescript compiler to ignore "incorrect" arguments
         return this.observable.map(arr => arr.findIndex(<any>callback, thisArg)).distinctUntilChanged();
     }
@@ -270,7 +270,7 @@ export class FirebaseArray {
      * @param onComplete
      * @returns {Subscription}
      */
-    subscribe(onNext?: (value: any[]) => void, onError?: (error: any) => void, onComplete?: () => void): Subscription {
+    subscribe(onNext?: (value: T[]) => void, onError?: (error: any) => void, onComplete?: () => void): Subscription {
         return this.observable.subscribe(onNext, onError, onComplete);
     }
 
@@ -278,7 +278,7 @@ export class FirebaseArray {
      * Gets the underlying service for this array.
      * @returns {FirebaseService}
      */
-    get service(): FirebaseService {
+    get service(): FirebaseService<T[]> {
         return this._service;
     }
 
@@ -294,7 +294,7 @@ export class FirebaseArray {
      * Gets the array that is currently stored in this service.
      * @returns {*[]}
      */
-    get array(): any[] {
+    get array(): T[] {
         return this.copyArray ? FirebaseArray._mapArrayValues(this._list) : this._arr;
     }
 
@@ -302,7 +302,7 @@ export class FirebaseArray {
      * Gets an observable that notifies whenever the underlying array is updated.
      * @returns {Observable<any>}
      */
-    get observable(): Observable<any[]> {
+    get observable(): Observable<T[]> {
         return this.copyArray ? this._subject.map(FirebaseArray._mapArrayValues) : this._subject.map((arr) => this._arr);
     }
 

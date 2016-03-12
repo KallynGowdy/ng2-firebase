@@ -18,7 +18,7 @@ function createSnapshot(key: string, val: any): any {
     };
 }
 
-function mockService(scheduler: TestScheduler, marbles?, values?): FirebaseService {
+function mockService(scheduler: TestScheduler, marbles?, values?): FirebaseService<any> {
     var safeMarbles = marbles || {
         a: '----',
         b: '----',

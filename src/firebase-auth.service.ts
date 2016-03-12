@@ -8,12 +8,12 @@ declare var Firebase:FirebaseStatic;
  * Defines a Firebase Service that provides Auth & Auth features.
  */
 @Injectable()
-export class FirebaseAuthService {
+export class FirebaseAuthService<T> {
     /**
      * Gets the FirebaseService that this Auth service is using.
      * @returns {FirebaseService}
      */
-    get service():FirebaseService {
+    get service():FirebaseService<T> {
         return this._firebase;
     }
 
@@ -25,13 +25,13 @@ export class FirebaseAuthService {
         return this.service.firebase;
     }
 
-    private _firebase:FirebaseService;
+    private _firebase:FirebaseService<T>;
 
     /**
      * Initializes a new FirebaseAuthService using the given FirebaseService.
      * @param firebase
      */
-    constructor(firebase:FirebaseService) {
+    constructor(firebase:FirebaseService<T>) {
         this._firebase = firebase;
     }
 

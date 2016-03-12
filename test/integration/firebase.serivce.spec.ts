@@ -9,7 +9,7 @@ import {FirebaseProvider, FirebaseService, FirebaseServiceProvider} from "../../
     template: '<p>{{data}}</p>'
 })
 class TestComponent {
-    constructor(public firebase: FirebaseService) {
+    constructor(public firebase: FirebaseService<any>) {
 
     }
 }
