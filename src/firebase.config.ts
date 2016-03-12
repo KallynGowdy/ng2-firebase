@@ -7,7 +7,7 @@ declare var Firebase:FirebaseStatic;
  * Defines an object that represents configuration for a FirebaseService.
  */
 @Injectable()
-export class FirebaseConfig {
+export class FirebaseConfig<T> {
     /**
      * The URL that the service should use to connect to firebase.
      * Typically in the format `https://<YOUR-FIREBASE-APP>.firebaseio.com`
@@ -33,7 +33,7 @@ export class FirebaseConfig {
     /**
      * Creates a new Firebase Service using the this configuration.
      */
-    public createService():FirebaseService {
-        return FirebaseServiceFactory(this.createFirebase());
+    public createService():FirebaseService<T> {
+        return FirebaseServiceFactory<T>(this.createFirebase());
     }
 }
