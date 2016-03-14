@@ -209,6 +209,23 @@ export class FirebaseService<T> {
     set(data:T):Promise<boolean> {
         return this.setData(data);
     }
+    
+    /**
+     * Update the objects children in this Firebase location. Passing null to updateData() will remove the value at the specified location.
+     * returns an promise that resolves when the operation is succesfull.
+     * @param data The object containing only the keys that should be updated in this location.
+     * @returns {Promise<boolean>} Returns a promise that resolves `true` if the data was succesfully updated. Otherwise the promise rejects if there was an error.
+     */
+    updateData(data:T):Promise<boolean> {
+        return FirebaseUtils.wrapFirebaseAsyncCall(this.firebase, this.firebase.update, [data]).then(() => true);
+    }
+    
+    /**
+     * @alias updateData(data)
+     */
+    update(data:T):Promise<boolean> {
+        return this.updateData(data);
+    }
 
     /**
      * Adds the given data to this Firebase location.
