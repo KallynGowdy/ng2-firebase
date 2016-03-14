@@ -13,6 +13,7 @@ export function main() {
                 offSpy,
                 childSpy,
                 setSpy,
+                updateSpy,
                 service;
 
             beforeEach(function () {
@@ -20,11 +21,13 @@ export function main() {
                 offSpy = Sinon.spy();
                 childSpy = Sinon.spy();
                 setSpy = Sinon.spy();
+                updateSpy = Sinon.spy();
                 firebase = {
                     on: onSpy,
                     off: offSpy,
                     child: childSpy,
-                    set: setSpy
+                    set: setSpy,
+                    update: updateSpy
                 };
                 service = new FirebaseService(firebase);
             });
@@ -224,8 +227,49 @@ export function main() {
                         .catch(done);
                 });
             });
+            
+            describe('.update(data)', function() {
+                it('should return a Promise', function () {
+                    var observable = service.update({});
+
+                    expect(observable instanceof Promise).toBe(true);
+                });
+                it('should call .update() on internal Firebase API Instance', function () {
+                    var obj = {updateKey: 'Update Value!'};
+                    service.updateData(obj);
+
+                    expect(updateSpy.called).toBe(true);
+                    expect(updateSpy.firstCall.args[0]).toBe(obj);
+                });
+                it('should resolve true when .update() calls given callback', function (done) {
+                    firebase.update = (data, callback) => {
+                        callback(null);
+                    };
+                    service.updateData({})
+                        .then(function (good) {
+                            expect(good).toBe(true);
+                            done();
+                        }).catch(done);
+                });
+                it('should resolve with error when .update() calls given callback with value', function (done) {
+                    firebase.update = (data, callback) => {
+                        callback('error');
+                    };
+
+                    service.updateData({})
+                        .catch(function (error) {
+                            expect(error).toBe('error');
+                            done();
+                        })
+                        .then(function () {
+                            done('Catch was not called');
+                        })
+                        .catch(done);
+                });
+            }); 
 
             describe('.on(event)', function () {
+                
                 it('should call .on(event, callback) on firebase instance when subscribed to', function () {
                     service.on('event').subscribe(() => {
                     });
