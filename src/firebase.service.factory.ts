@@ -1,6 +1,6 @@
 /// <reference path="../typings/firebase/firebase.d.ts"/>
 import {FirebaseService} from './firebase.service';
-import {Inject, Injectable} from "angular2/core";
+import {Inject, Injectable} from "@angular/core";
 
 /**
  * Gets the default factory function for FirebaseService objects.

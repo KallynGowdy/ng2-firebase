@@ -1,4 +1,4 @@
-import {Injectable} from "angular2/core";
+import {Injectable} from "@angular/core";
 import {FirebaseService} from './firebase.service';
 import {Observable, Subject, Subscription} from "rxjs/Rx";
 

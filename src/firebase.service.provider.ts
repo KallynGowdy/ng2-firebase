@@ -1,4 +1,4 @@
-import {provide} from 'angular2/core';
+import {provide} from '@angular/core';
 import {FirebaseService} from './firebase.service';
 import {FirebaseServiceFactory} from './firebase.service.factory';
 

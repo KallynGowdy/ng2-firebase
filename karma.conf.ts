@@ -36,14 +36,15 @@ export = function (config) {
             {pattern: 'core.js', included: false},
             {pattern: 'core.js.map', included: false},
             {pattern: 'test/**', included: false},
-            {pattern: 'node_modules/angular2/**', included: false, watched: false, served: true},
+            {pattern: 'node_modules/@angular/**', included: false, watched: false, served: true},
             {pattern: 'node_modules/rxjs/**', included: false, watched: false, served: true},
             {pattern: 'node_modules/sinon/**', included: false, watched: false, served: true},
             {pattern: 'node_modules/systemjs/dist/**', included: false, watched: false, served: true},
-            {pattern: 'node_modules/symbol-observable/**', included: false, watched: false, served: true},
 
             // Node Modules
-            'node_modules/angular2/bundles/angular2-polyfills.js',
+            'node_modules/core-js/client/shim.min.js',
+            'node_modules/zone.js/dist/zone.js',
+            'node_modules/reflect-metadata/Reflect.js',
             'node_modules/systemjs/dist/system.src.js',
             'main-test.js',
         ],

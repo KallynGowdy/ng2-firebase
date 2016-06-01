@@ -5,7 +5,7 @@
 
 declare var System;
 declare var __karma__;
-declare var Promise:PromiseConstructor;
+declare var Promise: PromiseConstructor;
 
 var win = <any>window;
 
@@ -18,6 +18,27 @@ __karma__.loaded = function () {
 };
 
 var baseURL = '/base/';
+
+var packages = {
+    'angular2-firebase': { main: 'core.js', defaultExtension: 'js' },
+    'rxjs': { defaultExtension: 'js' },
+    'angular2-in-memory-web-api': { defaultExtension: 'js' },
+    'sinon': { main: 'sinon.js', defaultExtension: 'js' }
+};
+
+var ngPackageNames = [
+    'common',
+    'compiler',
+    'core',
+    'platform-browser',
+    'platform-browser-dynamic'
+];
+
+// Add package entries for angular packages
+ngPackageNames.forEach(function (pkgName) {
+    packages['@angular/' + pkgName] = { main: pkgName + '.umd.js', defaultExtension: 'js' };
+});
+
 System.config({
     baseURL: baseURL,
     defaultJSExtensions: true,
@@ -28,16 +49,11 @@ System.config({
         }
     },
     map: {
-        'angular2': 'node_modules/angular2'
+        '@angular': 'node_modules/@angular',
+        'rxjs': 'node_modules/rxjs',
+        'sinon': 'node_modules/sinon/lib'
     },
-    paths: {
-        'rxjs/add/observable/*': 'node_modules/rxjs/add/observable/*.js',
-        'rxjs/add/operator/*': 'node_modules/rxjs/add/operator/*.js',
-        'rxjs/*': 'node_modules/rxjs/*.js',
-        'symbol-observable': 'node_modules/symbol-observable/index.js',
-        'sinon': 'node_modules/sinon/lib/sinon.js',
-        'angular2-firebase/*': 'core.js'
-    }
+    packages: packages
 });
 
 function onlySpecFiles(path) {
@@ -45,23 +61,19 @@ function onlySpecFiles(path) {
 }
 
 // Import all the specs, execute their `main()` method and kick off Karma (Jasmine).
-System.import('angular2/src/platform/browser/browser_adapter').then(function (browser_adapter) {
-    (<any>browser_adapter).BrowserDomAdapter.makeCurrent();
-}).then(function () {
-        return Promise.all(
-            Object.keys(win.__karma__.files) // All files served by Karma.
-                .filter(onlySpecFiles)
-                //.map(win.file2moduleName)        // Normalize paths to module names.
-                .map(function (path) {
-                    return System.import(path).then(function (module) {
-                        if (module.hasOwnProperty('main')) {
-                            module.main();
-                        } else {
-                            throw new Error('Module ' + path + ' does not implement main() method.');
-                        }
-                    });
-                }));
-    })
+Promise.all(
+    Object.keys(win.__karma__.files) // All files served by Karma.
+        .filter(onlySpecFiles)
+        //.map(win.file2moduleName)        // Normalize paths to module names.
+        .map(function (path) {
+            return System.import(path).then(function (module) {
+                if (module.hasOwnProperty('main')) {
+                    module.main();
+                } else {
+                    throw new Error('Module ' + path + ' does not implement main() method.');
+                }
+            });
+        }))
     .then(function () {
         __karma__.start();
     }, function (error) {

@@ -1,8 +1,8 @@
 /// <reference path="../../core.ts"/>
 /// <reference path="../../typings/jasmine/jasmine.d.ts"/>
 
-import {Component, Provider, Injector, ComponentMetadata, ViewMetadata, Injectable, provide} from 'angular2/core';
-import {bootstrap} from 'angular2/platform/browser';
+import {Component, Provider, Injector, ComponentMetadata, ViewMetadata, Injectable, provide} from '@angular/core';
+import {bootstrap} from '@angular/platform-browser-dynamic';
 import {FirebaseProvider, FirebaseService, FirebaseServiceProvider} from "../../core";
 @Component({
     selector: 'test-component',

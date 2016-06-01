@@ -1,5 +1,5 @@
 /// <
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {FirebaseConfig} from "./firebase.config";
 import {FirebaseUtils} from "./firebase-utils";

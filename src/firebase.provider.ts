@@ -1,4 +1,4 @@
-import {provide} from 'angular2/core';
+import {provide} from '@angular/core';
 declare var Firebase:Firebase;
 
 if (typeof Firebase === 'undefined') {
