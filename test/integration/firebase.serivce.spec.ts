@@ -1,7 +1,7 @@
 /// <reference path="../../core.ts"/>
 /// <reference path="../../typings/jasmine/jasmine.d.ts"/>
 
-import {Component, Provider, Injector, ComponentMetadata, View, ViewMetadata, Injectable, provide} from 'angular2/core';
+import {Component, Provider, Injector, ComponentMetadata, ViewMetadata, Injectable, provide} from 'angular2/core';
 import {bootstrap} from 'angular2/platform/browser';
 import {FirebaseProvider, FirebaseService, FirebaseServiceProvider} from "../../core";
 @Component({
@@ -33,7 +33,7 @@ export function main() {
             bootstrap(TestComponent, [provide(FirebaseService, { useValue: firebase })]).then(component => {
                 expect(component.instance).not.toBe(null);
                 expect(component.instance.firebase).toBe(firebase);
-                component.dispose();
+                component.destroy();
                 done();
             }, err => done(err));
         });
@@ -46,7 +46,7 @@ export function main() {
             bootstrap(TestComponent, [FirebaseServiceProvider, provide('Firebase', {useValue: firebase})]).then(component => {
                 expect(component.instance).not.toBe(null);
                 expect(component.instance.firebase.firebase).toBe(firebase);
-                component.dispose();
+                component.destroy();
                 done();
             }, err => done(err));
         });

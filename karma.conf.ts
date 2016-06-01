@@ -40,6 +40,7 @@ export = function (config) {
             {pattern: 'node_modules/rxjs/**', included: false, watched: false, served: true},
             {pattern: 'node_modules/sinon/**', included: false, watched: false, served: true},
             {pattern: 'node_modules/systemjs/dist/**', included: false, watched: false, served: true},
+            {pattern: 'node_modules/symbol-observable/**', included: false, watched: false, served: true},
 
             // Node Modules
             'node_modules/angular2/bundles/angular2-polyfills.js',

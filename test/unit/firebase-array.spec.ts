@@ -5,7 +5,7 @@ import {FirebaseService} from '../../core';
 import {Observable} from '../../node_modules/rxjs/Rx';
 import {Subscription} from '../../node_modules/rxjs/Subscription';
 import {FirebaseArray} from '../../src/firebase-array';
-import {TestScheduler} from 'rxjs/Rx.KitchenSink';
+import {TestScheduler} from '../../node_modules/rxjs/testing/TestScheduler';
 
 function createSnapshot(key: string, val: any): any {
     return {

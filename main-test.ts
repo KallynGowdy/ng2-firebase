@@ -34,6 +34,7 @@ System.config({
         'rxjs/add/observable/*': 'node_modules/rxjs/add/observable/*.js',
         'rxjs/add/operator/*': 'node_modules/rxjs/add/operator/*.js',
         'rxjs/*': 'node_modules/rxjs/*.js',
+        'symbol-observable': 'node_modules/symbol-observable/index.js',
         'sinon': 'node_modules/sinon/lib/sinon.js',
         'angular2-firebase/*': 'core.js'
     }

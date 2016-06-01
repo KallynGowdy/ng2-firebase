@@ -152,7 +152,7 @@ export class FirebaseArray<T> {
      * @param firebaseService
      */
     constructor(firebaseService: FirebaseService<T[]>) {
-        this._subject = new Subject();
+        this._subject = new Subject<ArrayValue[]>();
         this._service = firebaseService;
         this._list = [];
         this._arr = [];
