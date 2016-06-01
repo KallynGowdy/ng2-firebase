@@ -20,10 +20,10 @@ module.exports = {
     //},
         [
             {
-                "angular2/core": {
+                "@angular/core": {
                     root: ["ng", "core"],
-                    commonjs: ["angular2/core"],
-                    amd: "angular2/core"
+                    commonjs: ["@angular/core"],
+                    amd: "@angular/core"
                 },
                 "rxjs/Rx": {
                     root: "Rx",
