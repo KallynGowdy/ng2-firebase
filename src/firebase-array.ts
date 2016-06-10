@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {FirebaseService} from './firebase.service';
-import {Observable, Subject, Subscription} from "rxjs/Rx";
+import {Observable, Subject, ReplaySubject, Subscription} from "rxjs/Rx";
 
 class ArrayValue {
     value: any;
@@ -152,7 +152,7 @@ export class FirebaseArray<T> {
      * @param firebaseService
      */
     constructor(firebaseService: FirebaseService<T[]>) {
-        this._subject = new Subject<ArrayValue[]>();
+        this._subject = new ReplaySubject<ArrayValue[]>(1);
         this._service = firebaseService;
         this._list = [];
         this._arr = [];

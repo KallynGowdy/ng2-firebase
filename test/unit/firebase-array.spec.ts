@@ -2,7 +2,7 @@
 
 import * as Sinon from 'sinon';
 import {FirebaseService} from '../../core';
-import {Observable} from '../../node_modules/rxjs/Rx';
+import {Observable, Subject} from '../../node_modules/rxjs/Rx';
 import {Subscription} from '../../node_modules/rxjs/Subscription';
 import {FirebaseArray} from '../../src/firebase-array';
 import {TestScheduler} from '../../node_modules/rxjs/testing/TestScheduler';
@@ -39,8 +39,7 @@ function mockService(scheduler: TestScheduler, marbles?, values?): FirebaseServi
     };
 }
 export function main() {
-    describe('FirebaseArray', function() {
-
+    describe('FirebaseArray', function () {
         var setupScheduler = (): TestScheduler => {
             return new TestScheduler((first, second) => {
                 expect(first.length).toEqual(second.length, `Expected ${first.length} events to be observed.`);
@@ -55,8 +54,8 @@ export function main() {
             });
         };
 
-        describe('.subscribe()', function() {
-            it('should notify observer after "child_added" event', function() {
+        describe('.subscribe()', function () {
+            it('should notify observer after "child_added" event', function () {
                 var scheduler = setupScheduler();
 
                 var values = {
@@ -83,8 +82,7 @@ export function main() {
                 scheduler.expectObservable(<any>arr).toBe(expected, values);
                 scheduler.flush();
             });
-
-            it('should notify observer after "child_removed" event', function() {
+            it('should notify observer after "child_removed" event', function () {
                 var scheduler = setupScheduler();
                 var values = {
                     a: [createSnapshot('1', { value: 'a' }), null],
@@ -110,8 +108,7 @@ export function main() {
                 scheduler.expectObservable(<any>arr).toBe(expected, values);
                 scheduler.flush();
             });
-
-            it('should notify observer after "child_changed" event', function() {
+            it('should notify observer after "child_changed" event', function () {
                 var scheduler = setupScheduler();
                 var values = {
                     a: [createSnapshot('1', { value: 'a' }), null],
@@ -137,8 +134,7 @@ export function main() {
                 scheduler.expectObservable(<any>arr).toBe(expected, values);
                 scheduler.flush();
             });
-
-            it('should notify observer after "child_moved" event', function() {
+            it('should notify observer after "child_moved" event', function () {
                 var scheduler = setupScheduler();
                 var values = {
                     a: [createSnapshot('1', { value: 'a' }), null],
@@ -166,8 +162,7 @@ export function main() {
                 scheduler.expectObservable(<any>arr).toBe(expected, values);
                 scheduler.flush();
             });
-
-            it('should handle primitive values', function() {
+            it('should handle primitive values', function () {
                 var scheduler = setupScheduler();
                 var values = {
                     a: [createSnapshot('1', 'Hello, World'), null],
@@ -208,10 +203,54 @@ export function main() {
                 scheduler.expectObservable(<any>arr).toBe(expected, values);
                 scheduler.flush();
             });
+            it('should notify observer with the initial array values', () => {
+                var childAddedSubject = new Subject<any>();
+                var service = {
+                    childAddedRaw: childAddedSubject,
+                    childRemovedRaw: new Subject<any>(),
+                    childChangedRaw: new Subject<any>(),
+                    childMovedRaw: new Subject<any>()
+                };
+
+                var arr = new FirebaseArray<string>(<any>service);
+                childAddedSubject.next([createSnapshot('1', 'Hello'), null]);
+
+                var events: string[][] = [];
+                arr.subscribe(a => events.push(a));
+
+                expect(events.length).toBe(1);
+                expect(events[0].length).toBe(1);
+                expect(events[0][0]).toBe('Hello');
+            });
+            it('should notify late observer with current array values', () => {
+                var childAddedSubject = new Subject<any>();
+                var service = {
+                    childAddedRaw: childAddedSubject,
+                    childRemovedRaw: new Subject<any>(),
+                    childChangedRaw: new Subject<any>(),
+                    childMovedRaw: new Subject<any>()
+                };
+
+                var arr = new FirebaseArray<string>(<any>service);
+                childAddedSubject.next([createSnapshot('1', 'Hello'), null]);
+
+                var events: string[][] = [];
+                arr.subscribe(a => events.push(a));
+
+                childAddedSubject.next([createSnapshot('2', 'Great!'), '1']);
+
+                var otherEvents: string[][] = [];
+                arr.subscribe(a => otherEvents.push(a));
+
+                expect(otherEvents.length).toBe(1);
+                expect(otherEvents[0].length).toBe(2);
+                expect(otherEvents[0][0]).toBe('Hello');
+                expect(otherEvents[0][1]).toBe('Great!');
+            });
         });
 
-        var testCallFunctionOnService = function(testName, arrayName, serviceName, data, expected?) {
-            it(testName, function() {
+        var testCallFunctionOnService = function (testName, arrayName, serviceName, data, expected?) {
+            it(testName, function () {
                 var spy = Sinon.spy();
                 var service = mockService(setupScheduler());
                 service[serviceName] = spy;
@@ -224,8 +263,8 @@ export function main() {
             });
         };
 
-        var testReturnsWhatServiceReturns = function(testName, arrayName, serviceName, data, returned) {
-            it(testName, function() {
+        var testReturnsWhatServiceReturns = function (testName, arrayName, serviceName, data, returned) {
+            it(testName, function () {
                 var stub = Sinon.stub();
                 stub.returns(returned);
                 var service = mockService(setupScheduler());
@@ -238,7 +277,7 @@ export function main() {
             });
         };
 
-        describe('.add(data)', function() {
+        describe('.add(data)', function () {
             testCallFunctionOnService(
                 'should call push() on the underlying service',
                 'add',
@@ -263,7 +302,7 @@ export function main() {
                 }
             );
 
-            it('should reject nulls', function() {
+            it('should reject nulls', function () {
                 var service = mockService(setupScheduler());
                 var arr = new FirebaseArray(service);
 
@@ -275,7 +314,7 @@ export function main() {
             });
         });
 
-        describe('.remove(index)', function() {
+        describe('.remove(index)', function () {
             testCallFunctionOnService(
                 'it should call .remove() on the underlying service',
                 'remove',
@@ -293,7 +332,7 @@ export function main() {
                 }
             );
 
-            it('should reject nulls', function() {
+            it('should reject nulls', function () {
                 var service = mockService(setupScheduler());
                 var arr = new FirebaseArray(service);
 
@@ -305,8 +344,8 @@ export function main() {
             });
         });
 
-        describe('.set(index, data)', function() {
-            it('should call child().set() on the underlying service', function() {
+        describe('.set(index, data)', function () {
+            it('should call child().set() on the underlying service', function () {
                 var setSpy = Sinon.spy();
                 var childStub = Sinon.stub();
                 childStub.returns({
@@ -327,7 +366,7 @@ export function main() {
                 expect(setSpy.firstCall.args[0]).toBe(data);
             });
 
-            it('should return whatever child().set() returns', function() {
+            it('should return whatever child().set() returns', function () {
                 var returned = {
                     returned: true
                 };
@@ -351,8 +390,8 @@ export function main() {
             });
         });
 
-        describe('.length', function() {
-            it('should return an observable that updates when the length updates', function() {
+        describe('.length', function () {
+            it('should return an observable that updates when the length updates', function () {
                 var scheduler = setupScheduler();
                 var values = {
                     a: [createSnapshot('1', { value: 'a' }), null],
@@ -382,8 +421,8 @@ export function main() {
             });
         });
 
-        describe('.indexOfKey()', function() {
-            it('should return an observable that updates when the index of a value changes', function() {
+        describe('.indexOfKey()', function () {
+            it('should return an observable that updates when the index of a value changes', function () {
                 var scheduler = setupScheduler();
                 var values = {
                     a: [createSnapshot('1', { value: 'a' }), null],
@@ -412,8 +451,8 @@ export function main() {
             });
         });
 
-        describe('.indexOf()', function() {
-            it('should return an observable that updates when the index of a value changes', function() {
+        describe('.indexOf()', function () {
+            it('should return an observable that updates when the index of a value changes', function () {
                 var scheduler = setupScheduler();
                 var val = { value: 'a' };
                 var values = {
@@ -443,8 +482,8 @@ export function main() {
             });
         });
 
-        describe('.filter()', function() {
-            it('should return an observable that updates with the filtered array', function() {
+        describe('.filter()', function () {
+            it('should return an observable that updates with the filtered array', function () {
                 var scheduler = setupScheduler();
                 var values = {
                     a: [createSnapshot('1', 'Hello, World!'), null],
@@ -482,8 +521,8 @@ export function main() {
             });
         });
 
-        describe('.map()', function() {
-            it('should return an observable that updates with the mapped array', function() {
+        describe('.map()', function () {
+            it('should return an observable that updates with the mapped array', function () {
                 var scheduler = setupScheduler();
                 var helloWorldLength = 'Hello, World!'.length;
                 var mehLength = 'Meh.'.length;
@@ -525,8 +564,8 @@ export function main() {
             });
         });
 
-        describe('.find()', function() {
-            it('should return an observable that only updates with the found item', function() {
+        describe('.find()', function () {
+            it('should return an observable that only updates with the found item', function () {
                 var scheduler = setupScheduler();
                 var values = {
                     a: [createSnapshot('1', 'Hello, World!'), null],
@@ -561,8 +600,8 @@ export function main() {
             });
         });
 
-        describe('.findIndex()', function() {
-            it('should return an observable that only updates with the found item', function() {
+        describe('.findIndex()', function () {
+            it('should return an observable that only updates with the found item', function () {
                 var scheduler = setupScheduler();
                 var values = {
                     a: [createSnapshot('1', 'Hello, World!'), null],
@@ -597,8 +636,8 @@ export function main() {
             });
         });
 
-        describe('.copyArray', function() {
-            it('should produce different array instances between updates when copyArray = true', function() {
+        describe('.copyArray', function () {
+            it('should produce different array instances between updates when copyArray = true', function () {
                 var scheduler = setupScheduler();
                 var values = {
                     a: [createSnapshot('1', { value: 'a' }), null],
@@ -637,7 +676,7 @@ export function main() {
                     });
                 });
             });
-            it('should produce the same array instance between updates when copyArray = false', function() {
+            it('should produce the same array instance between updates when copyArray = false', function () {
                 var scheduler = setupScheduler();
                 var values = {
                     a: [createSnapshot('1', { value: 'a' }), null],
