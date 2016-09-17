@@ -5,11 +5,11 @@ import {FirebaseConfig} from "./firebase.config";
 @NgModule({
     providers: [FirebaseService]
 })
-export class AppModule {
+export class FirebaseModule {
 
     static forRoot(config: FirebaseConfig): ModuleWithProviders {
         return {
-            ngModule: AppModule,
+            ngModule: FirebaseModule,
             providers: [
                 {provide: FirebaseConfig, useValue: config}
             ]

@@ -62,11 +62,11 @@ function onlySpecFiles(path) {
 
 // Import all the specs, execute their `main()` method and kick off Karma (Jasmine).
 Promise.all(
-    Object.keys(win.__karma__.files) // All files served by Karma.
+    <any>Object.keys(win.__karma__.files) // All files served by Karma.
         .filter(onlySpecFiles)
         //.map(win.file2moduleName)        // Normalize paths to module names.
         .map(function (path) {
-            return System.import(path).then(function (module) {
+            return <any>System.import(path).then(function (module) {
                 if (module.hasOwnProperty('main')) {
                     module.main();
                 } else {

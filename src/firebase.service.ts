@@ -264,7 +264,7 @@ export class FirebaseService<T> {
      * Creates a new FirebaseService using the given Firebase JavaScript API Object.
      * @param config Either the FirebaseConfig or Firebase instance that the service should use.
      */
-    constructor(@Inject() config: any) {
+    constructor(@Inject(FirebaseConfig) config: any) {
         if (!config) throw new Error("You must provide either a firebase configuration object or a firebase instance");
         if((<FirebaseConfig>config).url) {
             this._firebase = new Firebase((<FirebaseConfig>config).url);
