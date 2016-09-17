@@ -12,7 +12,7 @@ function createSnapshot(key: string, val: any): any {
         val() {
             return val;
         },
-        key() {
+        get key() {
             return key;
         }
     };

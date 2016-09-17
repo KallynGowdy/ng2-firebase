@@ -63,6 +63,9 @@ import {FirebaseArray} from "./firebase-array";
  */
 @Injectable()
 export class FirebaseService<T> {
+
+    private static _initialized: boolean = false;
+
     /**
      * Gets the internal Firebase Instance.
      * @returns {Firebase}
@@ -266,10 +269,17 @@ export class FirebaseService<T> {
      */
     constructor(@Inject(FirebaseConfig) config: any) {
         if (!config) throw new Error("You must provide either a firebase configuration object or a firebase instance");
-        if((<FirebaseConfig>config).url) {
-            this._firebase = new Firebase((<FirebaseConfig>config).url);
+        if((<FirebaseConfig>config).databaseURL && config.apiKey && config.databaseURL) {
+            this._initalize(config);
+            this._firebase = firebase.database().ref();
         } else {
             this._firebase = <Firebase>config;
+        }
+    }
+
+    private _initalize(config: FirebaseConfig) {
+        if(!FirebaseService._initialized) {
+            firebase.initializeApp(config);
         }
     }
 
