@@ -5,7 +5,9 @@ export function main() {
         describe(".forRoot()", function () {
             it("should return an object that provides the given config object", () => {
                 var config = {
-                    url: "TestUrl"
+                    apiKey: "TestKey",
+                    authDomain: "AuthDomain",
+                    databaseURL: "TestUrl"
                 };
                 var result = FirebaseModule.forRoot(config);
 

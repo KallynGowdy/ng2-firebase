@@ -2,37 +2,26 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Rx';
 import {FirebaseService} from "./firebase.service";
 import {FirebaseUtils} from './firebase-utils';
-declare var Firebase:FirebaseStatic;
+declare var firebase:FirebaseStatic;
 
 /**
  * Defines a Firebase Service that provides Auth & Auth features.
  */
 @Injectable()
 export class FirebaseAuthService<T> {
-    /**
-     * Gets the FirebaseService that this Auth service is using.
-     * @returns {FirebaseService}
-     */
-    get service():FirebaseService<T> {
-        return this._firebase;
-    }
 
-    /**
-     * Gets the internal Firebase JavaScript API Service.
-     * @returns {Firebase}
-     */
-    get firebase():Firebase {
-        return this.service.firebase;
-    }
+    private _auth: any;
 
-    private _firebase:FirebaseService<T>;
+    public get auth(): any {
+        return this._auth;
+    }
 
     /**
      * Initializes a new FirebaseAuthService using the given FirebaseService.
      * @param firebase
      */
-    constructor(firebase:FirebaseService<T>) {
-        this._firebase = firebase;
+    constructor() {
+        this._auth = firebase.auth();
     }
 
     /**
@@ -41,9 +30,7 @@ export class FirebaseAuthService<T> {
      * @param credentials
      */
     authWithPassword(credentials:{email:string, password: string}):Promise<any> {
-        return FirebaseUtils.wrapFirebaseAsyncCall(this.firebase, this.firebase.authWithPassword, [credentials])
-            .then(args => args[1]);
+        return this.auth.signInWithEmailAndPassword(credentials.email, credentials.password);
     }
-
 
 }

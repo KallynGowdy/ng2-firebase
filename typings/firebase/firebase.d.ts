@@ -284,10 +284,11 @@ interface Firebase extends FirebaseQuery {
 	onDisconnect(): FirebaseOnDisconnect;
 }
 interface FirebaseStatic {
-	/**
-	 * Constructs a new Firebase reference from a full Firebase URL.
-	 */
-	new (firebaseURL: string): Firebase;
+
+	initializeApp(config: any);
+	database():any;
+	auth(): any;
+
 	/**
 	 * Manually disconnects the Firebase client from the server and disables automatic reconnection.
 	 */
@@ -305,7 +306,7 @@ interface FirebaseStatic {
 		TIMESTAMP: any;
 	};
 }
-declare var Firebase: FirebaseStatic;
+declare var firebase: FirebaseStatic;
 
 declare module 'firebase' {
 	export = Firebase;

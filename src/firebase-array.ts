@@ -340,7 +340,7 @@ export class FirebaseArray<T> {
     private _wrap(func: Function) {
         return (args: any[]) => {
             var child: FirebaseDataSnapshot = args[0];
-            func(child.val(), child.key(), ...args);
+            func(child.val(), child.key, ...args);
         }
     }
 
