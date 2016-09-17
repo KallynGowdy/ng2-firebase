@@ -1,5 +1,5 @@
 /// <
-import {Injectable} from '@angular/core';
+import {Injectable, Inject} from '@angular/core';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {FirebaseConfig} from "./firebase.config";
 import {FirebaseUtils} from "./firebase-utils";
@@ -67,17 +67,17 @@ export class FirebaseService<T> {
      * Gets the internal Firebase Instance.
      * @returns {Firebase}
      */
-    get firebase():Firebase {
+    get firebase(): Firebase {
         return this._firebase;
     }
 
-    private _firebase:Firebase;
+    private _firebase: Firebase;
 
     /**
      * Wraps the given Firebase event type as an observable.
      * @param eventType {string} One of the following strings: "value", "child_added", "child_changed", "child_removed", or "child_moved."
      */
-    private wrapFirebaseEvent(eventType:string):Observable<any[]> {
+    private wrapFirebaseEvent(eventType: string): Observable<any[]> {
         return FirebaseUtils.wrapFirebaseEvent(this.firebase, eventType);
     }
 
@@ -86,7 +86,7 @@ export class FirebaseService<T> {
      * @param eventType {string} One of the following strings: "value", "child_added", "child_changed", "child_removed", or "child_moved."
      * @returns {Observable<FirebaseDataSnapshot>} An object that represents the asynchronous stream of events.
      */
-    public on(eventType:string):Observable<any[]> {
+    public on(eventType: string): Observable<any[]> {
         return this.wrapFirebaseEvent(eventType);
     }
 
@@ -94,7 +94,7 @@ export class FirebaseService<T> {
      * Gets the raw event stream for the 'value' event from the underlying Firebase Object.
      * @returns {Observable<any>}
      */
-    get valueRaw():Observable<any[]> {
+    get valueRaw(): Observable<any[]> {
         return this.wrapFirebaseEvent('value');
     }
 
@@ -103,7 +103,7 @@ export class FirebaseService<T> {
      * Internally, this maps to the 'value' event emitted by Firebase.
      * @returns {Observable<any>}
      */
-    get value():Observable<T> {
+    get value(): Observable<T> {
         return this.valueRaw.map((data) => data[0].val());
     }
 
@@ -111,7 +111,7 @@ export class FirebaseService<T> {
      * Alias for .valueRaw.
      * @returns {Observable<any>}
      */
-    get dataRaw():Observable<any[]> {
+    get dataRaw(): Observable<any[]> {
         return this.valueRaw;
     }
 
@@ -121,7 +121,7 @@ export class FirebaseService<T> {
      * Internally, this maps to the 'value' event emitted by Firebase.
      * @returns {Observable<any>}
      */
-    get data():Observable<T> {
+    get data(): Observable<T> {
         return this.value;
     }
 
@@ -129,7 +129,7 @@ export class FirebaseService<T> {
      * Gets the raw event stream for the 'child_added' event from the underlying Firebase Object.
      * @returns {Observable<any>}
      */
-    get childAddedRaw():Observable<any[]> {
+    get childAddedRaw(): Observable<any[]> {
         return this.wrapFirebaseEvent('child_added');
     }
 
@@ -138,7 +138,7 @@ export class FirebaseService<T> {
      * Internally, this maps to the 'child_added' event emitted by Firebase.
      * @returns {Observable<any>}
      */
-    get childAdded():Observable<any> {
+    get childAdded(): Observable<any> {
         return this.childAddedRaw.map((data) => data[0].val());
     }
 
@@ -146,7 +146,7 @@ export class FirebaseService<T> {
      * Gets the raw event stream for the 'child_changed' event from the underlying Firebase Object.
      * @returns {Observable<any>}
      */
-    get childChangedRaw():Observable<any[]> {
+    get childChangedRaw(): Observable<any[]> {
         return this.wrapFirebaseEvent('child_changed');
     }
 
@@ -155,7 +155,7 @@ export class FirebaseService<T> {
      * Internally, this maps to the 'child_changed' event emitted by Firebase.
      * @returns {Observable<any>}
      */
-    get childChanged():Observable<any> {
+    get childChanged(): Observable<any> {
         return this.childChangedRaw.map(data => data[0].val());
     }
 
@@ -163,7 +163,7 @@ export class FirebaseService<T> {
      * Gets the raw event stream for the 'child_removed' event from the underlying Firebase Object.
      * @returns {Observable<any>}
      */
-    get childRemovedRaw():Observable<any[]> {
+    get childRemovedRaw(): Observable<any[]> {
         return this.wrapFirebaseEvent('child_removed');
     }
 
@@ -172,7 +172,7 @@ export class FirebaseService<T> {
      * Internally, this maps to the 'child_removed' event emitted by Firebase.
      * @returns {Observable<any>}
      */
-    get childRemoved():Observable<any> {
+    get childRemoved(): Observable<any> {
         return this.childRemovedRaw.map(data => data[0].val());
     }
 
@@ -181,7 +181,7 @@ export class FirebaseService<T> {
      * Internally, this maps to the 'child_moved' event emitted by Firebase.
      * @returns {Observable<any>}
      */
-    get childMoved():Observable<any> {
+    get childMoved(): Observable<any> {
         return this.childMovedRaw.map(data => data[0].val());
     }
 
@@ -189,7 +189,7 @@ export class FirebaseService<T> {
      * Gets the raw event stream for the 'child_moved' event from the underlying Firebase Object.
      * @returns {Observable<any>}
      */
-    get childMovedRaw():Observable<any[]> {
+    get childMovedRaw(): Observable<any[]> {
         return this.wrapFirebaseEvent('child_moved');
     }
 
@@ -199,31 +199,31 @@ export class FirebaseService<T> {
      * @param data The data that should be set to this location.
      * @returns {Promise<boolean>} Returns a promise that resolves `true` if the data was set. Otherwise the promise rejects if there was an error.
      */
-    setData(data:T):Promise<boolean> {
+    setData(data: T): Promise<boolean> {
         return FirebaseUtils.wrapFirebaseAsyncCall(this.firebase, this.firebase.set, [data]).then(() => true);
     }
 
     /**
      * @alias setData(data)
      */
-    set(data:T):Promise<boolean> {
+    set(data: T): Promise<boolean> {
         return this.setData(data);
     }
-    
+
     /**
      * Update the objects children in this Firebase location. Passing null to updateData() will remove the value at the specified location.
      * returns an promise that resolves when the operation is succesfull.
      * @param data The object containing only the keys that should be updated in this location.
      * @returns {Promise<boolean>} Returns a promise that resolves `true` if the data was succesfully updated. Otherwise the promise rejects if there was an error.
      */
-    updateData(data:T):Promise<boolean> {
+    updateData(data: T): Promise<boolean> {
         return FirebaseUtils.wrapFirebaseAsyncCall(this.firebase, this.firebase.update, [data]).then(() => true);
     }
-    
+
     /**
      * @alias updateData(data)
      */
-    update(data:T):Promise<boolean> {
+    update(data: T): Promise<boolean> {
         return this.updateData(data);
     }
 
@@ -232,7 +232,7 @@ export class FirebaseService<T> {
      * @param data The data that should be added.
      * @returns {Promise<boolean>}
      */
-    push(data:any):Promise<boolean> {
+    push(data: any): Promise<boolean> {
         return FirebaseUtils.wrapFirebaseAsyncCall(this.firebase, this.firebase.push, [data]).then(() => true);
     }
 
@@ -242,7 +242,7 @@ export class FirebaseService<T> {
      * @param key The key of the child that should be removed from this location.
      * @returns {Promise<boolean>}
      */
-    remove(key?:string):Promise<boolean> {
+    remove(key?: string): Promise<boolean> {
         var firebase = this.firebase;
         if (key) {
             firebase = firebase.child(key);
@@ -256,16 +256,21 @@ export class FirebaseService<T> {
      * The FirebaseArray service provides functionality for dealing with synchronized order lists of objects.
      * @returns {FirebaseArray}
      */
-    asArray():FirebaseArray<T> {
+    asArray(): FirebaseArray<T> {
         return new FirebaseArray<T>(<any>this);
     }
 
     /**
      * Creates a new FirebaseService using the given Firebase JavaScript API Object.
-     * @param firebase The Object that represents the instantiated Firebase JavaScript API Object.
+     * @param config Either the FirebaseConfig or Firebase instance that the service should use.
      */
-    constructor(firebase:any) {
-        this._firebase = firebase;
+    constructor(@Inject() config: any) {
+        if (!config) throw new Error("You must provide either a firebase configuration object or a firebase instance");
+        if((<FirebaseConfig>config).url) {
+            this._firebase = new Firebase((<FirebaseConfig>config).url);
+        } else {
+            this._firebase = <Firebase>config;
+        }
     }
 
     /**
@@ -273,7 +278,7 @@ export class FirebaseService<T> {
      * @param path The relative path from this Firebase location to the requested location.
      * @returns {FirebaseService}
      */
-    public child<TChild>(path:string):FirebaseService<TChild> {
+    public child<TChild>(path: string): FirebaseService<TChild> {
         return new FirebaseService<TChild>(this.firebase.child(path));
     }
 }
