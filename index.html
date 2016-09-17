@@ -84,7 +84,7 @@
 					</tbody>
 				</table>
 				<h2 id="installation">Installation</h2>
-				<pre><code>npm <span class="hljs-operator"><span class="hljs-keyword">install</span> <span class="hljs-comment">--save ng2-firebase</span></span>
+				<pre><code>npm <span class="hljs-keyword">install</span> <span class="hljs-comment">--save ng2-firebase</span>
 </code></pre><h2 id="usage">Usage</h2>
 				<p>There are two valid ways to use the library in your project:</p>
 				<ul>
@@ -94,11 +94,11 @@
 				<h3 id="typescript-demo-application-https-github-com-kallyngowdy-firebase-angular2-demo-tree-master-ts-">TypeScript - <a href="https://github.com/KallynGowdy/firebase-angular2-demo/tree/master/ts">Demo Application</a></h3>
 				<p>To use in your project, reference the <code>ng2-firebase/core</code> module:</p>
 				<pre><code class="lang-TypeScript"><span class="hljs-comment">// myfile.ts</span>
-<span class="hljs-keyword">import</span> {FirebaseService} from <span class="hljs-string">'ng2-firebase/core'</span>;
+<span class="hljs-keyword">import</span> {FirebaseModule} from <span class="hljs-string">'ng2-firebase/core'</span>;
 </code></pre>
 				<p>also make sure you include the Firebase JavaScript SDK:</p>
 				<pre><code class="lang-html"><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"https://cdn.firebase.com/js/client/2.3.2/firebase.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"https://cdn.firebase.com/js/client/2.3.2/firebase.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
 				<p>Add the path to your <code>System.config({})</code>:</p>
 				<pre><code class="lang-TypeScript">System.config({
@@ -109,42 +109,47 @@
   }
 });
 </code></pre>
-				<p>Finally, register whatever providers you need:</p>
-				<pre><code class="lang-TypeScript"><span class="hljs-comment">// boot.ts</span>
-<span class="hljs-keyword">import</span> {provide} from <span class="hljs-string">'angular2/core'</span>;
-<span class="hljs-keyword">import</span> {FirebaseService} from <span class="hljs-string">'ng2-firebase/core'</span>;
+				<p>Register the <code>FirebaseModule</code> in your root module:</p>
+				<pre><code class="lang-TypeScript"><span class="hljs-comment">// app.module.ts</span>
+<span class="hljs-keyword">import</span> {NgModule} from <span class="hljs-string">'@angular/core'</span>;
+<span class="hljs-keyword">import</span> {FirebaseModule} from <span class="hljs-string">'ng2-firebase/core'</span>;
 
-<span class="hljs-comment">// Tell TypeScript that Firebase is a global object.</span>
-<span class="hljs-keyword">declare</span> <span class="hljs-keyword">var</span> Firebase;
+@NgModule({
+    imports: [
+        <span class="hljs-comment">// ... other dependencies</span>
+        FirebaseModule.forRoot({ url: <span class="hljs-string">'https://myfirebaseurl.firebase.io'</span> })
+        <span class="hljs-comment">// ... other dependencies</span>
+    ]
+})
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> AppModule {}
+</code></pre>
+				<p>Then use it in your component:</p>
+				<pre><code class="lang-TypeScript"><span class="hljs-keyword">import</span> {FirebaseService} from <span class="hljs-string">'ng2-firebase/core'</span>;
 
-bootstrap(MyAppComponent, [
-    provide(FirebaseService, {useFactory: () =&gt; <span class="hljs-keyword">new</span> FirebaseService(<span class="hljs-keyword">new</span> Firebase(<span class="hljs-string">'https://YOUR-FIREBASE-URL.firebaseio.com/'</span>))})
-]);
+@Component({
+    selector: <span class="hljs-string">'my-app'</span>,
+    template: <span class="hljs-string">'&lt;h1&gt;My First Angular App!&lt;/h1&gt;'</span>
+})
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> AppComponent {
+    <span class="hljs-keyword">constructor</span>(private firebase: FirebaseService) { }
+}
 </code></pre>
 				<h3 id="javascript-demo-application-https-github-com-kallyngowdy-firebase-angular2-demo-tree-master-js-">JavaScript - <a href="https://github.com/KallynGowdy/firebase-angular2-demo/tree/master/js">Demo Application</a></h3>
 				<p>Make sure that both the Firebase SDK and the Firebase Angular 2 Bundle are included:</p>
 				<pre><code class="lang-html"><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"https://cdn.firebase.com/js/client/2.3.2/firebase.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"node_modules/ng2-firebase/bundles/ng2-firebase-all.umd.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"https://cdn.firebase.com/js/client/2.3.2/firebase.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"node_modules/ng2-firebase/bundles/ng2-firebase-all.umd.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
 				<p>Register the provider:</p>
-				<pre><code class="lang-JavaScript"><span class="hljs-comment">// boot.js</span>
+				<pre><code class="lang-JavaScript"><span class="hljs-comment">// app.module.js</span>
 (<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">app</span>) </span>{
-    <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">'DOMContentLoaded'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-        ng.platform.browser.bootstrap(app.AppComponent, [
-            <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> Improve Injection to be modular</span>
-            <span class="hljs-comment">//       For some reason, the modular versions break the app</span>
-            ng.core.provide(
-                firebaseAngular2.FirebaseService,
-                {
-                    useFactory: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-                        <span class="hljs-keyword">new</span> firebaseAngular2.FirebaseService(
-                            <span class="hljs-keyword">new</span> Firebase(<span class="hljs-string">'https://fb-angular2-demo.firebaseio.com/'</span>)
-                        )
-                    }
-                })
-        ]);
-    });
+    app.AppModule =
+        ng.core.NgModule({
+            imports: [ ng2Firebase.FirebaseModule.forRoot({ url: <span class="hljs-string">'https://myfirebaseurl.firebase.io'</span> }) ]
+        })
+        .Class({
+            <span class="hljs-keyword">constructor</span>: function() {}
+        });
 })(<span class="hljs-built_in">window</span>.app || (<span class="hljs-built_in">window</span>.app = {}));
 </code></pre>
 				<p>Use in a component:</p>
@@ -155,7 +160,7 @@ bootstrap(MyAppComponent, [
             template: <span class="hljs-string">'&lt;h1&gt;My First Angular App!&lt;/h1&gt;'</span>
         })
         .Class({
-            constructor: [firebaseAngular2.FirebaseService, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">firebaseService</span>) </span>{
+            <span class="hljs-keyword">constructor</span>: [ng2Firebase.FirebaseService, function(firebaseService) {
                 <span class="hljs-keyword">this</span>.firebaseService = firebaseService;
             }],
         });
@@ -163,7 +168,7 @@ bootstrap(MyAppComponent, [
 </code></pre>
 				<p>If you are not using a module system, then all of the exported services and classes from the <code>ng2-firebase</code> library are in the <code>ng2Firebase</code> global variable.</p>
 				<h2 id="demo">Demo</h2>
-				<p>TypeScript and JavaScript implementations of the Angular 2 Tutorial &quot;Tour of Heroes&quot; application have been created at the following repository: <a href="https://github.com/KallynGowdy/firebase-angular2-demo">firebase-angular2-demo</a>.</p>
+				<p>TypeScript and JavaScript implementations of the Angular 2 Tutorial &quot;Tour of Heroes&quot; application have been created at the following repository: <a href="https://github.com/KallynGowdy/firebase-angular2-demo">ng2-firebase-demo</a>.</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -185,8 +190,11 @@ bootstrap(MyAppComponent, [
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/firebaseauthservice.html" class="tsd-kind-icon">Firebase<wbr>Auth<wbr>Service</a>
 					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
+					<li class=" tsd-kind-class">
 						<a href="classes/firebaseconfig.html" class="tsd-kind-icon">Firebase<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/firebasemodule.html" class="tsd-kind-icon">Firebase<wbr>Module</a>
 					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/firebaseservice.html" class="tsd-kind-icon">Firebase<wbr>Service</a>
@@ -196,15 +204,6 @@ bootstrap(MyAppComponent, [
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
 						<a href="globals.html#firebase" class="tsd-kind-icon">Firebase</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#firebaseprovider" class="tsd-kind-icon">Firebase<wbr>Provider</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#firebaseserviceprovider" class="tsd-kind-icon">Firebase<wbr>Service<wbr>Provider</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="globals.html#firebaseservicefactory" class="tsd-kind-icon">Firebase<wbr>Service<wbr>Factory</a>
 					</li>
 				</ul>
 			</nav>

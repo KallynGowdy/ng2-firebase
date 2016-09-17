@@ -72,144 +72,34 @@
 								<li class="tsd-kind-class tsd-is-not-exported"><a href="classes/arrayvalue.html" class="tsd-kind-icon">Array<wbr>Value</a></li>
 								<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/firebasearray.html" class="tsd-kind-icon">Firebase<wbr>Array</a></li>
 								<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/firebaseauthservice.html" class="tsd-kind-icon">Firebase<wbr>Auth<wbr>Service</a></li>
-								<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/firebaseconfig.html" class="tsd-kind-icon">Firebase<wbr>Config</a></li>
+								<li class="tsd-kind-class"><a href="classes/firebaseconfig.html" class="tsd-kind-icon">Firebase<wbr>Config</a></li>
+								<li class="tsd-kind-class"><a href="classes/firebasemodule.html" class="tsd-kind-icon">Firebase<wbr>Module</a></li>
 								<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/firebaseservice.html" class="tsd-kind-icon">Firebase<wbr>Service</a></li>
 								<li class="tsd-kind-class"><a href="classes/firebaseutils.html" class="tsd-kind-icon">Firebase<wbr>Utils</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-variable tsd-is-not-exported"><a href="globals.html#firebase" class="tsd-kind-icon">Firebase</a></li>
-								<li class="tsd-kind-variable"><a href="globals.html#firebaseprovider" class="tsd-kind-icon">Firebase<wbr>Provider</a></li>
-								<li class="tsd-kind-variable"><a href="globals.html#firebaseserviceprovider" class="tsd-kind-icon">Firebase<wbr>Service<wbr>Provider</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Functions</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-has-type-parameter"><a href="globals.html#firebaseservicefactory" class="tsd-kind-icon">Firebase<wbr>Service<wbr>Factory</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Variables</h2>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-is-not-exported">
 					<a name="firebase" class="tsd-anchor"></a>
 					<h3>Firebase</h3>
-					<div class="tsd-signature tsd-kind-icon">Firebase<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Firebase</span></div>
+					<div class="tsd-signature tsd-kind-icon">Firebase<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FirebaseStatic</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.config.ts#L4">firebase.config.ts:4</a></li>
-							<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase-utils.ts#L2">firebase-utils.ts:2</a></li>
-							<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase-auth.service.ts#L5">firebase-auth.service.ts:5</a></li>
-							<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.provider.ts#L2">firebase.provider.ts:2</a></li>
+							<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.config.ts#L2">firebase.config.ts:2</a></li>
+							<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase-utils.ts#L2">firebase-utils.ts:2</a></li>
+							<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase-auth.service.ts#L5">firebase-auth.service.ts:5</a></li>
 						</ul>
 					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable">
-					<a name="firebaseprovider" class="tsd-anchor"></a>
-					<h3>Firebase<wbr>Provider</h3>
-					<div class="tsd-signature tsd-kind-icon">Firebase<wbr>Provider<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Provider</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.provider.ts#L23">firebase.provider.ts:23</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Declares a basic provider for the Global Firebase API object that is loaded by the Firebase JavaScript SDK.</p>
-						</div>
-						<p>Usage:</p>
-						<pre><code class="lang-TypeScript"><span class="hljs-keyword">import</span> {FirebaseProvider} from <span class="hljs-string">'ng2-firebase/core'</span>;
-
-<span class="hljs-comment">// Later in the application when you are declaring the providers...</span>
-
-bootstrap(MyAppComponent, [FirebaseProvider, MyOtherProvider]);
-</code></pre>
-						<dl class="tsd-comment-tags">
-							<dt>type</dt>
-							<dd><p>{Provider}</p>
-							</dd>
-						</dl>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable">
-					<a name="firebaseserviceprovider" class="tsd-anchor"></a>
-					<h3>Firebase<wbr>Service<wbr>Provider</h3>
-					<div class="tsd-signature tsd-kind-icon">Firebase<wbr>Service<wbr>Provider<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Provider</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.provider.ts#L16">firebase.service.provider.ts:16</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Gets the default Provider for FirebaseService services.
-							Semantically, using this variable is equivalent to the following statements:</p>
-						</div>
-						<pre><code class="lang-TypeScript"><span class="hljs-keyword">import</span> {FirebaseService, FirebaseServiceFactory} from <span class="hljs-string">'ng2-firebase/core'</span>;
-<span class="hljs-keyword">var</span> provider = provide(FirebaseService, {useFactory: FirebaseServiceFactory})
-</code></pre>
-						<dl class="tsd-comment-tags">
-							<dt>type</dt>
-							<dd><p>{Provider}</p>
-							</dd>
-						</dl>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
-					<a name="firebaseservicefactory" class="tsd-anchor"></a>
-					<h3>Firebase<wbr>Service<wbr>Factory</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">Firebase<wbr>Service<wbr>Factory&lt;T&gt;<span class="tsd-signature-symbol">(</span>Firebase<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Firebase</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="classes/firebaseservice.html" class="tsd-signature-type">FirebaseService</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.factory.ts#L28">firebase.service.factory.ts:28</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Gets the default factory function for FirebaseService objects.</p>
-								</div>
-								<p>Usage:</p>
-								<pre><code class="lang-TypeScript"><span class="hljs-comment">// Make sure you included the Firebase SDK.</span>
-<span class="hljs-keyword">import</span> {FirebaseServiceFactory} from <span class="hljs-string">'ng2-firebase/core'</span>;
-<span class="hljs-keyword">var</span> service = FirebaseServiceFactory(Firebase);
-</code></pre>
-								<p>Semantically, using this function is equivalent to the following statements:</p>
-								<pre><code class="lang-TypeScript"><span class="hljs-comment">// Make sure you included the Firebase SDK.</span>
-<span class="hljs-keyword">import</span> {FirebaseService} from <span class="hljs-string">'ng2-firebase/core'</span>;
-<span class="hljs-keyword">var</span> firebaseService = <span class="hljs-keyword">new</span> FirebaseService(Firebase);
-</code></pre>
-								<dl class="tsd-comment-tags">
-									<dt>constructor</dt>
-									<dd></dd>
-								</dl>
-							</div>
-							<h4 class="tsd-type-parameters-title">Type parameters</h4>
-							<ul class="tsd-type-parameters">
-								<li>
-									<h4>T</h4>
-								</li>
-							</ul>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>Firebase: <span class="tsd-signature-type">Firebase</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="classes/firebaseservice.html" class="tsd-signature-type">FirebaseService</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
 				</section>
 			</section>
 		</div>
@@ -232,8 +122,11 @@ bootstrap(MyAppComponent, [FirebaseProvider, MyOtherProvider]);
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/firebaseauthservice.html" class="tsd-kind-icon">Firebase<wbr>Auth<wbr>Service</a>
 					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
+					<li class=" tsd-kind-class">
 						<a href="classes/firebaseconfig.html" class="tsd-kind-icon">Firebase<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/firebasemodule.html" class="tsd-kind-icon">Firebase<wbr>Module</a>
 					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/firebaseservice.html" class="tsd-kind-icon">Firebase<wbr>Service</a>
@@ -243,15 +136,6 @@ bootstrap(MyAppComponent, [FirebaseProvider, MyOtherProvider]);
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
 						<a href="globals.html#firebase" class="tsd-kind-icon">Firebase</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#firebaseprovider" class="tsd-kind-icon">Firebase<wbr>Provider</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#firebaseserviceprovider" class="tsd-kind-icon">Firebase<wbr>Service<wbr>Provider</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="globals.html#firebaseservicefactory" class="tsd-kind-icon">Firebase<wbr>Service<wbr>Factory</a>
 					</li>
 				</ul>
 			</nav>

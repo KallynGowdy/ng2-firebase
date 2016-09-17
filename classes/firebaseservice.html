@@ -88,24 +88,24 @@
 <span class="hljs-keyword">import</span> { FirebaseService, FirebaseServiceFactory } from <span class="hljs-string">'ng2-firebase/core'</span>;
 <span class="hljs-keyword">import</span> { Observable } from <span class="hljs-string">'rxjs/Rx'</span>;
 
-@@Component({
+@<span class="hljs-meta">@Component</span>({
    <span class="hljs-comment">// FirebaseServiceFactory is not Implemented yet...</span>
-   selector: <span class="hljs-string">'some-component'</span>,
+<span class="hljs-symbol">   selector:</span> <span class="hljs-string">'some-component'</span>,
 
    <span class="hljs-comment">// Make sure to include the async pipe so that the most recent value</span>
    <span class="hljs-comment">// is resolved from the data observable.</span>
-   template: <span class="hljs-string">'My Data: {{data | async}}'</span>,
+<span class="hljs-symbol">   template:</span> <span class="hljs-string">'My Data: {{data | async}}'</span>,
 
    <span class="hljs-comment">// Declare the providers that should be used for the service.</span>
-   providers: [
-     provide(FirebaseService, { useFactory: FirebaseServiceFactory })
+<span class="hljs-symbol">   providers:</span> [
+     provide(FirebaseService, { <span class="hljs-string">useFactory:</span> FirebaseServiceFactory })
    ]
 })
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> SomeComponent <span class="hljs-keyword">implements</span> OnInit {
-  <span class="hljs-keyword">private</span> firebase: FirebaseService;
-  data: Observable&lt;<span class="hljs-built_in">any</span>&gt;;
+export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SomeComponent</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">OnInit</span> {</span>
+  <span class="hljs-keyword">private</span> <span class="hljs-string">firebase:</span> FirebaseService;
+<span class="hljs-symbol">  data:</span> Observable&lt;any&gt;;
 
-  <span class="hljs-constructor"><span class="hljs-keyword">constructor</span>(firebase: FirebaseService) </span>{
+  constructor(<span class="hljs-string">firebase:</span> FirebaseService) {
      <span class="hljs-keyword">this</span>.firebase = firebase;
   }
 
@@ -194,13 +194,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Firebase<wbr>Service<span class="tsd-signature-symbol">(</span>firebase<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="firebaseservice.html" class="tsd-signature-type">FirebaseService</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Firebase<wbr>Service<span class="tsd-signature-symbol">(</span>config<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="firebaseservice.html" class="tsd-signature-type">FirebaseService</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L261">firebase.service.ts:261</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L261">firebase.service.ts:261</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -211,10 +211,10 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>firebase: <span class="tsd-signature-type">any</span></h5>
+									<h5>config: <span class="tsd-signature-type">any</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>The Object that represents the instantiated Firebase JavaScript API Object.</p>
+											<p>Either the FirebaseConfig or Firebase instance that the service should use.</p>
 										</div>
 									</div>
 								</li>
@@ -232,7 +232,7 @@
 					<div class="tsd-signature tsd-kind-icon">_firebase<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Firebase</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L74">firebase.service.ts:74</a></li>
+							<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L74">firebase.service.ts:74</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -249,7 +249,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L141">firebase.service.ts:141</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L141">firebase.service.ts:141</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -272,7 +272,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L132">firebase.service.ts:132</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L132">firebase.service.ts:132</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -294,7 +294,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L158">firebase.service.ts:158</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L158">firebase.service.ts:158</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -317,7 +317,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L149">firebase.service.ts:149</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L149">firebase.service.ts:149</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -339,7 +339,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L184">firebase.service.ts:184</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L184">firebase.service.ts:184</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -362,7 +362,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L192">firebase.service.ts:192</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L192">firebase.service.ts:192</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -384,7 +384,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L175">firebase.service.ts:175</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L175">firebase.service.ts:175</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -407,7 +407,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L166">firebase.service.ts:166</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L166">firebase.service.ts:166</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -429,7 +429,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L124">firebase.service.ts:124</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L124">firebase.service.ts:124</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -453,7 +453,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L114">firebase.service.ts:114</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L114">firebase.service.ts:114</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -475,7 +475,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L70">firebase.service.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L70">firebase.service.ts:70</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -497,7 +497,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L106">firebase.service.ts:106</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L106">firebase.service.ts:106</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -520,7 +520,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L97">firebase.service.ts:97</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L97">firebase.service.ts:97</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -545,7 +545,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L259">firebase.service.ts:259</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L259">firebase.service.ts:259</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -568,7 +568,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L276">firebase.service.ts:276</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L281">firebase.service.ts:281</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -605,7 +605,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L89">firebase.service.ts:89</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L89">firebase.service.ts:89</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -637,7 +637,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L235">firebase.service.ts:235</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L235">firebase.service.ts:235</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -668,7 +668,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L245">firebase.service.ts:245</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L245">firebase.service.ts:245</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -700,7 +700,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L209">firebase.service.ts:209</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L209">firebase.service.ts:209</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -730,7 +730,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L202">firebase.service.ts:202</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L202">firebase.service.ts:202</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -763,7 +763,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L226">firebase.service.ts:226</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L226">firebase.service.ts:226</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -793,7 +793,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L219">firebase.service.ts:219</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L219">firebase.service.ts:219</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -826,7 +826,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/master/src/firebase.service.ts#L80">firebase.service.ts:80</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.service.ts#L80">firebase.service.ts:80</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -868,8 +868,11 @@
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="firebaseauthservice.html" class="tsd-kind-icon">Firebase<wbr>Auth<wbr>Service</a>
 					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
+					<li class=" tsd-kind-class">
 						<a href="firebaseconfig.html" class="tsd-kind-icon">Firebase<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="firebasemodule.html" class="tsd-kind-icon">Firebase<wbr>Module</a>
 					</li>
 				</ul>
 				<ul class="current">
@@ -960,15 +963,6 @@
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
 						<a href="../globals.html#firebase" class="tsd-kind-icon">Firebase</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../globals.html#firebaseprovider" class="tsd-kind-icon">Firebase<wbr>Provider</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../globals.html#firebaseserviceprovider" class="tsd-kind-icon">Firebase<wbr>Service<wbr>Provider</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="../globals.html#firebaseservicefactory" class="tsd-kind-icon">Firebase<wbr>Service<wbr>Factory</a>
 					</li>
 				</ul>
 			</nav>

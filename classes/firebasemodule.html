@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>FirebaseUtils | Angular 2 Firebase</title>
+	<title>FirebaseModule | Angular 2 Firebase</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,10 +55,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="firebaseutils.html">FirebaseUtils</a>
+					<a href="firebasemodule.html">FirebaseModule</a>
 				</li>
 			</ul>
-			<h1>Class FirebaseUtils</h1>
+			<h1>Class FirebaseModule</h1>
 		</div>
 	</div>
 </header>
@@ -68,7 +68,8 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A class that defines utility functions that help Wrap the Firebase JavaScript API.</p>
+						<p>Defines a class that represents the main ng2-firebase module.
+						Use the <code>forRoot</code> function to provide a <code>FirebaseConfig</code> with your application settings.</p>
 					</div>
 				</div>
 			</section>
@@ -76,7 +77,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">FirebaseUtils</span>
+						<span class="target">FirebaseModule</span>
 					</li>
 				</ul>
 			</section>
@@ -87,8 +88,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="firebaseutils.html#wrapfirebaseasynccall" class="tsd-kind-icon">wrap<wbr>Firebase<wbr>Async<wbr>Call</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="firebaseutils.html#wrapfirebaseevent" class="tsd-kind-icon">wrap<wbr>Firebase<wbr>Event</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="firebasemodule.html#forroot" class="tsd-kind-icon">for<wbr>Root</a></li>
 							</ul>
 						</section>
 					</div>
@@ -97,87 +97,34 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="wrapfirebaseasynccall" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> wrap<wbr>Firebase<wbr>Async<wbr>Call</h3>
+					<a name="forroot" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> for<wbr>Root</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">wrap<wbr>Firebase<wbr>Async<wbr>Call<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span>, args<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">for<wbr>Root<span class="tsd-signature-symbol">(</span>config<span class="tsd-signature-symbol">: </span><a href="firebaseconfig.html" class="tsd-signature-type">FirebaseConfig</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ModuleWithProviders</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase-utils.ts#L18">firebase-utils.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase.module.ts#L20">firebase.module.ts:20</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Wraps the given Firebase call in a Promise.
-										When the async call returns, the Promise resolves with the callback
-									arguments in an array.</p>
+									<p>Returns a <code>ModuleWithProviders</code> that configures the <code>FirebaseModule</code> with the given config object.
+									Generally, when importing the <code>FirebaseModule</code> into your application, you will want to call this function with your <code>FirebaseConfig</code>.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>obj: <span class="tsd-signature-type">any</span></h5>
+									<h5>config: <a href="firebaseconfig.html" class="tsd-signature-type">FirebaseConfig</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The object that the given function should be called on. This is typically your Firebase ref instance.</p>
-									</div>
-								</li>
-								<li>
-									<h5>fn: <span class="tsd-signature-type">Function</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The function that should be wrapped.</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The Arguments that should be given to Firebase.</p>
+										<p>The configuration that should be used to connect to Firebase.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="wrapfirebaseevent" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> wrap<wbr>Firebase<wbr>Event</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">wrap<wbr>Firebase<wbr>Event<span class="tsd-signature-symbol">(</span>firebase<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Firebase</span>, eventName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Observable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/KallynGowdy/ng2-firebase/blob/e82429a/src/firebase-utils.ts#L43">firebase-utils.ts:43</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Gets an observable that represents the given event name for the internal Firebase instance.
-										Whenever the event is triggered by the internal Firebase instance, the Observable will resolve with the new data.
-										This function is useful to map Firebase events to Observables.
-									When the observable is disposed, the event listener is removed.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>firebase: <span class="tsd-signature-type">Firebase</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The Raw Firebase JavaScript API Object.</p>
-									</div>
-								</li>
-								<li>
-									<h5>eventName: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The name of the event that should be listened to.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Observable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ModuleWithProviders</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -205,27 +152,24 @@
 					<li class=" tsd-kind-class">
 						<a href="firebaseconfig.html" class="tsd-kind-icon">Firebase<wbr>Config</a>
 					</li>
-					<li class=" tsd-kind-class">
-						<a href="firebasemodule.html" class="tsd-kind-icon">Firebase<wbr>Module</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="firebaseservice.html" class="tsd-kind-icon">Firebase<wbr>Service</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class">
-						<a href="firebaseutils.html" class="tsd-kind-icon">Firebase<wbr>Utils</a>
+						<a href="firebasemodule.html" class="tsd-kind-icon">Firebase<wbr>Module</a>
 						<ul>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="firebaseutils.html#wrapfirebaseasynccall" class="tsd-kind-icon">wrap<wbr>Firebase<wbr>Async<wbr>Call</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="firebaseutils.html#wrapfirebaseevent" class="tsd-kind-icon">wrap<wbr>Firebase<wbr>Event</a>
+								<a href="firebasemodule.html#forroot" class="tsd-kind-icon">for<wbr>Root</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="firebaseservice.html" class="tsd-kind-icon">Firebase<wbr>Service</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="firebaseutils.html" class="tsd-kind-icon">Firebase<wbr>Utils</a>
+					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
 						<a href="../globals.html#firebase" class="tsd-kind-icon">Firebase</a>
 					</li>
