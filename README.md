@@ -26,7 +26,7 @@ To use in your project, reference the `ng2-firebase/core` module:
 
 ```TypeScript
 // myfile.ts
-import {FirebaseService} from 'ng2-firebase/core';
+import {FirebaseModule} from 'ng2-firebase/core';
 ```
 
 also make sure you include the Firebase JavaScript SDK:
@@ -48,19 +48,35 @@ System.config({
 });
 ```
 
-Finally, register whatever providers you need:
+Register the `FirebaseModule` in your root module:
 
 ```TypeScript
-// boot.ts
-import {provide} from 'angular2/core';
+// app.module.ts
+import {NgModule} from '@angular/core';
+import {FirebaseModule} from 'ng2-firebase/core';
+
+@NgModule({
+    imports: [
+        // ... other dependencies
+        FirebaseModule.forRoot({ url: 'https://myfirebaseurl.firebase.io' })
+        // ... other dependencies
+    ]
+})
+export class AppModule {}
+```
+
+Then use it in your component:
+
+```TypeScript
 import {FirebaseService} from 'ng2-firebase/core';
 
-// Tell TypeScript that Firebase is a global object.
-declare var Firebase;
-
-bootstrap(MyAppComponent, [
-    provide(FirebaseService, {useFactory: () => new FirebaseService(new Firebase('https://YOUR-FIREBASE-URL.firebaseio.com/'))})
-]);
+@Component({
+    selector: 'my-app',
+    template: '<h1>My First Angular App!</h1>'
+})
+export class AppComponent {
+    constructor(private firebase: FirebaseService) { }
+}
 ```
 
 ### JavaScript - [Demo Application](https://github.com/KallynGowdy/firebase-angular2-demo/tree/master/js)
@@ -76,23 +92,15 @@ Make sure that both the Firebase SDK and the Firebase Angular 2 Bundle are inclu
 Register the provider:
 
 ```JavaScript
-// boot.js
+// app.module.js
 (function (app) {
-    document.addEventListener('DOMContentLoaded', function () {
-        ng.platform.browser.bootstrap(app.AppComponent, [
-            // TODO: Improve Injection to be modular
-            //       For some reason, the modular versions break the app
-            ng.core.provide(
-                firebaseAngular2.FirebaseService,
-                {
-                    useFactory: function () {
-                        new firebaseAngular2.FirebaseService(
-                            new Firebase('https://fb-angular2-demo.firebaseio.com/')
-                        )
-                    }
-                })
-        ]);
-    });
+    app.AppModule =
+        ng.core.NgModule({
+            imports: [ ng2Firebase.FirebaseModule.forRoot({ url: 'https://myfirebaseurl.firebase.io' }) ]
+        })
+        .Class({
+            constructor: function() {}
+        });
 })(window.app || (window.app = {}));
 ```
 
@@ -106,7 +114,7 @@ Use in a component:
             template: '<h1>My First Angular App!</h1>'
         })
         .Class({
-            constructor: [firebaseAngular2.FirebaseService, function(firebaseService) {
+            constructor: [ng2Firebase.FirebaseService, function(firebaseService) {
                 this.firebaseService = firebaseService;
             }],
         });
@@ -117,4 +125,4 @@ If you are not using a module system, then all of the exported services and clas
 
 ## Demo
 
-TypeScript and JavaScript implementations of the Angular 2 Tutorial "Tour of Heroes" application have been created at the following repository: [firebase-angular2-demo](https://github.com/KallynGowdy/firebase-angular2-demo).
+TypeScript and JavaScript implementations of the Angular 2 Tutorial "Tour of Heroes" application have been created at the following repository: [ng2-firebase-demo](https://github.com/KallynGowdy/firebase-angular2-demo).

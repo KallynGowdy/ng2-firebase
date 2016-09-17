@@ -19,7 +19,7 @@ export function main() {
             beforeEach(function () {
                 onSpy = Sinon.spy();
                 offSpy = Sinon.spy();
-                childSpy = Sinon.spy();
+                childSpy = Sinon.stub();
                 setSpy = Sinon.spy();
                 updateSpy = Sinon.spy();
                 firebase = {
@@ -60,7 +60,7 @@ export function main() {
 
                 it('should pass path to service', function () {
                     var service = new FirebaseService(firebase);
-
+                    childSpy.returns(firebase);
                     var childService = service.child('path');
 
                     expect(childSpy.firstCall.args[0]).toEqual('path');
