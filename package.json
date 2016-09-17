@@ -6,7 +6,7 @@
     "build:test": "tsc",
     "build:test:w": "tsc -w",
     "build:publish": "tsc && npm run build:package",
-    "build:docs": "typedoc --out ./docs --name \"Angular 2 Firebase\" --readme ./README.md --target ES5 --mode file --externalPattern \"./node_modules/**/*\" --excludeExternals --module commonjs --moduleResolution node --emitDecoratorMetadata --experimentalDecorators \"./src\"",
+    "build:docs": "typedoc --out ./docs --name \"Angular 2 Firebase\" --readme ./README.md --target ES5 --mode file --externalPattern \"./node_modules/**/*\" --excludeExternals --exclude \"./src/imports.ts\" --module commonjs --moduleResolution node --emitDecoratorMetadata --experimentalDecorators \"./src\"",
     "build:package": "npm run webpack",
     "webpack": "webpack --display-modules",
     "typedoc": "typedoc",
@@ -61,7 +61,7 @@
     "phantomjs": "^1.9.19",
     "sinon": "^1.17.2",
     "systemjs": "^0.19.6",
-    "typedoc": "^0.3.12",
+    "typedoc": "^0.4.5",
     "typescript": "^1.8.10",
     "webpack": "^1.12.10",
     "zone.js": "^0.6.12"
